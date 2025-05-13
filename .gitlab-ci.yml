@@ -1,0 +1,38 @@
+stages:
+  - build
+  - pack
+  - publish
+
+variables:
+  NUGET_FEED: "https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/packages/nuget/index.json"
+
+build:
+  stage: build
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  script:
+    - dotnet restore
+    - dotnet build -c Release
+  artifacts:
+    paths:
+      - src/EasShared/bin/
+    expire_in: 1 hour
+
+pack:
+  stage: pack
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  script:
+    - dotnet pack src/EasShared/EasShared.csproj -c Release -o ./out
+  dependencies:
+    - build
+  artifacts:
+    paths:
+      - out/
+    expire_in: 1 hour
+
+publish:
+  stage: publish
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  script:
+    - dotnet nuget push ./out/*.nupkg --source "$NUGET_FEED" --api-key "$GITLAB_PAT"
+  dependencies:
+    - pack
