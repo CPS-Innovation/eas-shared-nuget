@@ -1,0 +1,21 @@
+stages:
+  - pack
+  - publish
+
+variables:
+  NUGET_FEED: "https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/packages/nuget/index.json"
+
+pack:
+  stage: pack
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  script:
+    - dotnet restore
+    - dotnet pack -c Release -o ./out
+
+publish:
+  stage: publish
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  script:
+    - dotnet nuget push ./out/*.nupkg \
+        --source "$NUGET_FEED" \
+        --api-key "$GITLAB_PAT"
