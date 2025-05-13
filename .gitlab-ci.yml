@@ -29,8 +29,6 @@ publish:
   stage: publish
   image: mcr.microsoft.com/dotnet/sdk:8.0
   script:
-    - dotnet nuget push ./out/*.nupkg \
-        --source "$NUGET_FEED" \
-        --api-key "$GITLAB_PAT"
+    - dotnet nuget push ./out/*.nupkg --source "$NUGET_FEED" --api-key "$GITLAB_PAT"
   dependencies:
     - pack
