@@ -12,12 +12,18 @@ build:
   script:
     - dotnet restore
     - dotnet build -c Release
+  artifacts:
+    paths:
+      - src/EasShared/bin/
+    expire_in: 1 hour
 
 pack:
   stage: pack
   image: mcr.microsoft.com/dotnet/sdk:8.0
   script:
-    - dotnet pack -c Release -o ./out
+    - dotnet pack src/EasShared/EasShared.csproj -c Release -o ./out
+  dependencies:
+    - build
 
 publish:
   stage: publish
@@ -26,3 +32,5 @@ publish:
     - dotnet nuget push ./out/*.nupkg \
         --source "$NUGET_FEED" \
         --api-key "$GITLAB_PAT"
+  dependencies:
+    - pack
