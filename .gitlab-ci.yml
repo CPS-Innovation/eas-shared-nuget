@@ -24,6 +24,10 @@ pack:
     - dotnet pack src/EasShared/EasShared.csproj -c Release -o ./out
   dependencies:
     - build
+  artifacts:
+    paths:
+      - out/
+    expire_in: 1 hour
 
 publish:
   stage: publish
