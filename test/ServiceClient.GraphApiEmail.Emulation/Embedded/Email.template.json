@@ -1,0 +1,67 @@
+{
+  "bccRecipients": [
+    {
+      "emailAddress": {
+        "address": "a@invisible.com",
+        "name": "Blind Copy"
+      }
+    },
+    {
+      "emailAddress": {
+        "address": "b@invisible.com"
+      }
+    }
+  ],
+  "body": {
+    "content": "\u003Chtml\u003E\u003Chead\u003E\r\n\u003Cmeta http-equiv=\u0022Content-Type\u0022 content=\u0022text/html; charset=utf-8\u0022\u003E\u003Cmeta name=\u0022Generator\u0022 content=\u0022Microsoft Word 15 (filtered medium)\u0022\u003E\u003Cstyle\u003E\r\n\u003C!--\r\n@font-face\r\n\t{font-family:Wingdings}\r\n@font-face\r\n\t{font-family:\u0022Cambria Math\u0022}\r\n@font-face\r\n\t{font-family:Calibri}\r\np.MsoNormal, li.MsoNormal, div.MsoNormal\r\n\t{margin-top:0cm;\r\n\tmargin-right:0cm;\r\n\tmargin-bottom:8.0pt;\r\n\tmargin-left:0cm;\r\n\tline-height:106%;\r\n\tfont-size:11.0pt;\r\n\tfont-family:\u0022Calibri\u0022,sans-serif}\r\nspan.EmailStyle17\r\n\t{font-family:\u0022Calibri\u0022,sans-serif;\r\n\tcolor:windowtext}\r\n.MsoChpDefault\r\n\t{font-family:\u0022Calibri\u0022,sans-serif}\r\n@page WordSection1\r\n\t{margin:72.0pt 72.0pt 72.0pt 72.0pt}\r\ndiv.WordSection1\r\n\t{}\r\nol\r\n\t{margin-bottom:0cm}\r\nul\r\n\t{margin-bottom:0cm}\r\n--\u003E\r\n\u003C/style\u003E\u003C/head\u003E\u003Cbody lang=\u0022EN-GB\u0022 link=\u0022#0563C1\u0022 vlink=\u0022#954F72\u0022 style=\u0022word-wrap:break-word\u0022\u003E\u003Cdiv class=\u0022WordSection1\u0022\u003E\u003Cp class=\u0022MsoNormal\u0022 style=\u0022margin-bottom:11.25pt; line-height:normal\u0022\u003E\u003Cb\u003E\u003Cspan style=\u0022font-size:13.5pt; color:#08415C\u0022\u003EEmail body\u003C/span\u003E\u003C/b\u003E\u003C/p\u003E\u003Cp class=\u0022MsoNormal\u0022 style=\u0022line-height:normal\u0022\u003E\u003Cspan style=\u0022font-size:13.5pt; color:#08415C\u0022\u003EThe body of your email is where you get into your main message. Whether you\u2019re composing an email to establish a new business connection or just following up on a meeting, the body of your email should be detailed enough that the reader isn\u2019t confused, but also brief and to the point. No one wants to sit and read a long-winded email when they have dozens of other unattended messages in their inbox.\u003C/span\u003E\u003C/p\u003E\u003Cp class=\u0022MsoNormal\u0022 style=\u0022line-height:normal\u0022\u003E\u003Cb\u003E\u003Cspan style=\u0022font-size:13.5pt; color:#08415C\u0022\u003EEmail body writing guidelines:\u003C/span\u003E\u003C/b\u003E\u003Cspan style=\u0022font-size:13.5pt; color:#08415C\u0022\u003E\u003C/span\u003E\u003C/p\u003E\u003Cul type=\u0022disc\u0022 style=\u0022margin-top:0cm\u0022\u003E\u003Cli class=\u0022MsoNormal\u0022 style=\u0022color:#08415C; margin-top:7.5pt; margin-bottom:7.5pt; line-height:normal\u0022\u003E\u003Cb\u003E\u003Cspan style=\u0022font-size:13.5pt\u0022\u003EBe concise\u003C/span\u003E\u003C/b\u003E\u003Cspan style=\u0022font-size:13.5pt\u0022\u003E\u0026nbsp;\u2013 detail only what\u2019s needed to get your point across.\u003C/span\u003E\u003C/li\u003E\u003Cli class=\u0022MsoNormal\u0022 style=\u0022color:#08415C; margin-top:7.5pt; margin-bottom:7.5pt; line-height:normal\u0022\u003E\u003Cb\u003E\u003Cspan style=\u0022font-size:13.5pt\u0022\u003EUse words that convey (authentic) positive personal emotional\u003C/span\u003E\u003C/b\u003E\u003Cspan style=\u0022font-size:13.5pt\u0022\u003E\u0026nbsp;\u2013 words like \u201Cglad\u201D, \u201Cexcited\u201D, \u201Cintrigued\u201D, \u201Cconfident\u201D.\u003C/span\u003E\u003C/li\u003E\u003Cli class=\u0022MsoNormal\u0022 style=\u0022color:#08415C; margin-top:7.5pt; margin-bottom:7.5pt; line-height:normal\u0022\u003E\u003Cb\u003E\u003Cspan style=\u0022font-size:13.5pt\u0022\u003EUse the word \u201Cbecause\u003C/span\u003E\u003C/b\u003E\u003Cspan style=\u0022font-size:13.5pt\u0022\u003E\u201D when asking for something \u2013 it\u2019s been scientifically shown that people are more easily convinced to do something if told why, and more so if the reason is important for them.\u003C/span\u003E\u003C/li\u003E\u003Cli class=\u0022MsoNormal\u0022 style=\u0022color:#08415C; margin-top:7.5pt; margin-bottom:7.5pt; line-height:normal\u0022\u003E\u003Cb\u003E\u003Cspan style=\u0022font-size:13.5pt\u0022\u003EShow don\u2019t tell\u003C/span\u003E\u003C/b\u003E\u003Cspan style=\u0022font-size:13.5pt\u0022\u003E\u0026nbsp;\u2013 if you can\u2019t explain something in few words, see if you can add a screenshot, a video or a link that explain it better.\u003C/span\u003E\u003C/li\u003E\u003Cli class=\u0022MsoNormal\u0022 style=\u0022color:#08415C; margin-top:7.5pt; margin-bottom:7.5pt; line-height:normal\u0022\u003E\u003Cb\u003E\u003Cspan style=\u0022font-size:13.5pt\u0022\u003EUse headings to split long content into sub-topics\u003C/span\u003E\u003C/b\u003E\u003Cspan style=\u0022font-size:13.5pt\u0022\u003E\u0026nbsp;\u2013 if you can\u2019t avoid writing a long email, make sure to break it up into subsections with headings. This will help your time-scarce readers to scan and find their points of interest.\u003C/span\u003E\u003C/li\u003E\u003Cli class=\u0022MsoNormal\u0022 style=\u0022color:#08415C; margin-top:7.5pt; margin-bottom:7.5pt; line-height:normal\u0022\u003E\u003Cb\u003E\u003Cspan style=\u0022font-size:13.5pt\u0022\u003EAdd your concrete request or question in bold text\u003C/span\u003E\u003C/b\u003E\u003Cspan style=\u0022font-size:13.5pt\u0022\u003E\u0026nbsp;\u2013 to ensure your readers do not miss the most important piece of content (your request or question) \u2013 set it in a separate line and put it in bold. You can also use some colour. If you do avoid light shades (you want high contrast between the text and the white background. Once you pick a colour \u2013 stick with it.\u003C/span\u003E\u003C/li\u003E\u003C/ul\u003E\u003Cp class=\u0022MsoNormal\u0022\u003E\u0026nbsp;\u003C/p\u003E\u003C/div\u003E\u003C/body\u003E\u003C/html\u003E",
+    "contentType": "Html"
+  },
+  "bodyPreview": "Email body\r\nThe body of your email is where you get into your main message. Whether you\u2019re composing an email to establish a new business connection or just following up on a meeting, the body of your email should be detailed enough that the reader isn\u2019t ",
+  "ccRecipients": [],
+  "conversationId": "AAQkAGQ2MzNkMWQ3LTM1OGUtNGU1NS1iODdlLWRkNDU3ZjRlMWIwNgAQAE4TzxV1M0MAj6J9BoY_XiU=",
+  "conversationIndex": "AdlRwzpoThPPFXUzQwCPon0Ghj5eJQ==",
+  "flag": {
+    "flagStatus": "NotFlagged"
+  },
+  "from": {
+    "emailAddress": {
+      "address": "$(SenderEmailAddress)",
+      "name": "$(SenderName)"
+    }
+  },
+  "hasAttachments": false,
+  "importance": "Normal",
+  "inferenceClassification": "Focused",
+  "internetMessageId": "\u003CAM6PR02MB41687C5C7A0E2ED5FA6AA015BFB49@AM6PR02MB4168.eurprd02.prod.outlook.com\u003E",
+  "isDraft": false,
+  "isRead": false,
+  "isReadReceiptRequested": false,
+  "parentFolderId": "AAMkAGQ2MzNkMWQ3LTM1OGUtNGU1NS1iODdlLWRkNDU3ZjRlMWIwNgAuAAAAAABe5joI-SlXRIPXzvoBzcGwAQBzLStb6tWjRoczUrTG4kEKAAAAAAEMAAA=",
+  "receivedDateTime": "2023-03-08T14:27:22+00:00",
+  "replyTo": [],
+  "sender": {
+    "emailAddress": {
+      "address": "$(SenderEmailAddress)",
+      "name": "$(SenderName)"
+    }
+  },
+  "sentDateTime": "2023-03-08T14:27:16+00:00",
+  "subject": "$(Subject)",
+  "toRecipients": [
+    {
+      "emailAddress": {
+        "address": "developmentsmb1@zpkw1.onmicrosoft.com",
+        "name": "Development Shared Mailbox 1"
+      }
+    }
+  ],
+  "webLink": "https://outlook.office365.com/owa/?ItemID=$(IdUrlEncoded)\u0026exvsurl=1\u0026viewmodel=ReadMessageItem",
+  "categories": [],
+  "changeKey": "CQAAABYAAABzLStb6tWjRoczUrTG4kEKAAAMW2DC",
+  "createdDateTime": "2023-03-08T14:27:22+00:00",
+  "lastModifiedDateTime": "2023-03-08T14:27:22+00:00",
+  "id": "$(Id)",
+  "@odata.type": "microsoft.graph.message",
+  "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users(\u0027$(MailboxId)\u0027)/messages/$entity",
+  "@odata.etag": "$(ETag)"
+}

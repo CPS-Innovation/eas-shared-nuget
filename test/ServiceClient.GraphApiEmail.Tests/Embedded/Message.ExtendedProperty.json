@@ -1,0 +1,12 @@
+{
+    "singleValueExtendedProperties": [
+      {
+        "value": "2023-03-01T14:11:48.334Z|03fa14a6-0d0f-4a2c-8481-05abe73a1f5c",
+        "id": "String {80f98438-6260-4f48-baf2-d37336ca4dd7} Name CorrespondenceId_v1"
+      }
+    ],
+    "lastModifiedDateTime": "2023-05-23T12:49:57+00:00",
+    "id": "AAMkAGQ2MzNkMWQ3LTM1OGUtNGU1NS1iODdlLWRkNDU3ZjRlMWIwNgBGAAAAAABe5joI-SlXRIPXzvoBzcGwBwBzLStb6tWjRoczUrTG4kEKAAAr8OFUAABzLStb6tWjRoczUrTG4kEKAAA7r9HbAAA=",
+    "@odata.type": "microsoft.graph.message",
+    "@odata.etag": "W/\u0022CQAAABYAAABzLStb6tWjRoczUrTG4kEKAAA7rtsb\u0022"
+}

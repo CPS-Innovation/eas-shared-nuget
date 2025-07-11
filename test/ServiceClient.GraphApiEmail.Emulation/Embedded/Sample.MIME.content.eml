@@ -1,0 +1,189 @@
+Received: from PAXP195MB1416.EURP195.PROD.OUTLOOK.COM (2603:10a6:102:287::13)
+ by DB4P195MB2266.EURP195.PROD.OUTLOOK.COM with HTTPS; Thu, 31 Aug 2023
+ 13:57:30 +0000
+Received: from DB8P195MB0599.EURP195.PROD.OUTLOOK.COM (2603:10a6:10:15f::23)
+ by PAXP195MB1416.EURP195.PROD.OUTLOOK.COM (2603:10a6:102:287::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.21; Thu, 31 Aug
+ 2023 13:57:28 +0000
+Received: from DB8P195MB0599.EURP195.PROD.OUTLOOK.COM
+ ([fe80::80e1:a037:55b:ead1]) by DB8P195MB0599.EURP195.PROD.OUTLOOK.COM
+ ([fe80::80e1:a037:55b:ead1%6]) with mapi id 15.20.6745.021; Thu, 31 Aug 2023
+ 13:57:28 +0000
+From: Development Shared Mailbox 2 <developmentsmb2@zpkw1.onmicrosoft.com>
+To: Development Shared Mailbox 1 <developmentsmb1@zpkw1.onmicrosoft.com>
+Subject: Sample email
+Thread-Topic: Sample email
+Thread-Index: AQHZ3BMNRPpWE8bvwUyzG1m77uAk5g==
+Date: Thu, 31 Aug 2023 13:57:28 +0000
+Message-ID:
+	<DB8P195MB0599C9351688DA18AC1DA8E3F4E5A@DB8P195MB0599.EURP195.PROD.OUTLOOK.COM>
+Accept-Language: en-US
+Content-Language: en-GB
+X-MS-Exchange-Organization-AuthAs: Internal
+X-MS-Exchange-Organization-AuthMechanism: 04
+X-MS-Exchange-Organization-AuthSource: DB8P195MB0599.EURP195.PROD.OUTLOOK.COM
+X-MS-Has-Attach:
+X-MS-Exchange-Organization-Network-Message-Id:
+	d1a98076-7a4c-4dd2-6652-08dbaa2a368c
+X-MS-Exchange-Organization-SCL: 1
+X-MS-TNEF-Correlator:
+X-MS-Exchange-Organization-RecordReviewCfmType: 0
+msip_labels:
+	MSIP_Label_defa4170-0d19-0005-0004-bc88714345d2_Enabled=True;MSIP_Label_defa4170-0d19-0005-0004-bc88714345d2_SiteId=f4d75e9b-1ddb-4139-a935-72e1c1535f38;MSIP_Label_defa4170-0d19-0005-0004-bc88714345d2_SetDate=2023-08-31T13:57:28.788Z;MSIP_Label_defa4170-0d19-0005-0004-bc88714345d2_Name=All
+ Employees
+ (unrestricted);MSIP_Label_defa4170-0d19-0005-0004-bc88714345d2_ContentBits=0;MSIP_Label_defa4170-0d19-0005-0004-bc88714345d2_Method=Standard;
+x-ms-publictraffictype: Email
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(425001)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	p+ectBTCYDMZrjzdwVcB6CyheduouzbzZWdoAMzqNY6q0eQ+IlF1hCIv5nxSe/734Lh0Pyt/JG81zpfoWJ9OtKaYFevi+yLQCiyjctLCBscHn6/J0jJ/2Vbdd+6nhOmzw7JgHfd8LMxVNFbSgdnxfrwxYEB3ywVSRGKMGXMDl7QB0nSwJvfcABw9jLyCxl82JsbVg9IhSF5d+NtHVtQv4SMQzVrSuHhDhKY+sKPMfVMmBauhyui2l73qRbedhU/7qA+9RoJK8ccR1fll8GLEHbNBzmSK4XFKDE/eq0bIwimT0J+aMNntsW5riKzD1ECyENoh036cgHZ9ScuXEdyVT2u8Dz/FSAwiYT6dtmrhwh0Gd3ZIi4D6CRq2b1oKEXlIaIbo+/g6caBMXq9sSfvlLH2IyE2hDFEyvkHJttqXBIZab/0+7LMO816p9nGgrvB/4SBc4OS4KLTQYjkwmJ/2hvQcFicrQOGKWgX2P//314zc6u9QchYhP7T0mV5ZT4hXrSHK4sVeZtyNl6DXbsrfFWDP7dE622aMaImNv4y6gckHOUNM1nk9ljcXSOcXQ/iIBbpZJYPwrn0FPj0p3qQS9uTj/O1/KozKc5eqpQ5QXvcT+wIc3fFLNSSdUkspPp3DO/BIMEv83CFxgdcty/az8WXi4NY/HuFyP56iUvFOtoYbD6MoK0LD53muXDAQtQ3J0OABjaytRwldoEDxtwCmrQ==
+Content-Type: multipart/alternative;
+	boundary="_000_DB8P195MB0599C9351688DA18AC1DA8E3F4E5ADB8P195MB0599EURP_"
+MIME-Version: 1.0
+
+--_000_DB8P195MB0599C9351688DA18AC1DA8E3F4E5ADB8P195MB0599EURP_
+Content-Type: text/plain; charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
+
+Email body
+The body of your email is where you get into your main message. Whether you=
+=92re composing an email to establish a new business connection or just fol=
+lowing up on a meeting, the body of your email should be detailed enough th=
+at the reader isn=92t confused, but also brief and to the point. No one wan=
+ts to sit and read a long-winded email when they have dozens of other unatt=
+ended messages in their inbox.
+Email body writing guidelines:
+
+  *   Be concise =96 detail only what=92s needed to get your point across.
+  *   Use words that convey (authentic) positive personal emotional =96 wor=
+ds like =93glad=94, =93excited=94, =93intrigued=94, =93confident=94.
+  *   Use the word =93because=94 when asking for something =96 it=92s been =
+scientifically shown that people are more easily convinced to do something =
+if told why, and more so if the reason is important for them.
+  *   Show don=92t tell =96 if you can=92t explain something in few words, =
+see if you can add a screenshot, a video or a link that explain it better.
+  *   Use headings to split long content into sub-topics =96 if you can=92t=
+ avoid writing a long email, make sure to break it up into subsections with=
+ headings. This will help your time-scarce readers to scan and find their p=
+oints of interest.
+  *   Add your concrete request or question in bold text =96 to ensure your=
+ readers do not miss the most important piece of content (your request or q=
+uestion) =96 set it in a separate line and put it in bold. You can also use=
+ some colour. If you do avoid light shades (you want high contrast between =
+the text and the white background. Once you pick a colour =96 stick with it=
+.
+
+--_000_DB8P195MB0599C9351688DA18AC1DA8E3F4E5ADB8P195MB0599EURP_
+Content-Type: text/html; charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DWindows-1=
+252">
+<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
+ttom:0;} </style>
+</head>
+<body dir=3D"ltr">
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 12pt; color: rgb(0, 0, 0);" class=3D"elementToProof">
+<p class=3D"MsoNormal" style=3D"margin:0cm 0cm 8pt;font-size:11pt;font-fami=
+ly:Calibri, sans-serif;mso-margin-top-alt:auto;margin-bottom:11.25pt;mso-ou=
+tline-level:3">
+<b><span style=3D"font-size: 13.5pt; color: rgb(8, 65, 92);" class=3D"Conte=
+ntPasted0">Email body<o:p class=3D"ContentPasted0">&nbsp;</o:p></span></b><=
+/p>
+<p class=3D"MsoNormal" style=3D"margin:0cm 0cm 8pt;font-size:11pt;font-fami=
+ly:Calibri, sans-serif;mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">
+<span style=3D"font-size: 13.5pt; color: rgb(8, 65, 92);" class=3D"ContentP=
+asted0">The body of your email is where you get into your main message. Whe=
+ther you=92re composing an email to establish a new business connection or =
+just following up on a meeting, the body
+ of your email should be detailed enough that the reader isn=92t confused, =
+but also brief and to the point. No one wants to sit and read a long-winded=
+ email when they have dozens of other unattended messages in their inbox.<o=
+:p class=3D"ContentPasted0">&nbsp;</o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin:0cm 0cm 8pt;font-size:11pt;font-fami=
+ly:Calibri, sans-serif;mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">
+<b><span style=3D"font-size: 13.5pt; color: rgb(8, 65, 92);" class=3D"Conte=
+ntPasted0">Email body writing guidelines:</span></b><span style=3D"font-siz=
+e: 13.5pt; color: rgb(8, 65, 92);"><o:p class=3D"ContentPasted0">&nbsp;</o:=
+p></span></p>
+<ul style=3D"margin-bottom:0cm;margin-top:0cm" type=3D"disc" class=3D"Conte=
+ntPasted0">
+<li class=3D"MsoNormal" style=3D"margin: 7.5pt 0cm; font-size: 11pt; font-f=
+amily: Calibri, sans-serif; color: rgb(8, 65, 92);">
+<b><span style=3D"font-size:13.5pt;mso-fareast-font-family:&quot;Times New =
+Roman&quot;;mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin;ms=
+o-fareast-language:EN-GB" class=3D"ContentPasted0">Be concise</span></b><sp=
+an style=3D"font-size:13.5pt;mso-fareast-font-family:&quot;Times New Roman&=
+quot;;mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin;mso-fare=
+ast-language:EN-GB" class=3D"ContentPasted0">&nbsp;=96
+ detail only what=92s needed to get your point across.<o:p class=3D"Content=
+Pasted0">&nbsp;</o:p></span></li><li class=3D"MsoNormal" style=3D"margin: 7=
+.5pt 0cm; font-size: 11pt; font-family: Calibri, sans-serif; color: rgb(8, =
+65, 92);">
+<b><span style=3D"font-size:13.5pt;mso-fareast-font-family:&quot;Times New =
+Roman&quot;;mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin;ms=
+o-fareast-language:EN-GB" class=3D"ContentPasted0">Use words that convey (a=
+uthentic) positive personal emotional</span></b><span style=3D"font-size:13=
+.5pt;mso-fareast-font-family:&quot;Times New Roman&quot;;mso-bidi-font-fami=
+ly:Calibri;mso-bidi-theme-font:minor-latin;mso-fareast-language:EN-GB" clas=
+s=3D"ContentPasted0">&nbsp;=96
+ words like =93glad=94, =93excited=94, =93intrigued=94, =93confident=94.<o:=
+p class=3D"ContentPasted0">&nbsp;</o:p></span></li><li class=3D"MsoNormal" =
+style=3D"margin: 7.5pt 0cm; font-size: 11pt; font-family: Calibri, sans-ser=
+if; color: rgb(8, 65, 92);">
+<b><span style=3D"font-size:13.5pt;mso-fareast-font-family:&quot;Times New =
+Roman&quot;;mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin;ms=
+o-fareast-language:EN-GB" class=3D"ContentPasted0">Use the word =93because<=
+/span></b><span style=3D"font-size:13.5pt;mso-fareast-font-family:&quot;Tim=
+es New Roman&quot;;mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-l=
+atin;mso-fareast-language:EN-GB" class=3D"ContentPasted0">=94
+ when asking for something =96 it=92s been scientifically shown that people=
+ are more easily convinced to do something if told why, and more so if the =
+reason is important for them.<o:p class=3D"ContentPasted0">&nbsp;</o:p></sp=
+an></li><li class=3D"MsoNormal" style=3D"margin: 7.5pt 0cm; font-size: 11pt=
+; font-family: Calibri, sans-serif; color: rgb(8, 65, 92);">
+<b><span style=3D"font-size:13.5pt;mso-fareast-font-family:&quot;Times New =
+Roman&quot;;mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin;ms=
+o-fareast-language:EN-GB" class=3D"ContentPasted0">Show don=92t tell</span>=
+</b><span style=3D"font-size:13.5pt;mso-fareast-font-family:&quot;Times New=
+ Roman&quot;;mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin;m=
+so-fareast-language:EN-GB" class=3D"ContentPasted0">&nbsp;=96
+ if you can=92t explain something in few words, see if you can add a screen=
+shot, a video or a link that explain it better.<o:p class=3D"ContentPasted0=
+">&nbsp;</o:p></span></li><li class=3D"MsoNormal" style=3D"margin: 7.5pt 0c=
+m; font-size: 11pt; font-family: Calibri, sans-serif; color: rgb(8, 65, 92)=
+;">
+<b><span style=3D"font-size:13.5pt;mso-fareast-font-family:&quot;Times New =
+Roman&quot;;mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin;ms=
+o-fareast-language:EN-GB" class=3D"ContentPasted0">Use headings to split lo=
+ng content into sub-topics</span></b><span style=3D"font-size:13.5pt;mso-fa=
+reast-font-family:&quot;Times New Roman&quot;;mso-bidi-font-family:Calibri;=
+mso-bidi-theme-font:minor-latin;mso-fareast-language:EN-GB" class=3D"Conten=
+tPasted0">&nbsp;=96
+ if you can=92t avoid writing a long email, make sure to break it up into s=
+ubsections with headings. This will help your time-scarce readers to scan a=
+nd find their points of interest.<o:p class=3D"ContentPasted0">&nbsp;</o:p>=
+</span></li><li class=3D"MsoNormal" style=3D"margin: 7.5pt 0cm; font-size: =
+11pt; font-family: Calibri, sans-serif; color: rgb(8, 65, 92);">
+<b><span style=3D"font-size:13.5pt;mso-fareast-font-family:&quot;Times New =
+Roman&quot;;mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin;ms=
+o-fareast-language:EN-GB" class=3D"ContentPasted0">Add your concrete reques=
+t or question in bold text</span></b><span style=3D"font-size:13.5pt;mso-fa=
+reast-font-family:&quot;Times New Roman&quot;;mso-bidi-font-family:Calibri;=
+mso-bidi-theme-font:minor-latin;mso-fareast-language:EN-GB" class=3D"Conten=
+tPasted0">&nbsp;=96
+ to ensure your readers do not miss the most important piece of content (yo=
+ur request or question) =96 set it in a separate line and put it in bold. Y=
+ou can also use some colour. If you do avoid light shades (you want high co=
+ntrast between the text and the white
+ background. Once you pick a colour =96 stick with it.<o:p class=3D"Content=
+Pasted0">&nbsp;</o:p></span></li></ul>
+</div>
+</body>
+</html>
+
+--_000_DB8P195MB0599C9351688DA18AC1DA8E3F4E5ADB8P195MB0599EURP_--

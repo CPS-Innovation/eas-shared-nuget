@@ -1,0 +1,8 @@
+This document is intended to be attached to an email.
+
+Random text 1.
+
+Unicode text:
+©
+ç
+€

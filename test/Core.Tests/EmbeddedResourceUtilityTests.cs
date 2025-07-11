@@ -23,7 +23,7 @@ public class EmbeddedResourceUtilityTests
         Type type = typeof(EmbeddedResourceUtilityTests);
 
         // Act
-        string content = EmbeddedResourceUtility.LoadEmbeddedResource(" Cps.Fct.EasShared.Core.Tests.Embedded.Sample.embedded.resource.txt", type);
+        string content = EmbeddedResourceUtility.LoadEmbeddedResource("Cps.Fct.EasShared.Core.Tests.Embedded.Sample.embedded.resource.txt", type);
 
         // Assert
         content.Should().Contain("A sample embedded resource.");
@@ -57,7 +57,7 @@ public class EmbeddedResourceUtilityTests
         Type type = typeof(EmbeddedResourceUtilityTests);
 
         // Act
-        byte[] content = EmbeddedResourceUtility.LoadEmbeddedResourceAsBinary(" Cps.Fct.EasShared.Core.Tests.Embedded.Sample.embedded.resource.txt", type);
+        byte[] content = EmbeddedResourceUtility.LoadEmbeddedResourceAsBinary("Cps.Fct.EasShared.Core.Tests.Embedded.Sample.embedded.resource.txt", type);
 
         // Assert
         content.Should().NotBeNullOrEmpty();

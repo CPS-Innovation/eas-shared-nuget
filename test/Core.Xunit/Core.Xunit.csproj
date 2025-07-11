@@ -6,6 +6,10 @@
     <Nullable>enable</Nullable>
 
     <IsPackable>false</IsPackable>
+
+    <RootNamespace>Cps.Fct.EasShared.$(MSBuildProjectName)</RootNamespace>
+
+    <AssemblyName>$(RootNamespace)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
