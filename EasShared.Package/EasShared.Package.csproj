@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Cps.Fct.$(MSBuildProjectName)</RootNamespace>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
+
+    <!-- NuGet metadata -->
+    <PackageId>Cps.Fct.EasShared</PackageId>
+    <Version>1.0.1</Version>
+    <Authors>CPS</Authors>
+    <Company>CPS</Company>
+    <Description>Reusable components for the Email Automation Service microservices</Description>
+    <PackageTags>internal;utility;shared</PackageTags>
+
+    <!-- Required to generate .nupkg -->
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PrivateAssets>all</PrivateAssets>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\Core\Core.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\src\ServiceClient.GraphApi\ServiceClient.GraphApi.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\src\ServiceClient.GraphApiEmail\ServiceClient.GraphApiEmail.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\src\ServiceClient.GraphApiSubscription\ServiceClient.GraphApiSubscription.csproj" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

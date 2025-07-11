@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Cps.Fct.EasShared</id>
+    <version>1.0.4</version>
+    <authors>Crown Prosecution Service</authors>
+    <description>Reusable components for the Email Automation Service microservices</description>
+  </metadata>
+  <files>
+    <file src="src/Core/bin/Release/net8.0/Cps.Fct.EasShared.Core.dll" target="lib/net8.0/" />
+    <file src="test/Core.Xunit/bin/Release/net8.0/Cps.Fct.EasShared.Core.Xunit.dll" target="lib/net8.0/" />
+    <file src="src/ServiceClient.GraphApi/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApi.dll" target="lib/net8.0/" />
+    <file src="src/ServiceClient.GraphApiEmail/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApiEmail.dll" target="lib/net8.0/" />
+    <file src="src/ServiceClient.GraphApiSubscription/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApiSubscription.dll" target="lib/net8.0/" />
+  </files>
+</package>
