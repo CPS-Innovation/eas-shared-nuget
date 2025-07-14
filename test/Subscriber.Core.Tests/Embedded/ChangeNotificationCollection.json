@@ -1,0 +1,18 @@
+{
+  "value": [
+    {
+      "subscriptionId": "a2e2c991-e0a7-427a-ac18-a6ba7b576447",
+      "subscriptionExpirationDateTime": "2023-02-19T14:42:45.8024818+00:00",
+      "changeType": "created",
+      "resource": "Users/b2de5fff-8ce1-43ac-9ef8-32ebf12b404d/Messages/AAMkADcxZmQ5Y2VjLTBhOTgtNGMzNi1iMzE0LWIwZDY3ZDYxNjFkYgBGAAAAAADADYgWwf53S6DTtRRnJ940BwDBV2h-7uZxQ7JqLivCUCx6AAAAAAEMAADBV2h-7uZxQ7JqLivCUCx6AAAD-5qHAAA=",
+      "resourceData": {
+        "@odata.type": "#Microsoft.Graph.Message",
+        "@odata.id": "Users/b2de5fff-8ce1-43ac-9ef8-32ebf12b404d/Messages/AAMkADcxZmQ5Y2VjLTBhOTgtNGMzNi1iMzE0LWIwZDY3ZDYxNjFkYgBGAAAAAADADYgWwf53S6DTtRRnJ940BwDBV2h-7uZxQ7JqLivCUCx6AAAAAAEMAADBV2h-7uZxQ7JqLivCUCx6AAAD-5qHAAA=",
+        "@odata.etag": "W/\"CQAAABYAAADBV2h/7uZxQ7JqLivCUCx6AAAD/2hW\"",
+        "id": "AAMkADcxZmQ5Y2VjLTBhOTgtNGMzNi1iMzE0LWIwZDY3ZDYxNjFkYgBGAAAAAADADYgWwf53S6DTtRRnJ940BwDBV2h-7uZxQ7JqLivCUCx6AAAAAAEMAADBV2h-7uZxQ7JqLivCUCx6AAAD-5qHAAA="
+      },
+      "clientState": "3e1df716-51e3-4bf0-99cc-4204d0837279",
+      "tenantId": "141c1892-abd8-4fd6-9ac5-1e14475a6bda"
+    }
+  ]
+}

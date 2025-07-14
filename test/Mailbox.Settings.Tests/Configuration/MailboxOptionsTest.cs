@@ -1,0 +1,513 @@
+// <copyright file="MailboxOptionsTest.cs" company="TheCrownProsecutionService">
+// Copyright (c) The Crown Prosecution Service. All rights reserved.
+// </copyright>
+
+namespace Cps.Fct.EasShared.Mailbox.Settings.Tests.Configuration;
+
+using System;
+using System.Data;
+using Cps.Fct.EasShared.Mailbox.Settings.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
+/// <summary>
+/// Unit tests for <see cref="MailboxOptions"/>.
+/// </summary>
+[Trait("Category", "UnitTest")]
+[Trait("Status", "Ready")]
+public class MailboxOptionsTest
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MailboxOptionsTest"/> class.
+    /// </summary>
+    public MailboxOptionsTest()
+    {
+        string[] args = Array.Empty<string>();
+        IHost host = Host
+            .CreateDefaultBuilder(args)
+            .ConfigureServices(services =>
+            {
+                services
+                    .AddSingleton<MailboxOptions>();
+            })
+            .Build();
+
+        IServiceScope serviceScope = host.Services.CreateScope();
+        this.ServiceProvider = serviceScope.ServiceProvider;
+    }
+
+    private IServiceProvider ServiceProvider { get; }
+
+    /// <summary>
+    /// Tests that the expected number of mailboxes per environment.
+    /// </summary>
+    /// <param name="environment">The environment to check.</param>
+    /// <param name="expectedMailboxCount">The expected number of mailboxes per environment.</param>
+    [Theory]
+    [InlineData("Development", 1)]
+    [InlineData("Staging", 2)]
+    [InlineData("Production", 180)]
+    public void ExpectedEnvironmentCount(string environment, int expectedMailboxCount)
+    {
+        // Arrange
+        MailboxOptions mailboxOptions = this.ServiceProvider.GetRequiredService<MailboxOptions>();
+
+        // Act
+        IEnumerable<IdentifiableMailboxSettings> mailboxes = mailboxOptions.MailboxList
+            .Where(m => m.Environment.Equals(environment, StringComparison.OrdinalIgnoreCase));
+
+        // Assert
+        mailboxes.Should().HaveCount(expectedMailboxCount);
+    }
+
+    /// <summary>
+    /// Tests that the expected number of mailboxes are loaded for a given region.
+    /// </summary>
+    /// <param name="region">The region to check.</param>
+    /// <param name="expectedMailboxCount">The expected number of mailboxes.</param>
+    [Theory]
+    [InlineData("Cymru-Wales", 6)]
+    [InlineData("Default", 1)]
+    [InlineData("East Midlands", 6)]
+    [InlineData("London", 1)]
+    [InlineData("North West", 24)]
+    [InlineData("Proceeds of Crime", 7)]
+    [InlineData("West Midlands", 14)]
+    [InlineData("Wessex", 12)]
+    [InlineData("Extradition", 4)]
+    [InlineData("Yorkshire and Humberside", 11)]
+    [InlineData("Mersey Cheshire", 21)]
+    [InlineData("CPS Direct", 3)]
+    [InlineData("South West", 11)]
+    [InlineData("South East", 10)]
+    [InlineData("East of England", 4)]
+    [InlineData("London North", 1)]
+    [InlineData("London South", 8)]
+    [InlineData("North East", 13)]
+    [InlineData("Thames and Chiltern", 20)]
+    [InlineData("ARU", 3)]
+    [InlineData("VTP", 1)]
+    [InlineData("Testing development", 1)]
+    [InlineData("Testing staging", 2)]
+    [InlineData("Unit test", 4)]
+    public void ExpectedRegionCount(string region, int expectedMailboxCount)
+    {
+        // Arrange
+        MailboxOptions mailboxOptions = this.ServiceProvider.GetRequiredService<MailboxOptions>();
+
+        // Act
+        IEnumerable<IdentifiableMailboxSettings> mailboxes = mailboxOptions.MailboxList
+            .Where(m => m.Region.Equals(region, StringComparison.OrdinalIgnoreCase));
+
+        // Assert
+        mailboxes.Should().HaveCount(expectedMailboxCount);
+    }
+
+    /// <summary>
+    /// Tests that <see cref="MailboxOptions.IsSharedMailbox(string)"/> returns <c>true</c>.
+    /// </summary>
+    /// <param name="id">A mailbox identifier, either a GUID or an email address.</param>
+    [Theory]
+    [InlineData("shared1@mailbox.com")]
+    [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156")]
+    [InlineData("shared2@mailbox.com")]
+    [InlineData("a849ab7c-a548-41d1-a546-377a44be0c11")]
+    public void IsASharedMailbox(string id)
+    {
+        // Arrange
+        MailboxOptions mailboxOptions = this.ServiceProvider.GetRequiredService<MailboxOptions>();
+
+        // Act
+        bool isSharedMailbox = mailboxOptions.IsSharedMailbox(id);
+
+        // Assert
+        isSharedMailbox.Should().BeTrue();
+    }
+
+    /// <summary>
+    /// Tests that <see cref="MailboxOptions.IsSharedMailbox(string)"/> returns <c>false</c>.
+    /// </summary>
+    /// <param name="id">A mailbox identifier, either a GUID or an email address.</param>
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("shared1@b.com")]
+    [InlineData("338b27ea-0000-0000-849d-e396fd161156")]
+    [InlineData("shared2@b.com")]
+    [InlineData("a849ab7c-0000-0000-a546-377a44be0c11")]
+    public void NotASharedMailbox(string? id)
+    {
+        // Arrange
+        MailboxOptions mailboxOptions = this.ServiceProvider.GetRequiredService<MailboxOptions>();
+
+        // Act
+        bool isSharedMailbox = mailboxOptions.IsSharedMailbox(id!);
+
+        // Assert
+        isSharedMailbox.Should().BeFalse();
+    }
+
+    /// <summary>
+    /// Tests that a mailbox is not a Proceeds of Crime mailbox.
+    /// </summary>
+    /// <param name="mailboxId">The mailbox ID to test.</param>
+    [Theory]
+    [InlineData("a@b.com")]
+    [InlineData("123")]
+    [InlineData("shared1@mailbox.com")]
+    [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156")]
+    public void NotAProceedsOfCrimeMailbox(string mailboxId)
+    {
+        // Arrange
+        MailboxOptions options = this.ServiceProvider.GetRequiredService<MailboxOptions>();
+
+        // Act
+        bool result = options.RequiresProceedsOfCrimeUrnSupport(mailboxId);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    /// <summary>
+    /// Tests that a mailbox is a Proceeds of Crime mailbox.
+    /// </summary>
+    /// <param name="mailboxId">The mailbox ID to test.</param>
+    [Theory]
+    [InlineData("SHARED2@mailbox.com")]
+    [InlineData("email.automation3@cps.gov.uk")]
+    [InlineData("2e256642-b947-4da3-a987-0233f165eff4")]
+    [InlineData("0724d778-579d-423a-a83a-a1f092257b13")]
+    [InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602")]
+    [InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a")]
+    public void IsAProceedsOfCrimeMailbox(string mailboxId)
+    {
+        // Arrange
+        MailboxOptions options = this.ServiceProvider.GetRequiredService<MailboxOptions>();
+
+        // Act
+        bool result = options.RequiresProceedsOfCrimeUrnSupport(mailboxId);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    /// <summary>
+    /// Tests <c>AcceptNonProceedsOfCrimeUrn</c> returns <c>false</c>.
+    /// </summary>
+    /// <param name="mailboxId">The mailbox ID to test.</param>
+    [Theory]
+    [InlineData("Email.Automation2@cps.gov.uk")]
+    [InlineData("ef0ef3d7-9373-4f61-91a9-37fe5982abef")]
+    [InlineData("0724d778-579d-423a-a83a-a1f092257b13")]
+    [InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602")]
+    [InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a")]
+    public void AcceptNonProceedsOfCrimeUrnIsFalse(string mailboxId)
+    {
+        // Arrange
+        MailboxOptions options = this.ServiceProvider.GetRequiredService<MailboxOptions>();
+
+        // Act
+        bool result = options.AcceptNonProceedsOfCrimeUrn(mailboxId);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    /// <summary>
+    /// Tests <c>AcceptNonProceedsOfCrimeUrn</c> returns <c>true</c>.
+    /// </summary>
+    /// <param name="mailboxId">The mailbox ID to test.</param>
+    [Theory]
+    [InlineData("Email.Automation3@cps.gov.uk")]
+    [InlineData("2e256642-b947-4da3-a987-0233f165eff4")]
+    public void AcceptNonProceedsOfCrimeUrnIsTrue(string mailboxId)
+    {
+        // Arrange
+        MailboxOptions options = this.ServiceProvider.GetRequiredService<MailboxOptions>();
+
+        // Act
+        bool result = options.AcceptNonProceedsOfCrimeUrn(mailboxId);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    /// <summary>
+    /// Tests <c>RequiresEmailAsMsgFile</c> returns <c>false</c>.
+    /// </summary>
+    /// <param name="mailboxId">The mailbox ID to test.</param>
+    [Theory]
+    [InlineData("a@b.com")]
+    [InlineData("123")]
+    [InlineData("shared1@mailbox.com")]
+    [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156")]
+    public void RequiresEmailAsMsgFileIsFalse(string mailboxId)
+    {
+        // Arrange
+        MailboxOptions options = this.ServiceProvider.GetRequiredService<MailboxOptions>();
+
+        // Act
+        bool result = options.RequiresEmailAsMsgFile(mailboxId);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    /// <summary>
+    /// Tests <c>RequiresEmailAsMsgFile</c> returns <c>true</c>.
+    /// </summary>
+    /// <param name="mailboxId">The mailbox ID to test.</param>
+    [Theory]
+    [InlineData("shared2@mailbox.com")]
+    [InlineData("a849ab7c-a548-41d1-a546-377a44be0c11")]
+    [InlineData("email.automation3@cps.gov.uk")]
+    [InlineData("2e256642-b947-4da3-a987-0233f165eff4")]
+    [InlineData("0724d778-579d-423a-a83a-a1f092257b13")]
+    [InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602")]
+    [InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a")]
+    public void RequiresEmailAsMsgFileIsTrue(string mailboxId)
+    {
+        // Arrange
+        MailboxOptions options = this.ServiceProvider.GetRequiredService<MailboxOptions>();
+
+        // Act
+        bool result = options.RequiresEmailAsMsgFile(mailboxId);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    /// <summary>
+    /// Tests <c>RequiresEmailAsMsgFileIncludeAttachments</c> returns <c>false</c>.
+    /// </summary>
+    /// <param name="mailboxId">The mailbox ID to test.</param>
+    [Theory]
+    [InlineData("a@b.com")]
+    [InlineData("123")]
+    [InlineData("shared1@mailbox.com")]
+    [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156")]
+    [InlineData("shared2@mailbox.com")]
+    [InlineData("a849ab7c-a548-41d1-a546-377a44be0c11")]
+    public void RequiresEmailAsMsgFileIncludeAttachmentsIsFalse(string mailboxId)
+    {
+        // Arrange
+        MailboxOptions options = this.ServiceProvider.GetRequiredService<MailboxOptions>();
+
+        // Act
+        bool result = options.RequiresEmailAsMsgFileIncludeAttachments(mailboxId);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    /// <summary>
+    /// Tests <c>RequiresEmailAsMsgFileIncludeAttachments</c> returns <c>true</c>.
+    /// </summary>
+    /// <param name="mailboxId">The mailbox ID to test.</param>
+    [Theory]
+    [InlineData("0724d778-579d-423a-a83a-a1f092257b13")]
+    [InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602")]
+    [InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a")]
+    [InlineData("email.automation3@cps.gov.uk")]
+    [InlineData("2e256642-b947-4da3-a987-0233f165eff4")]
+    public void RequiresEmailAsMsgFileIncludeAttachmentsIsTrue(string mailboxId)
+    {
+        // Arrange
+        MailboxOptions options = this.ServiceProvider.GetRequiredService<MailboxOptions>();
+
+        // Act
+        bool result = options.RequiresEmailAsMsgFileIncludeAttachments(mailboxId);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    /// <summary>
+    /// Tests <c>RequiresIgnoreAttachmentsIsTrue</c> returns <c>true</c>.
+    /// </summary>
+    /// <param name="mailboxId">The mailbox ID to test.</param>
+    [Theory]
+    [InlineData("email.automation3@cps.gov.uk")]
+    [InlineData("2e256642-b947-4da3-a987-0233f165eff4")]
+    public void RequiresIgnoreAttachmentsIsTrue(string mailboxId)
+    {
+        // Arrange
+        MailboxOptions options = this.ServiceProvider.GetRequiredService<MailboxOptions>();
+
+        // Act
+        bool result = options.RequiresIgnoreAttachments(mailboxId);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    /// <summary>
+    /// Tests that <see cref="MailboxOptions.GetMailboxSettings(string)"/> returns the expected settings.
+    /// </summary>
+    /// <param name="id">A mailbox identifier, either a GUID or an email address.</param>
+    /// <param name="expectedName">The expected name.</param>
+    /// <param name="expectedParty">The expected party.</param>
+    /// <param name="expectedPartyDescription">The expected party description.</param>
+    /// <param name="createCommunicationTask">The expected value for <see cref="IMailboxSettings.CreateCommunicationTask"/>.</param>
+    /// <param name="markCommunicationAsRead">The expected value for <see cref="IMailboxSettings.MarkCommunicationAsRead"/>.</param>
+    /// <param name="dummyUrnPrefix">The expected value for <see cref="IMailboxSettings.DummyUrnPrefix"/>.</param>
+    [Theory]
+    [InlineData(null, "Crown Prosecution Service", "Defence", "DEF/CSL", true, false, null)]
+    [InlineData("", "Crown Prosecution Service", "Defence", "DEF/CSL", true, false, null)]
+    [InlineData(" ", "Crown Prosecution Service", "Defence", "DEF/CSL", true, false, null)]
+    [InlineData("shared1@mailbox.com", "Crown Prosecution Service", "Defence", "DEF/CSL", true, false, null)]
+    [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156", "Crown Prosecution Service", "Defence", "DEF/CSL", true, false, null)]
+    [InlineData("shared2@mailbox.com", "Shared mailbox #2", "Counsel", "CSL", false, true, "99")]
+    [InlineData("a849ab7c-a548-41d1-a546-377a44be0c11", "Shared mailbox #2", "Counsel", "CSL", false, true, "99")]
+    public void GetMailboxSettingsReturnsExpectedSettings(
+        string? id,
+        string expectedName,
+        string expectedParty,
+        string expectedPartyDescription,
+        bool createCommunicationTask,
+        bool markCommunicationAsRead,
+        string? dummyUrnPrefix)
+    {
+        // Arrange
+        MailboxOptions mailboxOptions = this.ServiceProvider.GetRequiredService<MailboxOptions>();
+
+        // Act
+        IMailboxSettings mailboxSettings = mailboxOptions.GetMailboxSettings(id!);
+
+        // Assert
+        mailboxSettings.Should().NotBeNull();
+        mailboxSettings.Name.Should().Be(expectedName);
+        mailboxSettings.CreateCommunicationTask.Should().Be(createCommunicationTask);
+        mailboxSettings.MarkCommunicationAsRead.Should().Be(markCommunicationAsRead);
+        mailboxSettings.DefaultParty.Should().Be(expectedParty);
+        mailboxSettings.DefaultPartyDescription.Should().Be(expectedPartyDescription);
+        mailboxSettings.DummyUrnPrefix.Should().Be(dummyUrnPrefix);
+    }
+
+    /// <summary>
+    /// Tests that <see cref="MailboxOptions.GetMailboxSettings(string)"/> returns the expected settings.
+    /// </summary>
+    /// <param name="id">A mailbox identifier, either a GUID or an email address.</param>
+    /// <param name="treatZipAttachmentEmailsAsExceptions">The expected value for <see cref="IMailboxSettings.TreatZipAttachmentEmailsAsExceptions"/>.</param>
+    [Theory]
+    [InlineData(null, false)]
+    [InlineData("", false)]
+    [InlineData(" ", false)]
+    [InlineData("shared1@mailbox.com", false)]
+    [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156", false)]
+    [InlineData("shared2@mailbox.com", true)]
+    [InlineData("a849ab7c-a548-41d1-a546-377a44be0c11", true)]
+    [InlineData("email.automation3@cps.gov.uk", true)]
+    [InlineData("2e256642-b947-4da3-a987-0233f165eff4", true)]
+    [InlineData("0724d778-579d-423a-a83a-a1f092257b13", true)]
+    [InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602", true)]
+    [InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a", true)]
+    public void GetMailboxSettingsReturnsExpectedTreatZipAttachmentEmailsAsExceptionsSettings(
+        string? id,
+        bool treatZipAttachmentEmailsAsExceptions)
+    {
+        // Arrange
+        MailboxOptions mailboxOptions = this.ServiceProvider.GetRequiredService<MailboxOptions>();
+
+        // Act
+        IMailboxSettings mailboxSettings = mailboxOptions.GetMailboxSettings(id!);
+
+        // Assert
+        mailboxSettings.Should().NotBeNull();
+        mailboxSettings.TreatZipAttachmentEmailsAsExceptions.Should().Be(treatZipAttachmentEmailsAsExceptions);
+    }
+
+    /// <summary>
+    /// Tests that <see cref="MailboxOptions.GetMailboxSettings(string)"/> returns the expected settings.
+    /// </summary>
+    /// <param name="id">A mailbox identifier, either a GUID or an email address.</param>
+    /// <param name="disableInvalidUrnAutoReply">The expected value for <see cref="IMailboxSettings.DisableInvalidUrnAutoReply"/>.</param>
+    [Theory]
+    [InlineData(null, false)]
+    [InlineData("", false)]
+    [InlineData(" ", false)]
+    [InlineData("shared1@mailbox.com", false)]
+    [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156", false)]
+    [InlineData("shared2@mailbox.com", true)]
+    [InlineData("a849ab7c-a548-41d1-a546-377a44be0c11", true)]
+    [InlineData("email.automation3@cps.gov.uk", false)]
+    [InlineData("2e256642-b947-4da3-a987-0233f165eff4", false)]
+    [InlineData("0724d778-579d-423a-a83a-a1f092257b13", false)]
+    [InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602", false)]
+    [InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a", false)]
+    public void GetMailboxSettingsReturnsExpectedDisableInvalidUrnAutoReplySettings(
+        string? id,
+        bool disableInvalidUrnAutoReply)
+    {
+        // Arrange
+        MailboxOptions mailboxOptions = this.ServiceProvider.GetRequiredService<MailboxOptions>();
+
+        // Act
+        IMailboxSettings mailboxSettings = mailboxOptions.GetMailboxSettings(id!);
+
+        // Assert
+        mailboxSettings.Should().NotBeNull();
+        mailboxSettings.DisableInvalidUrnAutoReply.Should().Be(disableInvalidUrnAutoReply);
+    }
+
+    /// <summary>
+    /// Tests that <see cref="MailboxOptions.GetMailboxSettings(string)"/> returns the expected settings.
+    /// </summary>
+    /// <param name="id">A mailbox identifier, either a GUID or an email address.</param>
+    /// <param name="disableAddToFinalisedCase">The expected value for <see cref="IMailboxSettings.DisableAddToFinalisedCase"/>.</param>
+    [Theory]
+    [InlineData(null, false)]
+    [InlineData("", false)]
+    [InlineData(" ", false)]
+    [InlineData("shared1@mailbox.com", false)]
+    [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156", false)]
+    [InlineData("shared2@mailbox.com", true)]
+    [InlineData("a849ab7c-a548-41d1-a546-377a44be0c11", true)]
+    [InlineData("email.automation3@cps.gov.uk", true)]
+    [InlineData("2e256642-b947-4da3-a987-0233f165eff4", true)]
+    [InlineData("0724d778-579d-423a-a83a-a1f092257b13", false)]
+    [InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602", false)]
+    [InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a", false)]
+    public void GetMailboxSettingsReturnsExpectedDisableAddToFinalisedCase(
+        string? id,
+        bool disableAddToFinalisedCase)
+    {
+        // Arrange
+        MailboxOptions mailboxOptions = this.ServiceProvider.GetRequiredService<MailboxOptions>();
+
+        // Act
+        IMailboxSettings mailboxSettings = mailboxOptions.GetMailboxSettings(id!);
+
+        // Assert
+        mailboxSettings.Should().NotBeNull();
+        mailboxSettings.DisableAddToFinalisedCase.Should().Be(disableAddToFinalisedCase);
+    }
+
+    /// <summary>
+    /// Tests that a mailbox requires the secure mailbox queue.
+    /// </summary>
+    /// <param name="mailboxId">The mailbox ID to test.</param>
+    [Theory]
+    [InlineData("SHARED2@mailbox.com")]
+    [InlineData("A849AB7C-A548-41D1-A546-377A44BE0C11")]
+    [InlineData("email.automation3@cps.gov.uk")]
+    [InlineData("2e256642-b947-4da3-a987-0233f165eff4")]
+    [InlineData("0724d778-579d-423a-a83a-a1f092257b13")]
+    [InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602")]
+    [InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a")]
+    [InlineData("253ebcbf-c354-46c5-91e0-791581ac276e")]
+    [InlineData("da0e9987-5098-482a-9c5f-bdcf5d8e930e")]
+    [InlineData("e281f282-6773-4a85-a215-6bc40fc026a9")]
+    public void IsASecureMailbox(string mailboxId)
+    {
+        // Arrange
+        MailboxOptions options = this.ServiceProvider.GetRequiredService<MailboxOptions>();
+
+        // Act
+        bool result = options.RequiresSecureMailbox(mailboxId);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+}

@@ -1,0 +1,6 @@
+{
+  "QueryName": "AggregatedMetricsLondon",
+  "Parameters": {
+    "mailboxFilter": "and @message like /.(?i)(a@b.com)/"
+  }
+}
