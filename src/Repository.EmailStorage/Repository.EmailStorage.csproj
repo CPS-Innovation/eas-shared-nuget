@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Cps.Fct.EasShared.$(MSBuildProjectName)</RootNamespace>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Analysis\stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Kiota.Abstractions" Version="1.9.6" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mailbox.Settings\Mailbox.Settings.csproj" />
+    <ProjectReference Include="..\ServiceClient.GraphApiEmail\ServiceClient.GraphApiEmail.csproj" />
+    <ProjectReference Include="..\ServiceClient.RabbitMQ\ServiceClient.RabbitMQ.csproj" />
+    <ProjectReference Include="..\Storage.Core\Storage.Core.csproj" />
+    <ProjectReference Include="..\Subscriber.Core\Subscriber.Core.csproj" />
+  </ItemGroup>
+  
+</Project>

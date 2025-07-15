@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Tests", "test\Core.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Xunit", "test\Core.Xunit\Core.Xunit.csproj", "{DFB4F569-800D-18EB-F7F6-A2352EF02B80}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04.GraphApiServiceClient", "04.GraphApiServiceClient", "{3F9D50A4-B3FC-44DA-8A9C-8052F90D43C4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "05.GraphApiServiceClient", "05.GraphApiServiceClient", "{3F9D50A4-B3FC-44DA-8A9C-8052F90D43C4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceClient.GraphApi", "src\ServiceClient.GraphApi\ServiceClient.GraphApi.csproj", "{3AE821BC-33B2-67F6-1151-5E8822452972}"
 EndProject
@@ -35,7 +35,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceClient.GraphApiSubsc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasShared.Package", "EasShared.Package\EasShared.Package.csproj", "{DFEB440B-A9C7-4A82-9129-93BCA606CC05}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "05.RabbitMQServiceClient", "05.RabbitMQServiceClient", "{22D10464-E5F0-4DD3-9FCC-4F504E521105}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "07.RabbitMQServiceClient", "07.RabbitMQServiceClient", "{22D10464-E5F0-4DD3-9FCC-4F504E521105}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceClient.RabbitMQ", "src\ServiceClient.RabbitMQ\ServiceClient.RabbitMQ.csproj", "{22977D9E-D1C8-CF08-3022-CB875DB04E0A}"
 EndProject
@@ -64,6 +64,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceClient.Aws.Emulation", "test\ServiceClient.Aws.Emulation\ServiceClient.Aws.Emulation.csproj", "{8C41C6B7-2833-DA74-D42D-001793AC99B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceClient.Aws.Tests", "test\ServiceClient.Aws.Tests\ServiceClient.Aws.Tests.csproj", "{490558BD-CDCB-9441-3521-EFCF7716508A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04.RepositoryEmailStorage", "04.RepositoryEmailStorage", "{BFA94F75-5F62-4B63-9BAA-8BF603803F1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository.EmailStorage", "src\Repository.EmailStorage\Repository.EmailStorage.csproj", "{0309B2CC-186D-F116-725A-F940C614C1FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository.EmailStorage.Tests", "test\Repository.EmailStorage.Tests\Repository.EmailStorage.Tests.csproj", "{7EB937C0-9897-3D02-3721-B6E811AE611B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -167,6 +173,14 @@ Global
 		{490558BD-CDCB-9441-3521-EFCF7716508A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{490558BD-CDCB-9441-3521-EFCF7716508A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{490558BD-CDCB-9441-3521-EFCF7716508A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0309B2CC-186D-F116-725A-F940C614C1FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0309B2CC-186D-F116-725A-F940C614C1FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0309B2CC-186D-F116-725A-F940C614C1FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0309B2CC-186D-F116-725A-F940C614C1FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EB937C0-9897-3D02-3721-B6E811AE611B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EB937C0-9897-3D02-3721-B6E811AE611B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EB937C0-9897-3D02-3721-B6E811AE611B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EB937C0-9897-3D02-3721-B6E811AE611B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -196,6 +210,8 @@ Global
 		{19B82DDD-BD41-BAB1-00FC-4DD6CF028A80} = {D0B81314-5D35-4C23-BB99-9D3F11B47BEC}
 		{8C41C6B7-2833-DA74-D42D-001793AC99B7} = {D0B81314-5D35-4C23-BB99-9D3F11B47BEC}
 		{490558BD-CDCB-9441-3521-EFCF7716508A} = {D0B81314-5D35-4C23-BB99-9D3F11B47BEC}
+		{0309B2CC-186D-F116-725A-F940C614C1FF} = {BFA94F75-5F62-4B63-9BAA-8BF603803F1A}
+		{7EB937C0-9897-3D02-3721-B6E811AE611B} = {BFA94F75-5F62-4B63-9BAA-8BF603803F1A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EA826639-6929-4698-8A89-CAE77C99E52E}
