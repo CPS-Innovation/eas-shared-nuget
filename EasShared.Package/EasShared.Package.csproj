@@ -9,7 +9,7 @@
 
     <!-- NuGet metadata -->
     <PackageId>Cps.Fct.EasShared</PackageId>
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
     <Authors>CPS</Authors>
     <Company>CPS</Company>
     <Description>Reusable components for the Email Automation Service microservices</Description>
@@ -25,9 +25,16 @@
 
   <ItemGroup>
     <ProjectReference Include="..\src\Core\Core.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\test\Core.Xunit\Core.Xunit.csproj" PrivateAssets="all" />
     <ProjectReference Include="..\src\ServiceClient.GraphApi\ServiceClient.GraphApi.csproj" PrivateAssets="all" />
     <ProjectReference Include="..\src\ServiceClient.GraphApiEmail\ServiceClient.GraphApiEmail.csproj" PrivateAssets="all" />
     <ProjectReference Include="..\src\ServiceClient.GraphApiSubscription\ServiceClient.GraphApiSubscription.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\src\ServiceClient.RabbitMQ\ServiceClient.RabbitMQ.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\src\ServiceClient.Aws\ServiceClient.Aws.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\src\Subscriber.Core\Subscriber.Core.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\src\Mailbox.Settings\Mailbox.Settings.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\src\Storage.Core\Storage.Core.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\src\Repository.EmailStorage\Repository.EmailStorage.csproj" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>
