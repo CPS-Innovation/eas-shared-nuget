@@ -6,8 +6,8 @@ namespace Cps.Fct.EasShared.Subscriber.Core.Translator;
 
 using System;
 using System.Text.RegularExpressions;
-using Cps.Fct.EasShared.Mailbox.Settings.Configuration;
 using Cps.Fct.EasShared.Core.Interfaces;
+using Cps.Fct.EasShared.Mailbox.Settings.Configuration;
 
 /// <summary>
 /// Translates an email subject to a URN.

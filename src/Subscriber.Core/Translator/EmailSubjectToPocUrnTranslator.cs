@@ -2,13 +2,13 @@
 // Copyright (c) The Crown Prosecution Service. All rights reserved.
 // </copyright>
 
-namespace Cps.Fct.EasShared.Subscriber.Core.Translator;
 
 using System;
 using System.Text.RegularExpressions;
 using Cps.Fct.EasShared.Core.Interfaces;
 using Cps.Fct.EasShared.Mailbox.Settings.Configuration;
 
+namespace Cps.Fct.EasShared.Subscriber.Core.Translator;
 /// <summary>
 /// Translates an email subject to a URN.
 /// </summary>
@@ -116,7 +116,7 @@ public partial class EmailSubjectToPocUrnTranslator
             valid = ProceedsOfCrimeUrn.IsMatch(end[..^MergeToken.Length]);
         }
 
-        if (end.EndsWith(MergeToken, StringComparison.Ordinal) || SplitMergeTokenRegex.IsMatch(end))
+        if (SplitMergeTokenRegex.IsMatch(end))
         {
             valid = ProceedsOfCrimeUrn.IsMatch(SplitMergeTokenRegex.Replace(end, string.Empty));
         }

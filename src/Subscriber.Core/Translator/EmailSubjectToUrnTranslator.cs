@@ -2,11 +2,12 @@
 // Copyright (c) The Crown Prosecution Service. All rights reserved.
 // </copyright>
 
-namespace Cps.Fct.EasShared.Subscriber.Core.Translator;
 
-using Cps.Fct.EasShared.Mailbox.Settings.Configuration;
 using Cps.Fct.EasShared.Core.Interfaces;
+using Cps.Fct.EasShared.Mailbox.Settings.Configuration;
+using Cps.Fct.EasShared.Subscriber.Core.Translator;
 
+namespace Cps.Fct.EasShared.Subscriber.Core.Translator;
 /// <summary>
 /// Translates an email subject to a URN.
 /// </summary>
