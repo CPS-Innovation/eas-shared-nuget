@@ -19,22 +19,18 @@ build:
       - test/
     expire_in: 1 hour
 
-# Use nuget.exe with mono to pack based on your .nuspec file
 pack:
   stage: pack
   image: mcr.microsoft.com/dotnet/sdk:8.0
   dependencies:
     - build
   script:
-    - apt-get update && apt-get install -y mono-runtime
-    - curl -Ls -o nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
-    - mono nuget.exe pack Cps.Fct.EasShared.nuspec -OutputDirectory ./out
+    - dotnet pack EasSharedNuget.csproj -c Release -o ./out --no-build --verbosity normal
   artifacts:
     paths:
       - out/
     expire_in: 1 hour
 
-# Push the built .nupkg to GitLab's package registry
 publish:
   stage: publish
   image: mcr.microsoft.com/dotnet/sdk:8.0

@@ -1,40 +1,60 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Cps.Fct.$(MSBuildProjectName)</RootNamespace>
+		<AssemblyName>$(RootNamespace)</AssemblyName>
+		<!-- NuGet metadata -->
+		<PackageId>Cps.Fct.EasShared</PackageId>
+		<Version>1.0.13</Version>
+		<Authors>Crown Prosecution Service</Authors>
+		<Company>CPS</Company>
+		<Description>Reusable components for the Email Automation Service microservices</Description>
+		<PackageTags>internal;utility;shared</PackageTags>
+		<!-- Required to generate .nupkg -->
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<PrivateAssets>all</PrivateAssets>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <RootNamespace>Cps.Fct.$(MSBuildProjectName)</RootNamespace>
-    <AssemblyName>$(RootNamespace)</AssemblyName>
+	<ItemGroup>
+		<ProjectReference Include="..\src\Core\Core.csproj" PrivateAssets="all" />
+		<ProjectReference Include="..\test\Core.Xunit\Core.Xunit.csproj" PrivateAssets="all" />
+		<ProjectReference Include="..\src\ServiceClient.GraphApi\ServiceClient.GraphApi.csproj" PrivateAssets="all" />
+		<ProjectReference Include="..\test\ServiceClient.GraphApi.Emulation\ServiceClient.GraphApi.Emulation.csproj" PrivateAssets="all" />
+		<ProjectReference Include="..\src\ServiceClient.GraphApiEmail\ServiceClient.GraphApiEmail.csproj" PrivateAssets="all" />
+		<ProjectReference Include="..\test\ServiceClient.GraphApiEmail.Emulation\ServiceClient.GraphApiEmail.Emulation.csproj" PrivateAssets="all" />
+		<ProjectReference Include="..\src\ServiceClient.GraphApiSubscription\ServiceClient.GraphApiSubscription.csproj" PrivateAssets="all" />
+		<ProjectReference Include="..\test\ServiceClient.GraphApiSubscription.Emulation\ServiceClient.GraphApiSubscription.Emulation.csproj" PrivateAssets="all" />
+		<ProjectReference Include="..\src\ServiceClient.RabbitMQ\ServiceClient.RabbitMQ.csproj" PrivateAssets="all" />
+		<ProjectReference Include="..\test\ServiceClient.RabbitMQ.Emulation\ServiceClient.RabbitMQ.Emulation.csproj" PrivateAssets="all" />
+		<ProjectReference Include="..\src\ServiceClient.Aws\ServiceClient.Aws.csproj" PrivateAssets="all" />
+		<ProjectReference Include="..\test\ServiceClient.Aws.Emulation\ServiceClient.Aws.Emulation.csproj" PrivateAssets="all" />
+		<ProjectReference Include="..\src\Subscriber.Core\Subscriber.Core.csproj" PrivateAssets="all" />
+		<ProjectReference Include="..\src\Mailbox.Settings\Mailbox.Settings.csproj" PrivateAssets="all" />
+		<ProjectReference Include="..\src\Storage.Core\Storage.Core.csproj" PrivateAssets="all" />
+		<ProjectReference Include="..\src\Repository.EmailStorage\Repository.EmailStorage.csproj" PrivateAssets="all" />
+	</ItemGroup>
 
-    <!-- NuGet metadata -->
-    <PackageId>Cps.Fct.EasShared</PackageId>
-    <Version>1.0.6</Version>
-    <Authors>CPS</Authors>
-    <Company>CPS</Company>
-    <Description>Reusable components for the Email Automation Service microservices</Description>
-    <PackageTags>internal;utility;shared</PackageTags>
-
-    <!-- Required to generate .nupkg -->
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <PrivateAssets>all</PrivateAssets>
-
-  </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\src\Core\Core.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\test\Core.Xunit\Core.Xunit.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\src\ServiceClient.GraphApi\ServiceClient.GraphApi.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\src\ServiceClient.GraphApiEmail\ServiceClient.GraphApiEmail.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\src\ServiceClient.GraphApiSubscription\ServiceClient.GraphApiSubscription.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\src\ServiceClient.RabbitMQ\ServiceClient.RabbitMQ.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\src\ServiceClient.Aws\ServiceClient.Aws.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\src\Subscriber.Core\Subscriber.Core.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\src\Mailbox.Settings\Mailbox.Settings.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\src\Storage.Core\Storage.Core.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\src\Repository.EmailStorage\Repository.EmailStorage.csproj" PrivateAssets="all" />
-  </ItemGroup>
-
+	<!-- Include built DLLs in the package -->
+	<ItemGroup>
+		<None Include="../src/Core/bin/Release/net8.0/Cps.Fct.EasShared.Core.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../test/Core.Xunit/bin/Release/net8.0/Cps.Fct.EasShared.Core.Xunit.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../src/ServiceClient.GraphApi/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApi.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../test/ServiceClient.GraphApi.Emulation/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApi.Emulation.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../src/ServiceClient.GraphApiEmail/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApiEmail.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../test/ServiceClient.GraphApiEmail.Emulation/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApiEmail.Emulation.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../src/ServiceClient.GraphApiSubscription/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApiSubscription.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../test/ServiceClient.GraphApiSubscription.Emulation/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApiSubscription.Emulation.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../src/ServiceClient.RabbitMQ/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.RabbitMQ.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../test/ServiceClient.RabbitMQ.Emulation/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.RabbitMQ.Emulation.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../src/ServiceClient.Aws/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.Aws.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../test/ServiceClient.Aws.Emulation/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.Aws.Emulation.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../src/Subscriber.Core/bin/Release/net8.0/Cps.Fct.EasShared.Subscriber.Core.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../src/Mailbox.Settings/bin/Release/net8.0/Cps.Fct.EasShared.Mailbox.Settings.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../src/Storage.Core/bin/Release/net8.0/Cps.Fct.EasShared.Storage.Core.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../src/Repository.EmailStorage/bin/Release/net8.0/Cps.Fct.EasShared.Repository.EmailStorage.dll" Pack="true" PackagePath="lib/net8.0/" />
+	</ItemGroup>
 </Project>
