@@ -108,6 +108,7 @@ public partial class EmailSubjectToUrnTranslatorTest
     [InlineData("12 AB 01234 24")]
     [InlineData("12/AB/0123424(m)")]
     [InlineData("12/AB/0123424(m)/1")]
+    [InlineData("12/AB/0123424(m)/99")]
     [InlineData("12 AB 01234 24  ")]
     [InlineData("Subject with URN 12/AB/01234/24")]
     [InlineData("URN 12 AB 01234 24 in the subject")]

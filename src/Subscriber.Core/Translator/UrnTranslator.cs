@@ -19,19 +19,24 @@ public partial class UrnTranslator
     protected const string MergeToken = "(M)";
 
     /// <summary>
-    /// The token used to identify a split merged case.
+    /// The max length of a split merge token.
     /// </summary>
-    protected const string SplitMergeToken = $"{MergeToken}/1";
+    protected const int MaxSplitMergeTokenLength = 6; // "(M)" + "/" + "12"
+
+    /// <summary>
+    /// The token regex used to identify a split merged case.
+    /// </summary>
+    protected static readonly Regex SplitMergeTokenRegex = new Regex($@"{Regex.Escape(MergeToken)}/\d{{1,2}}$");
+
+    /// <summary>
+    /// The maximum length of a URN.
+    /// </summary>
+    protected static readonly int MaxUrnLength = StandardUrnLength + 6 + MaxSplitMergeTokenLength;
 
     /// <summary>
     /// The length of a standard URN.
     /// </summary>
     protected const int StandardUrnLength = 11;
-
-    /// <summary>
-    /// The maximum length of a URN.
-    /// </summary>
-    protected static readonly int MaxUrnLength = StandardUrnLength + 6 + SplitMergeToken.Length;
 
     /// <summary>
     /// The pattern to identify a name.
@@ -154,7 +159,7 @@ public partial class UrnTranslator
             }
 
             if (endText.Equals(MergeToken, StringComparison.Ordinal) ||
-                endText.Equals(SplitMergeToken, StringComparison.Ordinal))
+                SplitMergeTokenRegex.IsMatch(endText))
             {
                 return true;
             }

@@ -146,6 +146,7 @@ public partial class EmailSubjectToUrnTranslatorTest
     [InlineData("A URN 12AB0123424CII10(M)/1", "12AB0123424CII10(M)/1", ProceedsOfCrimeDummyMailboxId)]
     [InlineData("A URN 12AB01234248CII10(M)/1", "12AB01234248CII10(M)/1", ProceedsOfCrimeDummyMailboxId)]
     [InlineData("12AB0123424CIO10(m)/1 to process", "12AB0123424CIO10(M)/1", ProceedsOfCrimeDummyEmailAddress)]
+    [InlineData("12AB0123424CIO10(m)/99 to process", "12AB0123424CIO10(M)/99", ProceedsOfCrimeDummyEmailAddress)]
     public void EmailSubjectToUrnTranslationSucceedsForProceedsOfSplitMergedCases(string emailSubject, string expectedUrn, string mailboxId)
     {
         this.EmailSubjectToUrnTranslationSucceeds(emailSubject, expectedUrn, mailboxId);

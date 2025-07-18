@@ -83,6 +83,7 @@ public partial class EmailSubjectToUrnTranslatorTest
     [InlineData("12 AB 01234 24A", "12AB0123424A")]
     [InlineData("12/AB/0123424A(m)", "12AB0123424A(M)")]
     [InlineData("12/AB/0123424A(m)/1", "12AB0123424A(M)/1")]
+    [InlineData("12/AB/0123424A(m)/99", "12AB0123424A(M)/99")]
     [InlineData("12 AB 01234 24A  ", "12AB0123424A")]
     [InlineData("Subject with URN 12/AB/01234/24A", "12AB0123424A")]
     [InlineData("URN 12 AB 01234 24A in the subject", "12AB0123424A")]
@@ -157,7 +158,7 @@ public partial class EmailSubjectToUrnTranslatorTest
     [Theory]
     [InlineData("12AB0123424A012346")]
     [InlineData("12AB0123424A/123")]
-    [InlineData("12AB0123424A(M)/2")]
+    [InlineData("12AB0123424A(M)/123")]
     public void EmailSubjectToUrnTranslationFailsBecauseTheUrnIsTooLongForProceedsOfCrime(string emailSubject)
     {
         this.EmailSubjectToUrnTranslationFails(emailSubject, ProceedsOfCrimeDummyMailboxId);

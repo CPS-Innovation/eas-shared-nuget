@@ -68,7 +68,7 @@ public partial class EmailSubjectToPocUrnTranslator
         if (valid)
         {
             string end = urn[StandardUrnLength..];
-            if (end.EndsWith(MergeToken, StringComparison.Ordinal) || end.EndsWith(SplitMergeToken, StringComparison.Ordinal))
+            if (end.EndsWith(MergeToken, StringComparison.Ordinal) || SplitMergeTokenRegex.IsMatch(end))
             {
                 valid = IsValidPocMergedCase(end);
             }
@@ -116,9 +116,9 @@ public partial class EmailSubjectToPocUrnTranslator
             valid = ProceedsOfCrimeUrn.IsMatch(end[..^MergeToken.Length]);
         }
 
-        if (end.EndsWith(SplitMergeToken, StringComparison.Ordinal))
+        if (end.EndsWith(MergeToken, StringComparison.Ordinal) || SplitMergeTokenRegex.IsMatch(end))
         {
-            valid = ProceedsOfCrimeUrn.IsMatch(end[..^SplitMergeToken.Length]);
+            valid = ProceedsOfCrimeUrn.IsMatch(SplitMergeTokenRegex.Replace(end, string.Empty));
         }
 
         return valid;
