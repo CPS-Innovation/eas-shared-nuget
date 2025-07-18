@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Cps.Fct.EasShared</id>
-    <version>1.0.7</version>
+    <version>1.0.11</version>
     <authors>Crown Prosecution Service</authors>
     <description>Reusable components for the Email Automation Service microservices</description>
   </metadata>
@@ -13,9 +13,12 @@
     <file src="test/ServiceClient.GraphApi.Emulation/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApi.Emulation.dll" target="lib/net8.0/" />
     <file src="src/ServiceClient.GraphApiEmail/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApiEmail.dll" target="lib/net8.0/" />
     <file src="test/ServiceClient.GraphApiEmail.Emulation/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApiEmail.Emulation.dll" target="lib/net8.0/" />
-    <file src="src/ServiceClient.GraphApiSubscription/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApiSubscription.dll" target="lib/net8.0/" />    
+    <file src="src/ServiceClient.GraphApiSubscription/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApiSubscription.dll" target="lib/net8.0/" /> 
+    <file src="test/ServiceClient.GraphApiSubscription.Emulation/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApiSubscription.Emulation.dll" target="lib/net8.0/" />    
 	<file src="src/ServiceClient.RabbitMQ/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.RabbitMQ.dll" target="lib/net8.0/" />
+	<file src="test/ServiceClient.RabbitMQ.Emulation/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.RabbitMQ.Emulation.dll" target="lib/net8.0/" />
     <file src="src/ServiceClient.Aws/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.Aws.dll" target="lib/net8.0/" />
+    <file src="test/ServiceClient.Aws.Emulation/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.Aws.Emulation.dll" target="lib/net8.0/" />
     <file src="src/Subscriber.Core/bin/Release/net8.0/Cps.Fct.EasShared.Subscriber.Core.dll" target="lib/net8.0/" />
     <file src="src/Mailbox.Settings/bin/Release/net8.0/Cps.Fct.EasShared.Mailbox.Settings.dll" target="lib/net8.0/" />
     <file src="src/Storage.Core/bin/Release/net8.0/Cps.Fct.EasShared.Storage.Core.dll" target="lib/net8.0/" />

@@ -50,6 +50,11 @@ public class IgnoreCaseTextMatcher : ITextMatcher
                 found = info.CriteriaForMatching == CriteriaForMatching.Contains && textToMatch.Contains(info.SnippetToMatch, StringComparison.OrdinalIgnoreCase);
             }
 
+            if (!found)
+            {
+                found = info.CriteriaForMatching == CriteriaForMatching.FinalMatchEndsWith && textToMatch.Contains(info.SnippetToMatch, StringComparison.OrdinalIgnoreCase);
+            }
+
             if (found)
             {
                 outcome = info.Outcome;

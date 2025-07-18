@@ -28,4 +28,9 @@ public enum CriteriaForMatching
     /// The text must be an exact match with the snippet.
     /// </summary>
     Exact,
+
+    /// <summary>
+    /// The text must end with the snippet will be the last match before going to default mailbox settings.
+    /// </summary>
+    FinalMatchEndsWith,
 }
