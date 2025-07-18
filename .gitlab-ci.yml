@@ -43,7 +43,7 @@ pack:
   dependencies:
     - build
   script:
-    - dotnet pack EasSharedNuget.csproj -c Release -o ./out --no-build --verbosity normal
+    - dotnet pack EasShared.Package/EasShared.Package.csproj -c Release -o ./out --verbosity normal
   artifacts:
     paths:
       - out/
