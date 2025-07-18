@@ -6,33 +6,39 @@ stages:
 variables:
   NUGET_FEED: "https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/packages/nuget/index.json"
 
+# Compile everything so that all referenced DLLs exist for nuspec to include
 build:
   stage: build
   image: mcr.microsoft.com/dotnet/sdk:8.0
   script:
-    - dotnet restore
-    - dotnet build -c Release
+    - dotnet restore EasSharedNuget.sln
+    - dotnet build EasSharedNuget.sln -c Release
   artifacts:
     paths:
-      - src/EasShared/bin/
+      - src/
+      - test/
     expire_in: 1 hour
 
+# Use nuget.exe with mono to pack based on your .nuspec file
 pack:
   stage: pack
   image: mcr.microsoft.com/dotnet/sdk:8.0
-  script:
-    - dotnet pack src/EasShared/EasShared.csproj -c Release -o ./out
   dependencies:
     - build
+  script:
+    - apt-get update && apt-get install -y mono-runtime
+    - curl -Ls -o nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+    - mono nuget.exe pack Cps.Fct.EasShared.nuspec -OutputDirectory ./out
   artifacts:
     paths:
       - out/
     expire_in: 1 hour
 
+# Push the built .nupkg to GitLab's package registry
 publish:
   stage: publish
   image: mcr.microsoft.com/dotnet/sdk:8.0
-  script:
-    - dotnet nuget push ./out/*.nupkg --source "$NUGET_FEED" --api-key "$GITLAB_PAT"
   dependencies:
     - pack
+  script:
+    - dotnet nuget push ./out/*.nupkg --source "$NUGET_FEED" --api-key "$GITLAB_PAT"
