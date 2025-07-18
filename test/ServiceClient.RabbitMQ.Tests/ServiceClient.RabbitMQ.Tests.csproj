@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Subscriber.Core\Subscriber.Core.csproj" />
+    <ProjectReference Include="..\Core.Xunit\Core.Xunit.csproj" />
     <ProjectReference Include="..\ServiceClient.RabbitMQ.Emulation\ServiceClient.RabbitMQ.Emulation.csproj" />
   </ItemGroup>
 

@@ -30,6 +30,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\src\Repository.EmailStorage\Repository.EmailStorage.csproj" />
+    <ProjectReference Include="..\Core.Xunit\Core.Xunit.csproj" />
     <ProjectReference Include="..\ServiceClient.Aws.Emulation\ServiceClient.Aws.Emulation.csproj" />
     <ProjectReference Include="..\ServiceClient.GraphApi.Emulation\ServiceClient.GraphApi.Emulation.csproj" />
     <ProjectReference Include="..\ServiceClient.GraphApiEmail.Emulation\ServiceClient.GraphApiEmail.Emulation.csproj" />

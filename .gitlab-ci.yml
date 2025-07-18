@@ -1,5 +1,6 @@
 stages:
   - build
+  - test
   - pack
   - publish
 
@@ -18,6 +19,23 @@ build:
       - src/
       - test/
     expire_in: 1 hour
+
+# Run all unit tests
+test:
+  stage: test
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  dependencies:
+    - build
+  script:
+    - dotnet test EasSharedNuget.sln -c Release --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
+  artifacts:
+    when: always
+    paths:
+      - "**/*.trx"
+    reports:
+      junit:
+        - "**/*.trx"
+    expire_in: 1 week
 
 pack:
   stage: pack
