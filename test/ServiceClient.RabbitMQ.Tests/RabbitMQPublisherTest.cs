@@ -151,7 +151,7 @@ public class RabbitMQPublisherTest
             Subject = mailboxId,
             Id = $"{messageId} {payload.ETag}",
             Time = payload.EventTime,
-            DataContentType = "application/vnd.Cps.Fct.Eas.NewEmailNotificationReceived\u002Bjson",
+            DataContentType = "application/vnd.Cps.Fct.EasShared.NewEmailNotificationReceived\u002Bjson",
             Data = payload,
         };
 

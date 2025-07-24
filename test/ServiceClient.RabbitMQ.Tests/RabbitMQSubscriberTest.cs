@@ -2,7 +2,7 @@
 // Copyright (c) The Crown Prosecution Service. All rights reserved.
 // </copyright>
 
-namespace Cps.Fct.Eas.ServiceClient.RabbitMQ.Tests;
+namespace Cps.Fct.EasShared.ServiceClient.RabbitMQ.Tests;
 
 using System;
 using Cps.Fct.EasShared.ServiceClient.RabbitMQ;
@@ -14,7 +14,6 @@ using Cps.Fct.EasShared.Core.Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Cps.Fct.EasShared.ServiceClient.RabbitMQ.Tests;
 
 /// <summary>
 /// Tests the RabbitMQ subscriber.
