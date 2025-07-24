@@ -498,12 +498,12 @@ public class EmailStorageRepository
 
         CloudEvent result = new()
         {
-            Type = $"#Cps.Fct.Eas.{nameof(NewEmailReceived)}",
+            Type = $"#Cps.Fct.EasShared.{nameof(NewEmailReceived)}",
             Source = new Uri($"#{this.ApplicationOptions.Name}", UriKind.Relative),
             Subject = mailboxId.ToString(),
             Id = message.Id,
             Time = payload.EventTime,
-            DataContentType = $"application/vnd.Cps.Fct.Eas.{nameof(NewEmailReceived)}\u002Bjson",
+            DataContentType = $"application/vnd.Cps.Fct.EasShared.{nameof(NewEmailReceived)}\u002Bjson",
             Data = payload,
         };
 

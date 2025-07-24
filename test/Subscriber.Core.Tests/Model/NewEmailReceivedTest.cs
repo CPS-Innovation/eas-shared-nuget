@@ -2,7 +2,7 @@
 // Copyright (c) The Crown Prosecution Service. All rights reserved.
 // </copyright>
 
-namespace Cps.Fct.Eas.Subscriber.Core.Tests.Model;
+namespace Cps.Fct.EasShared.Subscriber.Core.Tests.Model;
 
 using System;
 using System.Collections.Generic;

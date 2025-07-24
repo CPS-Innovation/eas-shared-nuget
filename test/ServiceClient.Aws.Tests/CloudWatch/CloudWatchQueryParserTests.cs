@@ -1,7 +1,7 @@
 // <copyright file="CloudWatchQueryParserTests.cs" company="TheCrownProsecutionService">
 // Copyright (c) The Crown Prosecution Service. All rights reserved.
 // </copyright>
-namespace Cps.Fct.Eas.ServiceClient.Aws.Tests.CloudWatch;
+namespace Cps.Fct.EasShared.ServiceClient.Aws.Tests.CloudWatch;
 
 using System.Text.Json;
 using Cps.Fct.EasShared.Core;
