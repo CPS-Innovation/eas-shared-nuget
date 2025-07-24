@@ -42,6 +42,8 @@ pack:
   image: mcr.microsoft.com/dotnet/sdk:8.0
   dependencies:
     - build
+  rules:
+      - if: $CI_COMMIT_BRANCH == "main"
   script:
     - dotnet pack EasShared.Package/EasShared.Package.csproj -c Release -o ./out --verbosity normal
   artifacts:
@@ -54,5 +56,7 @@ publish:
   image: mcr.microsoft.com/dotnet/sdk:8.0
   dependencies:
     - pack
+  rules:
+      - if: $CI_COMMIT_BRANCH == "main"
   script:
     - dotnet nuget push ./out/*.nupkg --source "$NUGET_FEED" --api-key "$GITLAB_PAT"
