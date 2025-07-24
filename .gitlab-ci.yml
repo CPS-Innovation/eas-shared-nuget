@@ -1,29 +1,49 @@
 stages:
   - build
+  - test
   - pack
   - publish
 
 variables:
   NUGET_FEED: "https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/packages/nuget/index.json"
 
+# Compile everything so that all referenced DLLs exist for nuspec to include
 build:
   stage: build
   image: mcr.microsoft.com/dotnet/sdk:8.0
   script:
-    - dotnet restore
-    - dotnet build -c Release
+    - dotnet restore EasSharedNuget.sln
+    - dotnet build EasSharedNuget.sln -c Release
   artifacts:
     paths:
-      - src/EasShared/bin/
+      - src/
+      - test/
     expire_in: 1 hour
+
+# Run all unit tests
+test:
+  stage: test
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  dependencies:
+    - build
+  script:
+    - dotnet test EasSharedNuget.sln -c Release --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
+  artifacts:
+    when: always
+    paths:
+      - "**/*.trx"
+    reports:
+      junit:
+        - "**/*.trx"
+    expire_in: 1 week
 
 pack:
   stage: pack
   image: mcr.microsoft.com/dotnet/sdk:8.0
-  script:
-    - dotnet pack src/EasShared/EasShared.csproj -c Release -o ./out
   dependencies:
     - build
+  script:
+    - dotnet pack EasShared.Package/EasShared.Package.csproj -c Release -o ./out --verbosity normal
   artifacts:
     paths:
       - out/
@@ -32,7 +52,7 @@ pack:
 publish:
   stage: publish
   image: mcr.microsoft.com/dotnet/sdk:8.0
-  script:
-    - dotnet nuget push ./out/*.nupkg --source "$NUGET_FEED" --api-key "$GITLAB_PAT"
   dependencies:
     - pack
+  script:
+    - dotnet nuget push ./out/*.nupkg --source "$NUGET_FEED" --api-key "$GITLAB_PAT"
