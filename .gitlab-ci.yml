@@ -11,6 +11,9 @@ variables:
 build:
   stage: build
   image: mcr.microsoft.com/dotnet/sdk:8.0
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
   script:
     - dotnet restore EasSharedNuget.sln
     - dotnet build EasSharedNuget.sln -c Release
@@ -26,6 +29,9 @@ test:
   image: mcr.microsoft.com/dotnet/sdk:8.0
   dependencies:
     - build
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
   script:
     - dotnet test EasSharedNuget.sln -c Release --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
   artifacts:
