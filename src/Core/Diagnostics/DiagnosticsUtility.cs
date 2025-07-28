@@ -33,13 +33,14 @@ public static class DiagnosticsUtility
     public static void LogApplicationInfo(
         IServiceProvider serviceProvider,
         ILogger logger,
-        string environmentName)
+        string environmentName,
+        Type type)
     {
         IConfiguration config = serviceProvider.GetRequiredService<IConfiguration>();
         logger.LogInformation(
             "Application: {Application} - Version: {AssemblyFileVersion} - Environment: {EnvironmentName} - Log level: {LogLevel}",
             ApplicationOptions.GetApplicationName(serviceProvider),
-            ApplicationOptions.GetAssemblyFileVersion(typeof(DiagnosticsUtility)),
+            ApplicationOptions.GetAssemblyFileVersion(type),
             environmentName,
             config["Logging:LogLevel:Default"]);
     }

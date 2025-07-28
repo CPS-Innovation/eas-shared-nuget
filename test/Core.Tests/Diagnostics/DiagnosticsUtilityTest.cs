@@ -61,7 +61,7 @@ public class DiagnosticsUtilityTest
         ILogger<DiagnosticsUtilityTest> logger = this.ServiceProvider.GetRequiredService<ILogger<DiagnosticsUtilityTest>>();
 
         // Act
-        DiagnosticsUtility.LogApplicationInfo(this.ServiceProvider, logger, "Test");
+        DiagnosticsUtility.LogApplicationInfo(this.ServiceProvider, logger, "Test", typeof(DiagnosticsUtilityTest));
 
         // Assert
         logger.Should().NotBeNull();
