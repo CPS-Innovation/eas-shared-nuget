@@ -16,7 +16,7 @@ build:
     - if: $CI_COMMIT_BRANCH == "main"
   script:
     - dotnet restore EasSharedNuget.sln
-    - dotnet build EasSharedNuget.sln -c Release
+    - dotnet build EasSharedNuget.sln -c Debug
   artifacts:
     paths:
       - src/
@@ -33,7 +33,7 @@ test:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == "main"
   script:
-    - dotnet test EasSharedNuget.sln -c Release --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
+    - dotnet test EasSharedNuget.sln -c Debug --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
   artifacts:
     when: always
     paths:
@@ -51,7 +51,7 @@ pack:
   rules:
       - if: $CI_COMMIT_BRANCH == "main"
   script:
-    - dotnet pack EasShared.Package/EasShared.Package.csproj -c Release -o ./out --verbosity normal
+    - dotnet pack EasShared.Package/EasShared.Package.csproj -c Debug -o ./out --verbosity normal
   artifacts:
     paths:
       - out/
