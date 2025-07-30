@@ -14,8 +14,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Graph" Version="5.56.0" />
-    <PackageReference Include="MsgKit" Version="2.8.1" />
-    <PackageReference Include="MsgReader" Version="5.6.2" />
+    <PackageReference Include="MsgKit" Version="2.8.3" />
+    <PackageReference Include="MsgReader" Version="5.7.3" />
   </ItemGroup>
 
   <ItemGroup>
