@@ -16,14 +16,13 @@ build:
     - if: $CI_COMMIT_BRANCH == "main"
   script:
     - dotnet restore EasSharedNuget.sln
-    - dotnet build EasSharedNuget.sln -c Debug
+    - dotnet build EasSharedNuget.sln -c Release
   artifacts:
     paths:
       - src/
       - test/
     expire_in: 1 hour
 
-# Run all unit tests
 test:
   stage: test
   image: mcr.microsoft.com/dotnet/sdk:8.0
@@ -33,14 +32,18 @@ test:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == "main"
   script:
-    - dotnet test EasSharedNuget.sln -c Debug --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
+    - dotnet test EasSharedNuget.sln -c Release --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
+    - dotnet tool install -g trx2junit
+    - export PATH="$PATH:/root/.dotnet/tools"
+    - trx2junit **/*.trx
   artifacts:
     when: always
     paths:
       - "**/*.trx"
+      - "**/*.xml"
     reports:
       junit:
-        - "**/*.trx"
+        - "**/*.xml"
     expire_in: 1 week
 
 pack:
@@ -51,7 +54,7 @@ pack:
   rules:
       - if: $CI_COMMIT_BRANCH == "main"
   script:
-    - dotnet pack EasShared.Package/EasShared.Package.csproj -c Debug -o ./out --verbosity normal --include-symbols --include-source -p:SymbolPackageFormat=snupkg
+    - dotnet pack EasShared.Package/EasShared.Package.csproj -c Release -o ./out --verbosity normal --include-symbols --include-source -p:SymbolPackageFormat=snupkg
   artifacts:
     paths:
       - out/
