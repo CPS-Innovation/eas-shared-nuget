@@ -35,7 +35,7 @@ test:
     - dotnet test EasSharedNuget.sln -c Release --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
     - dotnet tool install -g trx2junit
     - export PATH="$PATH:/root/.dotnet/tools"
-    - trx2junit **/*.trx
+    - find . -name "*.trx" -exec trx2junit {} \;
   artifacts:
     when: always
     paths:
