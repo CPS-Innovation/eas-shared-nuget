@@ -7,7 +7,7 @@
 		<AssemblyName>$(RootNamespace)</AssemblyName>
 		<!-- NuGet metadata -->
 		<PackageId>Cps.Fct.EasShared</PackageId>
-		<Version>1.0.17</Version>
+		<Version>1.0.18</Version>
 		<Authors>Crown Prosecution Service</Authors>
 		<Company>CPS</Company>
 		<Description>Reusable components for the Email Automation Service microservices</Description>
@@ -20,6 +20,7 @@
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		<DebugType>portable</DebugType>
 		<DebugSymbols>true</DebugSymbols>
+		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 	</PropertyGroup>
 
 	<ItemGroup>

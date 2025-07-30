@@ -54,7 +54,7 @@ pack:
   rules:
       - if: $CI_COMMIT_BRANCH == "main"
   script:
-    - dotnet pack EasShared.Package/EasShared.Package.csproj -c Release -o ./out --verbosity normal --include-symbols --include-source -p:SymbolPackageFormat=snupkg
+    - dotnet pack EasShared.Package/EasShared.Package.csproj -c Release -o ./out --verbosity normal -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:EmbedUntrackedSources=true -p:EmbedAllSources=true -p:DebugType=portable
   artifacts:
     paths:
       - out/
