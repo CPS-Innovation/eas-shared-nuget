@@ -146,7 +146,7 @@ public class EmailMessageToDestinationFolder
         DestinationFolderResult? result = null;
         if (urn is not null &&
             message?.Attachments != null &&
-            message.Attachments.Any(a => a.ContentType is null || string.IsNullOrEmpty(a.ContentType) || a.ContentType.Equals("text/rfc822-headers", StringComparison.OrdinalIgnoreCase)))
+            message.Attachments.Any(a => !string.IsNullOrEmpty(a.ContentType) && a.ContentType.Equals("text/rfc822-headers", StringComparison.OrdinalIgnoreCase)))
         {
             string destinationFolder = this.FolderOptions.ExceptionsFolderName;
             string reason = "email has attachments with unsupported content type";

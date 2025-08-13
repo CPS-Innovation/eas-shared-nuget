@@ -170,7 +170,7 @@ public class EmailMessageToDestinationFolderTest
     [InlineData("nofilename.test@b.com", "A URN 12ab1234523 in the subject", "CMS.Exceptions", "email has attachments with no name", "12AB1234523", "", "application/pdf")]
     [InlineData("nofilename.test@b.com", "A URN 12ab1234523 in the subject", "CMS.Exceptions", "email has attachments with no name", "12AB1234523", ",sample.attachment.pdf", "application/pdf,application/pdf")]
     [InlineData("nofilename.test@b.com", "A URN 12ab1234523 in the subject", "CMS.Exceptions", "email has attachments with no name", "12AB1234523", ",sample.attachment.pdf,", "application/pdf,application/pdf,application/pdf")]
-    [InlineData("incorrectcontenttype.test@b.com", "A URN 12ab1234523 in the subject", "CMS.Exceptions", "email has attachments with unsupported content type", "12AB1234523", "sample.attachment.pdf", "")]
+    [InlineData("incorrectcontenttype.test@b.com", "A URN 12ab1234523 in the subject", "CMS.Processing", "further processing required", "12AB1234523", "sample.attachment.pdf", "")]
     [InlineData("incorrectcontenttype.test@b.com", "A URN 12ab1234523 in the subject", "CMS.Exceptions", "email has attachments with unsupported content type", "12AB1234523", "sample.attachment.pdf", "text/rfc822-headers")]
     [InlineData("nofilename.test@b.com", "A URN 12ab1234523 in the subject", "CMS.Exceptions", "email has attachments with no name", "12AB1234523", "", "text/rfc822-headers")]
     public void MailMessageTranslatesToExceptionsMailboxFolderNameWhenAttachmentNameOrContentTypeIsInvalid(
