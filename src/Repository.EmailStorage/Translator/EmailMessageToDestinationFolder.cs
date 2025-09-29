@@ -5,6 +5,7 @@
 namespace Cps.Fct.EasShared.Repository.EmailStorage.Translator;
 
 using System;
+using Cps.Fct.EasShared.Core.Configuration;
 using Cps.Fct.EasShared.Core.Interfaces;
 using Cps.Fct.EasShared.Core.Text;
 using Cps.Fct.EasShared.Mailbox.Settings.Configuration;
@@ -13,6 +14,7 @@ using Cps.Fct.EasShared.ServiceClient.GraphApiEmail.Configuration;
 using Cps.Fct.EasShared.Subscriber.Core.Translator;
 using Microsoft.Extensions.Options;
 using Microsoft.Graph.Models;
+
 
 /// <summary>
 /// Email message to mailbox destination folder translator.
@@ -31,6 +33,7 @@ public class EmailMessageToDestinationFolder
     private readonly EmailSubjectExclusionOptions emailSubjectExclusionOptions;
     private readonly EmailSubjectToUrnTranslator urnTranslator;
     private readonly MailboxOptions mailboxOptions;
+    private readonly AttachmentOptions attachmentOptions;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EmailMessageToDestinationFolder"/> class.
@@ -47,7 +50,9 @@ public class EmailMessageToDestinationFolder
         IOptions<EmailAddressExclusionOptions> emailAddressExclusionOptions,
         IOptions<EmailSubjectExclusionOptions> emailSubjectExclusionOptions,
         IOptions<MailboxFolderOptions> folderOptions,
-        MailboxOptions mailboxOptions)
+        MailboxOptions mailboxOptions,
+        IOptions<AttachmentOptions> attachmentSize
+        )
     {
         Requires.NotNull(textMatcher);
         Requires.NotNull(urnTranslator);
@@ -55,6 +60,7 @@ public class EmailMessageToDestinationFolder
         Requires.NotNull(emailSubjectExclusionOptions);
         Requires.NotNull(folderOptions);
         Requires.NotNull(mailboxOptions);
+        Requires.NotNull(attachmentSize);
 
         this.textMatcher = textMatcher;
         this.urnTranslator = urnTranslator;
@@ -62,6 +68,7 @@ public class EmailMessageToDestinationFolder
         this.emailSubjectExclusionOptions = emailSubjectExclusionOptions.Value;
         this.FolderOptions = folderOptions.Value;
         this.mailboxOptions = mailboxOptions;
+        this.attachmentOptions = attachmentSize.Value;
     }
 
     /// <summary>
@@ -109,6 +116,8 @@ public class EmailMessageToDestinationFolder
         destinationFolderResult ??= this.HasAttachmentsWithUnsupportedMimeType(urn, message);
 
         destinationFolderResult ??= this.HasAttachmentsWithLongFileExtension(urn, message);
+
+        destinationFolderResult ??= this.HasAttachmentsWithSizeExceedingLimit(urn, message);
 
         if (destinationFolderResult is null)
         {
@@ -181,6 +190,32 @@ public class EmailMessageToDestinationFolder
         {
             string destinationFolder = this.FolderOptions.ExceptionsFolderName;
             string reason = "email has attachments with file extension longer than 4 characters";
+            result = new DestinationFolderResult(destinationFolder, reason, urn);
+        }
+
+        return result;
+    }
+
+    private DestinationFolderResult? HasAttachmentsWithSizeExceedingLimit(string? urn, Message message)
+    {
+        DestinationFolderResult? result = null;
+        int attachmentsSize = 0;
+        if (urn is not null &&
+            message?.Attachments != null &&
+            message.Attachments.Any(a =>
+            {
+                if (a.Size != null)
+                {
+                    // Extract the file extension
+                    attachmentsSize += (int)a.Size;
+                    return attachmentsSize > attachmentOptions.AttachmentSize;
+                }
+
+                return false;
+            }))
+        {
+            string destinationFolder = this.FolderOptions.ExceptionsFolderName;
+            string reason = "email has attachments with size " + attachmentsSize + " exceeding allowed limit of " + attachmentOptions.AttachmentSize;
             result = new DestinationFolderResult(destinationFolder, reason, urn);
         }
 

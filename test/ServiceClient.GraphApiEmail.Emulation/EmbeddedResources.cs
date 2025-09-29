@@ -113,6 +113,7 @@ public class EmbeddedResources
     /// <param name="senderEmailAddress">The from email address.</param>
     /// <param name="senderName">The from name.</param>
     /// <param name="subject">The email subject. Defaults to "test email".</param>
+    /// <param name="attachmentSizes">The size of each of the attachments.</param>
     /// <returns>The <see cref="Message"/>.</returns>
     public static Message CreateMessageFromEmailTemplateWithAttachmentsJson(
     string id,
@@ -122,7 +123,8 @@ public class EmbeddedResources
     string[] attachmentContentTypes,
     string senderEmailAddress = "AdeleV@zpkw1.onmicrosoft.com",
     string senderName = "Adele Vance",
-    string subject = "Test email")
+    string subject = "Test email",
+    string[]? attachmentSizes = null)
     {
         string token;
         token = "$(Id)";
@@ -160,9 +162,10 @@ public class EmbeddedResources
             {
                 string? attachmentName = attachmentNames[i];
                 string? attachmentContentType = attachmentContentTypes[i];
+                string? attachmentSize = attachmentSizes?[i] ?? "0";
 
                 string base64Content = PdfAttachmentBase64;
-                string attachmentJson = $"{{\"@odata.type\": \"#microsoft.graph.fileAttachment\",\"name\": \"{attachmentName}\",\"contentBytes\": \"{base64Content}\",\"contentType\": \"{attachmentContentType}\"}},";
+                string attachmentJson = $"{{\"@odata.type\": \"#microsoft.graph.fileAttachment\",\"name\": \"{attachmentName}\",\"contentBytes\": \"{base64Content}\",\"contentType\": \"{attachmentContentType}\",\"size\": {attachmentSize}}},";
 
                 attachmentsJson.Append(attachmentJson);
             }
