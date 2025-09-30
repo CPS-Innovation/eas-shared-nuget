@@ -10,22 +10,22 @@ using System.Text.Json.Serialization;
 /// <summary>
 /// Attachment Size Setting.
 /// </summary>
-public class AttachmentOptions
+public class AttachmentSettingOptions
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="AttachmentOptions"/> class.
+    /// Initializes a new instance of the <see cref="AttachmentSettingOptions"/> class.
     /// </summary>
-    public AttachmentOptions()
-        : this(20480)
+    public AttachmentSettingOptions()
+        : this(20971520)
     {
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="AttachmentOptions"/> class.
+    /// Initializes a new instance of the <see cref="AttachmentSettingOptions"/> class.
     /// </summary>
     /// <param name="AttachmentSize">The attachment size allowed.</param>
     [JsonConstructor]
-    public AttachmentOptions(int attachmentSize)
+    public AttachmentSettingOptions(int attachmentSize)
     {
         this.AttachmentSize = attachmentSize;
     }

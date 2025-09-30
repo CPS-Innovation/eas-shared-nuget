@@ -346,11 +346,11 @@ public class EmailMessageToDestinationFolderTest
     /// <param name="attachmentNames">A comma separated string for the names types of the attachments. This also dictates the number of attachments.</param>
     /// <param name="attachmentContentTypes">A comma separated string for the content types of the attachments. This also dictates the number of attachments.</param>
     [Theory]
-    [InlineData("attachmentFilesizeExceeded@b.com", "A URN 12ab1234521 in the subject", "CMS.Exceptions", "email has attachments with size", "12AB1234521", "sample.attachment.pdf1", "application/pdf", "21000")]
-    [InlineData("attachmentFilesizeTotalExceeded@b.com", "A URN 12ab1234522 in the subject", "CMS.Exceptions", "email has attachments with size", "12AB1234522", "sample.attachment.pdf1,myNotes.pdf", "application/pdf,application/pdf", "15000,6000")]
-    [InlineData("attachmentFilesizeTotalValid@b.com", "A URN 12ab1234523 in the subject", "CMS.Processing", "further processing required", "12AB1234523", "sample.attachment.xlsx, myNotes.pdf", "application/pdf, application/pdf", "15000,5480")]
-    [InlineData("attachmentFilesizeValid@b.com", "A URN 12ab1234524 in the subject", "CMS.Processing", "further processing required", "12AB1234524", "sample.attachment.xls", "application/pdf", "20000")]
-    [InlineData("AnotherAttachmentFilesizeValid@b.com", "A URN 12ab1234525 in the subject", "CMS.Processing", "further processing required", "12AB1234525", "sample.attachment.xls", "application/pdf", "19000")]
+    [InlineData("attachmentFilesizeExceeded@b.com", "A URN 12ab1234521 in the subject", "CMS.Exceptions", "email has attachments with size", "12AB1234521", "sample.attachment.pdf1", "application/pdf", "22000000")]
+    [InlineData("attachmentFilesizeTotalExceeded@b.com", "A URN 12ab1234522 in the subject", "CMS.Exceptions", "email has attachments with size", "12AB1234522", "sample.attachment.pdf1,myNotes.pdf", "application/pdf,application/pdf", "15000000,8000000")]
+    [InlineData("attachmentFilesizeTotalValid@b.com", "A URN 12ab1234523 in the subject", "CMS.Processing", "further processing required", "12AB1234523", "sample.attachment.xlsx, myNotes.pdf", "application/pdf, application/pdf", "15000000,5000000")]
+    [InlineData("attachmentFilesizeValid@b.com", "A URN 12ab1234524 in the subject", "CMS.Processing", "further processing required", "12AB1234524", "sample.attachment.xls", "application/pdf", "20000000")]
+    [InlineData("AnotherAttachmentFilesizeValid@b.com", "A URN 12ab1234525 in the subject", "CMS.Processing", "further processing required", "12AB1234525", "sample.attachment.xls", "application/pdf", "19000000")]
     public void MailMessageTranslatesToCorrectMailboxFolderNameWhenAttachmentTotalSizeIsChecked(
         string? emailAddress,
         string subject,
