@@ -33,7 +33,7 @@ public class EmailMessageToDestinationFolder
     private readonly EmailSubjectExclusionOptions emailSubjectExclusionOptions;
     private readonly EmailSubjectToUrnTranslator urnTranslator;
     private readonly MailboxOptions mailboxOptions;
-    private readonly AttachmentOptions attachmentOptions;
+    private readonly AttachmentSettingOptions attachmentSettingOptions;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EmailMessageToDestinationFolder"/> class.
@@ -51,7 +51,7 @@ public class EmailMessageToDestinationFolder
         IOptions<EmailSubjectExclusionOptions> emailSubjectExclusionOptions,
         IOptions<MailboxFolderOptions> folderOptions,
         MailboxOptions mailboxOptions,
-        IOptions<AttachmentOptions> attachmentSize
+        IOptions<AttachmentSettingOptions> attachmentSize
         )
     {
         Requires.NotNull(textMatcher);
@@ -68,7 +68,7 @@ public class EmailMessageToDestinationFolder
         this.emailSubjectExclusionOptions = emailSubjectExclusionOptions.Value;
         this.FolderOptions = folderOptions.Value;
         this.mailboxOptions = mailboxOptions;
-        this.attachmentOptions = attachmentSize.Value;
+        this.attachmentSettingOptions = attachmentSize.Value;
     }
 
     /// <summary>
@@ -208,14 +208,14 @@ public class EmailMessageToDestinationFolder
                 {
                     // Extract the file extension
                     attachmentsSize += (int)a.Size;
-                    return attachmentsSize > attachmentOptions.AttachmentSize;
+                    return attachmentsSize > attachmentSettingOptions.AttachmentSize;
                 }
 
                 return false;
             }))
         {
             string destinationFolder = this.FolderOptions.ExceptionsFolderName;
-            string reason = "email has attachments with size " + attachmentsSize + " exceeding allowed limit of " + attachmentOptions.AttachmentSize;
+            string reason = "email has attachments with size " + attachmentsSize + " exceeding allowed limit of " + attachmentSettingOptions.AttachmentSize;
             result = new DestinationFolderResult(destinationFolder, reason, urn);
         }
 
