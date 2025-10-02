@@ -299,6 +299,7 @@ public class EmailMessageToDestinationFolderTest
     [InlineData("incorrectfileextensionlength@b.com", "A URN 12ab1234523 in the subject", "CMS.Exceptions", "email has attachments with file extension longer than 4 characters", "12AB1234523", "sample.attachment.pdf12", "application/pdf")]
     [InlineData("validfileextensionlength@b.com", "A URN 12ab1234523 in the subject", "CMS.Processing", "further processing required", "12AB1234523", "sample.attachment.xlsx", "application/pdf")]
     [InlineData("anothervalidfileextensionlength@b.com", "A URN 12ab1234523 in the subject", "CMS.Processing", "further processing required", "12AB1234523", "sample.attachment.xls", "application/pdf")]
+    [InlineData("validfileWithOutlookAttachment@b.com", "A URN 12ab1234523 in the subject", "CMS.Processing", "further processing required", "12AB1234523", "Re: CPS ref: 88ST3997714E1. Bob v Peter", "application/vnd.ms-outlook")]
     public void MailMessageTranslatesToCorrectMailboxFolderNameWhenAttachmentFileExtensionLengthIsChecked(
         string? emailAddress,
         string subject,
