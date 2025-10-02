@@ -335,4 +335,59 @@ public class EmailMessageToDestinationFolderTest
         destinationFolderResult.Reason.Should().Contain(reason);
         destinationFolderResult.Urn.Should().Be(urn);
     }
+
+    /// <summary>
+    /// Tests that the <see cref="EmailMessageToDestinationFolder"/> translates the email message to the correct mailbox folder name when attachment total size is checked.
+    /// </summary>
+    /// <param name="emailAddress">The from email address.</param>
+    /// <param name="subject">The email subject.</param>
+    /// <param name="expectedDestinationFolder">The expected destination folder.</param>
+    /// <param name="reason">The reason to move the email to the folder.</param>
+    /// <param name="urn">The expected URN.</param>
+    /// <param name="attachmentNames">A comma separated string for the names types of the attachments. This also dictates the number of attachments.</param>
+    /// <param name="attachmentContentTypes">A comma separated string for the content types of the attachments. This also dictates the number of attachments.</param>
+    [Theory]
+    [InlineData("attachmentFilesizeExceeded@b.com", "A URN 12ab1234521 in the subject", "CMS.Exceptions", "email has attachments with size", "12AB1234521", "sample.attachment.pdf1", "application/pdf", "22000000")]
+    [InlineData("attachmentFilesizeTotalExceeded@b.com", "A URN 12ab1234522 in the subject", "CMS.Exceptions", "email has attachments with size", "12AB1234522", "sample.attachment.pdf1,myNotes.pdf", "application/pdf,application/pdf", "15000000,8000000")]
+    [InlineData("attachmentFilesizeTotalValid@b.com", "A URN 12ab1234523 in the subject", "CMS.Processing", "further processing required", "12AB1234523", "sample.attachment.xlsx, myNotes.pdf", "application/pdf, application/pdf", "15000000,5000000")]
+    [InlineData("attachmentFilesizeValid@b.com", "A URN 12ab1234524 in the subject", "CMS.Processing", "further processing required", "12AB1234524", "sample.attachment.xls", "application/pdf", "20000000")]
+    [InlineData("AnotherAttachmentFilesizeValid@b.com", "A URN 12ab1234525 in the subject", "CMS.Processing", "further processing required", "12AB1234525", "sample.attachment.xls", "application/pdf", "19000000")]
+    public void MailMessageTranslatesToCorrectMailboxFolderNameWhenAttachmentTotalSizeIsChecked(
+        string? emailAddress,
+        string subject,
+        string expectedDestinationFolder,
+        string reason,
+        string urn,
+        string attachmentNames,
+        string attachmentContentTypes,
+        string attachmentSizes)
+    {
+        // Arrange
+        string id = "AAMkAGQ2MzNkMWQ3LTM1OGUtNGU1NS1iODdlLWRkNDU3ZjRlMWIwNgBGAAAAAABe5joI-SlXRIPXzvoBzcGwBwBzLStb6tWjRoczUrTG4kEKAAAAAAEMAABzLStb6tWjRoczUrTG4kEKAAAMXGS6AAA=";
+        string mailboxId = Guid.NewGuid().ToString();
+        string eTag = "W/\"CQAAABYAAABzLStb6tWjRoczUrTG4kEKAAAMW2DC\"";
+        string[] attachmentNamesArray = attachmentNames.Split(',');
+        string[] attachmentContentTypesArray = attachmentContentTypes.Split(',');
+        string[] attachmentSizesArray = attachmentSizes.Split(',');
+
+        Message message = EmbeddedResources.CreateMessageFromEmailTemplateWithAttachmentsJson(
+           id: id,
+           mailboxId: mailboxId,
+           eTag: eTag,
+           senderEmailAddress: emailAddress!,
+           subject: subject,
+           attachmentNames: attachmentNamesArray,
+           attachmentContentTypes: attachmentContentTypesArray,
+           attachmentSizes: attachmentSizesArray);
+        EmailMessageToDestinationFolder translator = this.ServiceProvider.GetRequiredService<EmailMessageToDestinationFolder>();
+        EmailMessageInfo emailMessageInfo = new(Email: message, MailboxId: mailboxId);
+
+        // Act
+        DestinationFolderResult destinationFolderResult = translator.Translate(emailMessageInfo);
+
+        // Assert
+        destinationFolderResult.FolderName.Should().Be(expectedDestinationFolder);
+        destinationFolderResult.Reason.Should().Contain(reason);
+        destinationFolderResult.Urn.Should().Be(urn);
+    }
 }
