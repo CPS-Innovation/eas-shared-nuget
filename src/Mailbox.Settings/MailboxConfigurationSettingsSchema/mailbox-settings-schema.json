@@ -1,0 +1,155 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cps.gov.uk/schemas/mailbox-settings-schema.json",
+  "title": "Mailbox Settings Configuration Schema",
+  "description": "Defines the structure for EAS mailbox configuration files based on IMailboxSettings, with required fields determined by DefaultMailboxSettings.",
+  "type": "object",
+  "required": [ "SchemaVersion", "Region", "Mailboxes" ],
+  "properties": {
+    "SchemaVersion": {
+      "type": "string",
+      "description": "Version of this configuration schema."
+    },
+    "Region": {
+      "type": "string",
+      "description": "CPS region this configuration applies to."
+    },
+    "Mailboxes": {
+      "type": "array",
+      "description": "List of mailbox configurations for this region.",
+      "items": {
+        "type": "object",
+        "required": [
+          "Name",
+          "Environment",
+          "Region",
+          "EmailAddress",
+          "MailboxId",
+          "EmailAsMsgFileSupport",
+          "ProceedsOfCrimeUrnSupport"
+        ],
+        "properties": {
+          "Name": {
+            "type": "string",
+            "description": "The name of the mailbox."
+          },
+          "NameWelsh": {
+            "type": [ "string", "null" ],
+            "description": "Welsh mailbox name if applicable."
+          },
+          "Region": {
+            "type": "string",
+            "description": "The region the mailbox belongs to."
+          },
+          "Environment": {
+            "type": "string",
+            "enum": [ "Production", "Staging", "Development" ],
+            "description": "Environment associated with the mailbox."
+          },
+          "EmailAddress": {
+            "type": "string",
+            "format": "email",
+            "description": "The mailbox email address."
+          },
+          "MailboxId": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F-]{36}$",
+            "description": "Unique identifier (GUID) for the mailbox."
+          },
+          "IsSecureMailbox": {
+            "type": "boolean",
+            "description": "Indicates whether the mailbox is secure (CJSM)."
+          },
+          "CreateCommunicationTask": {
+            "type": "boolean",
+            "default": true
+          },
+          "DefaultParty": {
+            "type": "string",
+            "default": "Defence"
+          },
+          "DefaultPartyDescription": {
+            "type": "string",
+            "default": "DEF/CSL"
+          },
+          "DisableAddToFinalisedCase": {
+            "type": "boolean",
+            "default": false
+          },
+          "DisableInvalidUrnAutoReply": {
+            "type": "boolean",
+            "default": false
+          },
+          "DummyUrnPrefix": {
+            "type": [ "string", "null" ],
+            "default": null
+          },
+          "FullyAutomated": {
+            "type": "boolean",
+            "default": false
+          },
+          "IgnoreAttachments": {
+            "type": "boolean",
+            "default": false
+          },
+          "MarkCommunicationAsRead": {
+            "type": "boolean",
+            "default": false
+          },
+          "TreatZipAttachmentEmailsAsExceptions": {
+            "type": "boolean",
+            "default": false
+          },
+          "EmailAsMsgFileSupport": {
+            "type": "object",
+            "description": "Configuration for MSG file support.",
+            "required": [ "Supported" ],
+            "properties": {
+              "Supported": {
+                "type": "boolean",
+                "description": "Whether MSG file formatting is supported."
+              },
+              "IncludeAttachments": {
+                "type": [ "boolean", "null" ],
+                "description": "Whether attachments should be included if supported."
+              }
+            },
+            "additionalProperties": false
+          },
+          "ProceedsOfCrimeUrnSupport": {
+            "type": "object",
+            "description": "Settings for Proceeds of Crime URN support.",
+            "required": [ "Supported" ],
+            "properties": {
+              "Supported": {
+                "type": "boolean",
+                "description": "Whether Proceeds of Crime URNs are supported."
+              },
+              "AcceptOtherAreaUrns": {
+                "type": [ "boolean", "null" ],
+                "description": "Whether URNs from other areas are accepted."
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "Metadata": {
+      "type": "object",
+      "required": [ "LastUpdated" ],
+      "properties": {
+        "LastUpdated": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Author": {
+          "type": [ "string", "null" ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
