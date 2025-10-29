@@ -6,6 +6,8 @@ namespace Cps.Fct.EasShared.Mailbox.Settings.Configuration;
 
 using Cps.Fct.EasShared.Core;
 using Cps.Fct.EasShared.Core.Configuration;
+using Cps.Fct.EasShared.ServiceClient.Aws;
+using Cps.Fct.EasShared.Storage.Core;
 using Microsoft;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -21,11 +23,53 @@ public class MailboxOptions
     private readonly ImmutableDictionary<string, IdentifiableMailboxSettings> mailboxIdentifiers;
 
     /// <summary>
+    /// The list of environment configuration file names to load.
+    /// </summary>
+    private static readonly string[] Environments =
+    {
+        "Default",
+        "Production.London",
+        "Production.North West",
+        "Production.West Midlands",
+        "Production.Proceeds of Crime",
+        "Production.East Midlands",
+        "Production.Cymru-Wales",
+        "Production.Wessex",
+        "Production.Extradition",
+        "Production.Yorkshire and Humberside",
+        "Production.Mersey Cheshire",
+        "Production.CPS Direct",
+        "Production.South West",
+        "Production.South East",
+        "Production.East of England",
+        "Production.London North",
+        "Production.London South",
+        "Production.North East",
+        "Production.Thames and Chiltern",
+        "Production.ARU",
+        "Production.VTP",
+        "Development",
+        "Staging",
+    };
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="MailboxOptions"/> class.
     /// </summary>
     public MailboxOptions()
     {
         this.MailboxList = CreateMailboxList();
+        this.mailboxIdentifiers = CreateMailboxIdentifiers(this.MailboxList);
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MailboxOptions"/> class using S3 storage.
+    /// </summary>
+    /// <param name="clientFactory">The S3 client factory.</param>
+    public MailboxOptions(IAmazonS3ClientFactory clientFactory)
+    {
+        Requires.NotNull(clientFactory);
+
+        this.MailboxList = CreateMailboxListFromS3(clientFactory);
         this.mailboxIdentifiers = CreateMailboxIdentifiers(this.MailboxList);
     }
 
@@ -172,41 +216,57 @@ public class MailboxOptions
     private static IList<IdentifiableMailboxSettings> CreateMailboxList()
     {
         const string ResourceNamespace = "Cps.Fct.EasShared.Mailbox.Settings.Configuration";
-        string[] environments =
-        {
-            "Default",
-            "Production.London",
-            "Production.North West",
-            "Production.West Midlands",
-            "Production.Proceeds of Crime",
-            "Production.East Midlands",
-            "Production.Cymru-Wales",
-            "Production.Wessex",
-            "Production.Extradition",
-            "Production.Yorkshire and Humberside",
-            "Production.Mersey Cheshire",
-            "Production.CPS Direct",
-            "Production.South West",
-            "Production.South East",
-            "Production.East of England",
-            "Production.London North",
-            "Production.London South",
-            "Production.North East",
-            "Production.Thames and Chiltern",
-            "Production.ARU",
-            "Production.VTP",
-            "Development",
-            "Staging",
-        };
-
+        
         List<IdentifiableMailboxSettings> result = new();
-        foreach (string environment in environments)
+        foreach (string environment in Environments)
         {
             string json = EmbeddedResourceUtility.LoadEmbeddedResource($"{ResourceNamespace}.appsettings.{environment}.json", typeof(MailboxOptions));
             MailboxListSettings? settings = JsonSerializer.Deserialize<MailboxListSettings>(json: json, options: ApplicationOptions.ApplicationSerializerOptions);
             if (settings is not null && settings.MailboxList is not null && settings.MailboxList.Any())
             {
                 result.AddRange(settings.MailboxList);
+            }
+        }
+
+        LoadPrivateSettings(result);
+        return result;
+    }
+
+    /// <summary>
+    /// Creates the mailbox list by loading configuration from S3.
+    /// </summary>
+    /// <param name="clientFactory">The S3 client factory.</param>
+    /// <returns>The list of mailbox settings loaded from S3.</returns>
+    private static IList<IdentifiableMailboxSettings> CreateMailboxListFromS3(IAmazonS3ClientFactory clientFactory)
+    {
+        Requires.NotNull(clientFactory);
+
+        List<IdentifiableMailboxSettings> result = new();
+        IStorageClient configClient = clientFactory.GetMailboxConfigurationClient();
+
+        foreach (string environment in Environments)
+        {
+            string key = $"appsettings.{environment}.json";
+
+            try
+            {
+                // Load from S3
+                string json = configClient.GetObjectAsync<string>(key).GetAwaiter().GetResult();
+
+                MailboxListSettings? settings = JsonSerializer.Deserialize<MailboxListSettings>(
+                    json: json,
+                    options: ApplicationOptions.ApplicationSerializerOptions);
+
+                if (settings is not null && settings.MailboxList is not null && settings.MailboxList.Any())
+                {
+                    result.AddRange(settings.MailboxList);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log or handle missing files gracefully
+                // Some environments might not have configs yet
+                System.Diagnostics.Debug.WriteLine($"Warning: Could not load {key} from S3: {ex.Message}");
             }
         }
 

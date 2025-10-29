@@ -30,7 +30,7 @@ public class AmazonS3ApiClient : IStorageClient
     /// </summary>
     /// <param name="loggerFactory">The logger factory.</param>
     /// <param name="apiOptions">The S3 API options.</param>
-    public AmazonS3ApiClient(
+    protected internal AmazonS3ApiClient(
         ILoggerFactory loggerFactory,
         IOptions<AmazonS3ApiOptions> apiOptions)
     {

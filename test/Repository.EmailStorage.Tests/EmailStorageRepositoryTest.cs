@@ -66,6 +66,7 @@ public class EmailStorageRepositoryTest
                     .AddServiceOptions<TestOptions>(TestOptions.DefaultSectionName)
                     .AddServiceOptions<GraphApiConnectionOptions>(GraphApiConnectionOptions.DefaultSectionName)
                     .AddServiceOptions<AmazonS3ApiOptions>(AmazonS3ApiOptions.DefaultSectionName)
+                    .AddServiceOptions<AmazonS3ClientFactoryOptions>(AmazonS3ClientFactoryOptions.DefaultSectionName)
                     .AddServiceOptions<RabbitMQConnectionOptions>(RabbitMQConnectionOptions.DefaultSectionName)
                     .AddServiceOptions<RetryOptions>(RabbitMQConnectionOptions.DefaultSectionName)
                     .AddServiceOptions<EmailReceivedQueueOptions>(EmailReceivedQueueOptions.DefaultSectionName)
@@ -80,7 +81,23 @@ public class EmailStorageRepositoryTest
                     .AddSingleton<GraphApiEmailClient>()
                     .AddSingleton<FakeGraphApiEmailClient>()
                     .AddSingleton(CreateGraphApiEmailClient)
-                    .AddSingleton<AmazonS3ApiClient>()
+                    .AddSingleton<AmazonS3ApiClient>(sp =>
+                    {
+                        var testOptions = sp.GetRequiredService<IOptions<TestOptions>>().Value;
+
+                        if (testOptions.Category.Equals(TestOptions.UnitTest, StringComparison.OrdinalIgnoreCase))
+                        {
+                            // For unit tests: return the fake directly
+                            return sp.GetRequiredService<FakeAmazonS3ApiClient>();
+                        }
+                        else
+                        {
+                            // For real usage: use the factory
+                            var factory = sp.GetRequiredService<IAmazonS3ClientFactory>();
+                            var apiOptions = sp.GetRequiredService<IOptions<AmazonS3ApiOptions>>();
+                            return (AmazonS3ApiClient)factory.CreateClient(apiOptions.Value.ContainerName);
+                        }
+                    })
                     .AddSingleton<FakeAmazonS3ApiClient>()
                     .AddSingleton(CreateStorageClient)
                     .AddSingleton<ConnectionFactory>()

@@ -46,11 +46,30 @@ public class AmazonS3ApiClientTest
             {
                 services
                     .AddServiceOptions<AmazonS3ApiOptions>(AmazonS3ApiOptions.DefaultSectionName)
-                    .AddServiceOptions<TestOptions>(TestOptions.DefaultSectionName);
+                    .AddServiceOptions<AmazonS3ClientFactoryOptions>(AmazonS3ClientFactoryOptions.DefaultSectionName)
+                    .AddServiceOptions<TestOptions>(TestOptions.DefaultSectionName)
+                    .AddSingleton<IAmazonS3ClientFactory, AmazonS3ClientFactory>();
 
                 services
                     .AddSingleton(output)
-                    .AddSingleton(CreateAmazonS3ApiClient);
+                    .AddSingleton<AmazonS3ApiClient>(sp =>
+                    {
+                        var testOptions = sp.GetRequiredService<IOptions<TestOptions>>().Value;
+
+                        if (testOptions.Category.Equals(TestOptions.UnitTest, StringComparison.OrdinalIgnoreCase))
+                        {
+                            // For unit tests: return the fake directly
+                            return sp.GetRequiredService<FakeAmazonS3ApiClient>();
+                        }
+                        else
+                        {
+                            // For real usage: use the factory
+                            var factory = sp.GetRequiredService<IAmazonS3ClientFactory>();
+                            var apiOptions = sp.GetRequiredService<IOptions<AmazonS3ApiOptions>>();
+                            return (AmazonS3ApiClient)factory.CreateClient(apiOptions.Value.ContainerName);
+                        }
+                    })
+                    .AddSingleton<FakeAmazonS3ApiClient>();
             })
             .Build();
 
@@ -165,17 +184,18 @@ public class AmazonS3ApiClientTest
     [Fact]
     public void SpecifyingServiceEndpointSucceeds()
     {
-        // Assemble
+        // Arrange
         ILoggerFactory loggerFactory = this.ServiceProvider.GetRequiredService<ILoggerFactory>();
-        AmazonS3ApiOptions options = new()
+        AmazonS3ApiOptions options = new(
+            containerName: "test-bucket",
+            regionEndpoint: Amazon.RegionEndpoint.EUWest2)
         {
             ServiceEndpoint = "http://localhost",
         };
-
         OptionsWrapper<AmazonS3ApiOptions> optionsWrapper = new(options);
 
         // Act
-        AmazonS3ApiClient client = new(loggerFactory, optionsWrapper);
+        FakeAmazonS3ApiClient client = new(loggerFactory, optionsWrapper);
 
         // Assert
         client.Client.Should().NotBeNull();
@@ -313,9 +333,9 @@ public class AmazonS3ApiClientTest
     {
         ILoggerFactory loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
         IOptions<AmazonS3ApiOptions> apiOptions = serviceProvider.GetRequiredService<IOptions<AmazonS3ApiOptions>>();
-        AmazonS3ApiClient serviceClient = new(
-                loggerFactory: loggerFactory,
-                apiOptions: apiOptions);
+        var s3ClientFactory = serviceProvider.GetRequiredService<IAmazonS3ClientFactory>();
+
+        AmazonS3ApiClient serviceClient = (AmazonS3ApiClient)s3ClientFactory.CreateClient(apiOptions.Value.ContainerName);
 
         TestOptions testOptions = serviceProvider.GetRequiredService<IOptions<TestOptions>>().Value;
         if (testOptions.Category.Equals(TestOptions.UnitTest, StringComparison.OrdinalIgnoreCase))

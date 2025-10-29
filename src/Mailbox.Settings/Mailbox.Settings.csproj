@@ -44,6 +44,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\ServiceClient.Aws\ServiceClient.Aws.csproj" />
   </ItemGroup>
 
 </Project>
