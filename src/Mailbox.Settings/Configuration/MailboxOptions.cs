@@ -28,28 +28,28 @@ public class MailboxOptions
     private static readonly string[] Environments =
     {
         "Default",
-        "Production.London",
-        "Production.North West",
-        "Production.West Midlands",
-        "Production.Proceeds of Crime",
-        "Production.East Midlands",
-        "Production.Cymru-Wales",
-        "Production.Wessex",
-        "Production.Extradition",
-        "Production.Yorkshire and Humberside",
-        "Production.Mersey Cheshire",
-        "Production.CPS Direct",
-        "Production.South West",
-        "Production.South East",
-        "Production.East of England",
-        "Production.London North",
-        "Production.London South",
-        "Production.North East",
-        "Production.Thames and Chiltern",
-        "Production.ARU",
-        "Production.VTP",
-        "Development",
-        "Staging",
+        //"Production.London",
+        //"Production.North West",
+        //"Production.West Midlands",
+        //"Production.Proceeds of Crime",
+        //"Production.East Midlands",
+        //"Production.Cymru-Wales",
+        //"Production.Wessex",
+        //"Production.Extradition",
+        //"Production.Yorkshire and Humberside",
+        //"Production.Mersey Cheshire",
+        //"Production.CPS Direct",
+        //"Production.South West",
+        //"Production.South East",
+        //"Production.East of England",
+        //"Production.London North",
+        //"Production.London South",
+        //"Production.North East",
+        //"Production.Thames and Chiltern",
+        //"Production.ARU",
+        //"Production.VTP",
+        // "Development",
+        //"Staging",
     };
 
     /// <summary>
@@ -251,11 +251,13 @@ public class MailboxOptions
             try
             {
                 // Load from S3
-                string json = configClient.GetObjectAsync<string>(key).GetAwaiter().GetResult();
+                // string json = configClient.GetObjectAsync<string>(key).GetAwaiter().GetResult();
+                MailboxListSettings? settings = configClient.GetObjectAsync<MailboxListSettings>(key).GetAwaiter().GetResult();
 
-                MailboxListSettings? settings = JsonSerializer.Deserialize<MailboxListSettings>(
-                    json: json,
-                    options: ApplicationOptions.ApplicationSerializerOptions);
+
+                //MailboxListSettings? settings = JsonSerializer.Deserialize<MailboxListSettings>(
+                //    json: json,
+                //    options: ApplicationOptions.ApplicationSerializerOptions);
 
                 if (settings is not null && settings.MailboxList is not null && settings.MailboxList.Any())
                 {

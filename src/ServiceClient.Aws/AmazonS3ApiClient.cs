@@ -120,6 +120,31 @@ public class AmazonS3ApiClient : IStorageClient
                 Key = key,
             };
 
+            //using GetObjectResponse response = await this.Client.GetObjectAsync(request, cancellationToken).ConfigureAwait(false);
+
+            //// Read the stream to see what JSON you're actually getting
+            //response.ResponseStream.Position = 0; // Reset if needed
+            //using var reader = new StreamReader(response.ResponseStream);
+            //string jsonContent = await reader.ReadToEndAsync();
+            //System.Diagnostics.Debug.WriteLine($"JSON Content: {jsonContent}");
+
+            //// Now try to deserialize and catch the exception with details
+            //try
+            //{
+            //    TValue result = JsonSerializer.Deserialize<TValue>(jsonContent, serializerOptions)!;
+            //    outcome = "Succeeded";
+            //    return result;
+            //}
+            //catch (JsonException ex)
+            //{
+            //    System.Diagnostics.Debug.WriteLine($"JSON Error: {ex.Message}");
+            //    System.Diagnostics.Debug.WriteLine($"Path: {ex.Path}, Line: {ex.LineNumber}, Position: {ex.BytePositionInLine}");
+            //    throw;
+            //}
+
+
+
+
             using GetObjectResponse response = await this.Client.GetObjectAsync(request, cancellationToken).ConfigureAwait(false);
             TValue result = JsonSerializer.Deserialize<TValue>(response.ResponseStream, serializerOptions)!;
             outcome = "Succeeded";

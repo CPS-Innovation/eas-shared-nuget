@@ -15,6 +15,7 @@ using Cps.Fct.EasShared.Core.Configuration;
 using Cps.Fct.EasShared.Mailbox.Settings.Configuration;
 using Cps.Fct.EasShared.Repository.EmailStorage.Configuration;
 using Cps.Fct.EasShared.Repository.EmailStorage.Translator;
+using Cps.Fct.EasShared.ServiceClient.Aws;
 using Cps.Fct.EasShared.ServiceClient.GraphApiEmail;
 using Cps.Fct.EasShared.ServiceClient.RabbitMQ;
 using Cps.Fct.EasShared.Storage.Core;
@@ -36,7 +37,7 @@ public class EmailStorageRepository
     private static readonly EmailMessageBodyTranslator EmailMessageBodyTranslator = new();
     private readonly ILogger<EmailStorageRepository> logger;
     private readonly IGraphApiEmailClient graphApiEmailClient;
-    private readonly IStorageClient storageClient;
+    private readonly IStorageClient emailStorageClient;
     private readonly IRabbitMQPublisher eventPublisher;
     private readonly EmailSubjectToUrnTranslator urnTranslator;
     private readonly EmailReceivedQueueOptions queueOptions;
@@ -48,7 +49,7 @@ public class EmailStorageRepository
     /// </summary>
     /// <param name="loggerFactory">The logger factory.</param>
     /// <param name="graphApiEmailClient">The Graph API email client.</param>
-    /// <param name="storageClient">The storage client.</param>
+    /// <param name="clientFactory">The AWS S3 client factory.</param>
     /// <param name="eventPublisher">The new email received event publisher.</param>
     /// <param name="urnTranslator">The email subject to URN translator.</param>
     /// <param name="applicationOptions">The application options.</param>
@@ -58,7 +59,7 @@ public class EmailStorageRepository
     public EmailStorageRepository(
         ILoggerFactory loggerFactory,
         IGraphApiEmailClient graphApiEmailClient,
-        IStorageClient storageClient,
+        IAmazonS3ClientFactory clientFactory,
         IRabbitMQPublisher eventPublisher,
         EmailSubjectToUrnTranslator urnTranslator,
         IOptions<ApplicationOptions> applicationOptions,
@@ -68,7 +69,7 @@ public class EmailStorageRepository
     {
         Requires.NotNull(loggerFactory);
         Requires.NotNull(graphApiEmailClient);
-        Requires.NotNull(storageClient);
+        Requires.NotNull(clientFactory);
         Requires.NotNull(eventPublisher);
         Requires.NotNull(urnTranslator);
         Requires.NotNull(applicationOptions);
@@ -91,7 +92,7 @@ public class EmailStorageRepository
         this.logger = loggerFactory.CreateLogger<EmailStorageRepository>();
         this.ApplicationOptions = applicationOptions.Value;
         this.queueOptions = queueOptions.Value;
-        this.storageClient = storageClient;
+        this.emailStorageClient = clientFactory.GetEmailStorageClient();
         this.graphApiEmailClient = graphApiEmailClient;
         this.eventPublisher = eventPublisher;
         this.urnTranslator = urnTranslator;
@@ -219,14 +220,14 @@ public class EmailStorageRepository
             {
                 outcome = "Failed - saving contents to storage";
                 using Stream stream = emailBody.Stream;
-                await this.storageClient.PutStreamAsync(key, stream).ConfigureAwait(false);
+                await this.emailStorageClient.PutStreamAsync(key, stream).ConfigureAwait(false);
                 size = (int)stream.Length;
             }
 
             StorageInfo result = new(
                 ContentType: contentType,
-                DeleteUrl: this.storageClient.GetDeleteUrl(key, TimeSpan.FromDays(5)),
-                GetUrl: this.storageClient.GetAccessUrl(key, TimeSpan.FromDays(5)),
+                DeleteUrl: this.emailStorageClient.GetDeleteUrl(key, TimeSpan.FromDays(5)),
+                GetUrl: this.emailStorageClient.GetAccessUrl(key, TimeSpan.FromDays(5)),
                 Name: emailBodyName,
                 Size: size);
             if (exists)
@@ -287,14 +288,14 @@ public class EmailStorageRepository
         string contentType = SubscriberConstants.EmailBodyContentType;
         string emailBodyName = SubscriberConstants.EmailBodyHtmlFilename;
         string key = $"{identifier.ToMessageKey()}/{emailBodyName}";
-        bool exists = await this.storageClient.ObjectExistsAsync(key).ConfigureAwait(false);
+        bool exists = await this.emailStorageClient.ObjectExistsAsync(key).ConfigureAwait(false);
 
         if (requiresMsgFormat && !exists)
         {
             contentType = SubscriberConstants.OutlookMessageContentType;
             emailBodyName = SubscriberConstants.EmailBodyOutlookFilename;
             key = $"{identifier.ToMessageKey()}/{emailBodyName}";
-            exists = await this.storageClient.ObjectExistsAsync(key).ConfigureAwait(false);
+            exists = await this.emailStorageClient.ObjectExistsAsync(key).ConfigureAwait(false);
         }
 
         if (requiresMsgFormat && !exists)
@@ -348,7 +349,7 @@ public class EmailStorageRepository
             outcome = "Failed - checking object existence in storage";
             int size = attachment.Size ?? 0;
             string contentType = DetermineAttachmentContentType(attachment);
-            bool exists = await this.storageClient.ObjectExistsAsync(key).ConfigureAwait(false);
+            bool exists = await this.emailStorageClient.ObjectExistsAsync(key).ConfigureAwait(false);
             if (!exists)
             {
                 outcome = $"Failed - reading attachment contents of type '{attachment.ContentType}' and derived content type '{contentType}'";
@@ -370,7 +371,7 @@ public class EmailStorageRepository
                 outcome = $"Failed - saving {contentType} attachment contents to storage";
                 try
                 {
-                    await this.storageClient.PutStreamAsync(key, stream).ConfigureAwait(false);
+                    await this.emailStorageClient.PutStreamAsync(key, stream).ConfigureAwait(false);
                 }
                 finally
                 {
@@ -380,8 +381,8 @@ public class EmailStorageRepository
 
             StorageInfo result = new(
                 ContentType: contentType,
-                DeleteUrl: this.storageClient.GetDeleteUrl(key, TimeSpan.FromDays(5)),
-                GetUrl: this.storageClient.GetAccessUrl(key, TimeSpan.FromDays(5)),
+                DeleteUrl: this.emailStorageClient.GetDeleteUrl(key, TimeSpan.FromDays(5)),
+                GetUrl: this.emailStorageClient.GetAccessUrl(key, TimeSpan.FromDays(5)),
                 Name: name,
                 Size: size);
             if (exists)
