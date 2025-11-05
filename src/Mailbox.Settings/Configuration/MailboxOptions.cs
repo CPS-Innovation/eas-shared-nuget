@@ -27,7 +27,7 @@ public class MailboxOptions
     /// </summary>
     private static readonly string[] Environments =
     {
-        "Default",
+        //"Default",
         //"Production.London",
         //"Production.North West",
         //"Production.West Midlands",
@@ -48,8 +48,9 @@ public class MailboxOptions
         //"Production.Thames and Chiltern",
         //"Production.ARU",
         //"Production.VTP",
-        // "Development",
+        //"Development",
         //"Staging",
+        "Faisal"
     };
 
     /// <summary>
@@ -250,14 +251,7 @@ public class MailboxOptions
 
             try
             {
-                // Load from S3
-                // string json = configClient.GetObjectAsync<string>(key).GetAwaiter().GetResult();
                 MailboxListSettings? settings = configClient.GetObjectAsync<MailboxListSettings>(key).GetAwaiter().GetResult();
-
-
-                //MailboxListSettings? settings = JsonSerializer.Deserialize<MailboxListSettings>(
-                //    json: json,
-                //    options: ApplicationOptions.ApplicationSerializerOptions);
 
                 if (settings is not null && settings.MailboxList is not null && settings.MailboxList.Any())
                 {
@@ -266,8 +260,6 @@ public class MailboxOptions
             }
             catch (Exception ex)
             {
-                // Log or handle missing files gracefully
-                // Some environments might not have configs yet
                 System.Diagnostics.Debug.WriteLine($"Warning: Could not load {key} from S3: {ex.Message}");
             }
         }
