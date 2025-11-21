@@ -177,7 +177,9 @@ public class EmailMessageToDestinationFolder
                 {
                     // Extract the file extension
                     string? extension = Path.GetExtension(a.Name);
-                    if (!string.IsNullOrEmpty(extension) && !string.IsNullOrEmpty(a.ContentType) && !a.ContentType.Equals("application/vnd.ms-outlook", StringComparison.OrdinalIgnoreCase))
+                    if (!string.IsNullOrEmpty(extension) && !string.IsNullOrEmpty(a.ContentType) &&
+                        ((a.ContentType.Equals("application/pdf", StringComparison.OrdinalIgnoreCase)))
+                        || (a.ContentType.Equals("application/doc", StringComparison.OrdinalIgnoreCase)))
                     {
                         // Remove the dot and check length
                         string extWithoutDot = extension.TrimStart('.');
