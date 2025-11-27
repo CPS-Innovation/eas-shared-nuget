@@ -46,7 +46,7 @@ public class MailboxOptionsTest
     [Theory]
     [InlineData("Development", 1)]
     [InlineData("Staging", 2)]
-    [InlineData("Production", 188)]
+    [InlineData("Production", 189)]
     public void ExpectedEnvironmentCount(string environment, int expectedMailboxCount)
     {
         // Arrange
@@ -81,7 +81,7 @@ public class MailboxOptionsTest
     [InlineData("South West", 12)]
     [InlineData("South East", 10)]
     [InlineData("East of England", 9)]
-    [InlineData("London North", 1)]
+    [InlineData("London North", 2)]
     [InlineData("London South", 9)]
     [InlineData("North East", 13)]
     [InlineData("Thames and Chiltern", 20)]
