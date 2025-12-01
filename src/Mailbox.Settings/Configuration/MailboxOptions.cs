@@ -23,45 +23,6 @@ public class MailboxOptions
     private readonly ImmutableDictionary<string, IdentifiableMailboxSettings> mailboxIdentifiers;
 
     /// <summary>
-    /// The list of legacy configuration file names to load (for backwards compatibility with embedded resources).
-    /// </summary>
-    private static readonly string[] LegacyConfigurationFiles =
-    {
-        //"Default",
-        //"Production.London",
-        //"Production.North West",
-        //"Production.West Midlands",
-        //"Production.Proceeds of Crime",
-        //"Production.East Midlands",
-        //"Production.Cymru-Wales",
-        //"Production.Wessex",
-        //"Production.Extradition",
-        //"Production.Yorkshire and Humberside",
-        //"Production.Mersey Cheshire",
-        //"Production.CPS Direct",
-        //"Production.South West",
-        //"Production.South East",
-        //"Production.East of England",
-        //"Production.London North",
-        //"Production.London South",
-        //"Production.North East",
-        //"Production.Thames and Chiltern",
-        //"Production.ARU",
-        //"Production.VTP",
-        //"Development",
-        //"Staging",
-    };
-
-    ///// <summary>
-    ///// Initializes a new instance of the <see cref="MailboxOptions"/> class.
-    ///// </summary>
-    //public MailboxOptions()
-    //{
-    //    this.MailboxList = CreateMailboxList();
-    //    this.mailboxIdentifiers = CreateMailboxIdentifiers(this.MailboxList);
-    //}
-
-    /// <summary>
     /// Initializes a new instance of the <see cref="MailboxOptions"/> class using S3 storage.
     /// </summary>
     /// <param name="clientFactory">The S3 client factory.</param>
@@ -69,7 +30,7 @@ public class MailboxOptions
     {
         Requires.NotNull(clientFactory);
 
-        this.MailboxList = CreateMailboxListFromS3(clientFactory);
+        this.MailboxList = CreateMailboxList(clientFactory);
         this.mailboxIdentifiers = CreateMailboxIdentifiers(this.MailboxList);
     }
 
@@ -214,34 +175,11 @@ public class MailboxOptions
     }
 
     /// <summary>
-    /// Creates the mailbox list by loading configuration from embedded resources (legacy method).
-    /// </summary>
-    /// <returns>The list of mailbox settings.</returns>
-    private static IList<IdentifiableMailboxSettings> CreateMailboxList()
-    {
-        const string ResourceNamespace = "Cps.Fct.EasShared.Mailbox.Settings.Configuration";
-
-        List<IdentifiableMailboxSettings> result = new();
-        foreach (string configName in LegacyConfigurationFiles)
-        {
-            string json = EmbeddedResourceUtility.LoadEmbeddedResource($"{ResourceNamespace}.appsettings.{configName}.json", typeof(MailboxOptions));
-            MailboxListSettings? settings = JsonSerializer.Deserialize<MailboxListSettings>(json: json, options: ApplicationOptions.ApplicationSerializerOptions);
-            if (settings is not null && settings.MailboxList is not null && settings.MailboxList.Any())
-            {
-                result.AddRange(settings.MailboxList);
-            }
-        }
-
-        LoadPrivateSettings(result);
-        return result;
-    }
-
-    /// <summary>
     /// Creates the mailbox list by dynamically loading all configuration files from S3 bucket.
     /// </summary>
     /// <param name="clientFactory">The S3 client factory.</param>
     /// <returns>The list of mailbox settings loaded from S3.</returns>
-    private static IList<IdentifiableMailboxSettings> CreateMailboxListFromS3(IAmazonS3ClientFactory clientFactory)
+    private static IList<IdentifiableMailboxSettings> CreateMailboxList(IAmazonS3ClientFactory clientFactory)
     {
         Requires.NotNull(clientFactory);
 
@@ -277,47 +215,11 @@ public class MailboxOptions
                     System.Diagnostics.Debug.WriteLine($"Warning: Could not load {key} from S3: {ex.Message}");
                 }
             }
-
-            if (result.Count == 0)
-            {
-                System.Diagnostics.Debug.WriteLine("Warning: No mailbox configurations loaded from S3. Falling back to legacy embedded resources.");
-                return CreateMailboxListFallback();
-            }
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Error listing objects from S3: {ex.Message}. Falling back to legacy embedded resources.");
-            return CreateMailboxListFallback();
-        }
-
-        LoadPrivateSettings(result);
-        return result;
-    }
-
-    /// <summary>
-    /// Fallback method that loads configurations from legacy embedded resources when S3 is unavailable.
-    /// </summary>
-    /// <returns>The list of mailbox settings from embedded resources.</returns>
-    private static IList<IdentifiableMailboxSettings> CreateMailboxListFallback()
-    {
-        const string ResourceNamespace = "Cps.Fct.EasShared.Mailbox.Settings.Configuration";
-
-        List<IdentifiableMailboxSettings> result = new();
-        foreach (string configName in LegacyConfigurationFiles)
-        {
-            try
-            {
-                string json = EmbeddedResourceUtility.LoadEmbeddedResource($"{ResourceNamespace}.appsettings.{configName}.json", typeof(MailboxOptions));
-                MailboxListSettings? settings = JsonSerializer.Deserialize<MailboxListSettings>(json: json, options: ApplicationOptions.ApplicationSerializerOptions);
-                if (settings is not null && settings.MailboxList is not null && settings.MailboxList.Any())
-                {
-                    result.AddRange(settings.MailboxList);
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Warning: Could not load embedded resource for {configName}: {ex.Message}");
-            }
+            throw;
         }
 
         LoadPrivateSettings(result);
