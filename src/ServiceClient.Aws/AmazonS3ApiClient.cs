@@ -314,4 +314,49 @@ public class AmazonS3ApiClient : IStorageClient
             throw;
         }
     }
+
+    /// <inheritdoc/>
+    public virtual async Task<IEnumerable<string>> ListObjectKeysAsync(
+        string? prefix = null,
+        CancellationToken cancellationToken = default)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        string outcome = "Failed";
+
+        List<string> keys = new();
+
+        try
+        {
+            string? continuationToken = null;
+
+            do
+            {
+                ListObjectsV2Request request = new()
+                {
+                    BucketName = this.ApiOptions.ContainerName,
+                    Prefix = prefix,
+                    ContinuationToken = continuationToken,
+                };
+
+                ListObjectsV2Response response = await this.Client.ListObjectsV2Async(request, cancellationToken).ConfigureAwait(false);
+
+                keys.AddRange(response.S3Objects.Select(obj => obj.Key));
+
+                continuationToken = response.IsTruncated ? response.NextContinuationToken : null;
+            }
+            while (continuationToken != null);
+
+            outcome = "Succeeded";
+            return keys;
+        }
+        finally
+        {
+            this.logger.LogTrace(
+                "Amazon S3 client attempted LIST for objects with prefix {Prefix}\nOutcome: {Outcome}\nDuration: {Duration}\nCount: {Count}",
+                prefix ?? "(none)",
+                outcome,
+                stopwatch.Elapsed,
+                outcome == "Succeeded" ? ((List<string>)keys).Count : 0);
+        }
+    }
 }
