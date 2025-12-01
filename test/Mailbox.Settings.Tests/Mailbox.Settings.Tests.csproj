@@ -36,6 +36,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Mailbox.Settings\Mailbox.Settings.csproj" />
+    <ProjectReference Include="..\ServiceClient.Aws.Emulation\ServiceClient.Aws.Emulation.csproj" />
   </ItemGroup>
   
 </Project>

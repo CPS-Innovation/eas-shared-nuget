@@ -50,17 +50,16 @@ public class MailboxOptions
         //"Production.VTP",
         //"Development",
         //"Staging",
-        "Faisal"
     };
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="MailboxOptions"/> class.
-    /// </summary>
-    public MailboxOptions()
-    {
-        this.MailboxList = CreateMailboxList();
-        this.mailboxIdentifiers = CreateMailboxIdentifiers(this.MailboxList);
-    }
+    ///// <summary>
+    ///// Initializes a new instance of the <see cref="MailboxOptions"/> class.
+    ///// </summary>
+    //public MailboxOptions()
+    //{
+    //    this.MailboxList = CreateMailboxList();
+    //    this.mailboxIdentifiers = CreateMailboxIdentifiers(this.MailboxList);
+    //}
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MailboxOptions"/> class using S3 storage.

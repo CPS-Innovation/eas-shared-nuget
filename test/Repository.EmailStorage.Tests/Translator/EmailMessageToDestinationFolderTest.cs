@@ -10,6 +10,8 @@ using Cps.Fct.EasShared.Core.Text;
 using Cps.Fct.EasShared.Mailbox.Settings.Configuration;
 using Cps.Fct.EasShared.Repository.EmailStorage.Configuration;
 using Cps.Fct.EasShared.Repository.EmailStorage.Translator;
+using Cps.Fct.EasShared.ServiceClient.Aws.Emulation;
+using Cps.Fct.EasShared.ServiceClient.Aws;
 using Cps.Fct.EasShared.ServiceClient.GraphApiEmail.Emulation;
 using Cps.Fct.EasShared.Subscriber.Core.Translator;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +33,7 @@ public class EmailMessageToDestinationFolderTest
     /// </summary>
     public EmailMessageToDestinationFolderTest()
     {
-        this.mailboxOptionsMock = new Mock<MailboxOptions>();
+        this.mailboxOptionsMock = new Mock<MailboxOptions>(new MockS3ClientFactory());
 
         string[] args = Array.Empty<string>();
         IHost host = Host
@@ -46,7 +48,8 @@ public class EmailMessageToDestinationFolderTest
                     .AddSingleton<ITextMatcher, IgnoreCaseTextMatcher>()
                     .AddSingleton<EmailSubjectToUrnTranslator>()
                     .AddSingleton<EmailMessageToDestinationFolder>()
-                    .AddSingleton<MailboxOptions>(this.mailboxOptionsMock.Object);
+                    .AddSingleton<MailboxOptions>(this.mailboxOptionsMock.Object)
+                    ;
             })
             .Build();
 

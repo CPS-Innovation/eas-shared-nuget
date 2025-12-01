@@ -6,6 +6,8 @@ namespace Cps.Fct.EasShared.Subscriber.Core.Tests.Translator;
 
 using System;
 using Cps.Fct.EasShared.Mailbox.Settings.Configuration;
+using Cps.Fct.EasShared.ServiceClient.Aws;
+using Cps.Fct.EasShared.ServiceClient.Aws.Emulation;
 using Cps.Fct.EasShared.Subscriber.Core.Translator;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -33,6 +35,7 @@ public partial class EmailSubjectToUrnTranslatorTest
             .ConfigureServices(services =>
             {
                 services
+                    .AddSingleton<IAmazonS3ClientFactory, MockS3ClientFactory>()
                     .AddSingleton<MailboxOptions>()
                     .AddSingleton<EmailSubjectToUrnTranslator>();
             })

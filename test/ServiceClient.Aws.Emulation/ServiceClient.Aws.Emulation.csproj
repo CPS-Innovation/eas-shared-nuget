@@ -13,6 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Embedded\appsettings.UnitTest.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Moq" Version="4.20.70" />
   </ItemGroup>
 
