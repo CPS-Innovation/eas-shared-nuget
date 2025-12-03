@@ -58,25 +58,6 @@ public class AmazonS3ApiClientTest
                         var apiOptions = sp.GetRequiredService<IOptions<AmazonS3ApiOptions>>();
                         return (AmazonS3ApiClient)factory.CreateClient(apiOptions.Value.ContainerName);
                     });
-                //.AddSingleton<AmazonS3ApiClient>(sp =>
-                //{
-                //    var testOptions = sp.GetRequiredService<IOptions<TestOptions>>().Value;
-                //
-                //    if (testOptions.Category.Equals(TestOptions.UnitTest, StringComparison.OrdinalIgnoreCase))
-                //    {
-                //        // For unit tests: return the fake directly
-                //        return sp.GetRequiredService<FakeAmazonS3ApiClient>();
-                //    }
-                //    else
-                //    {
-                //        // For real usage: use the factory
-                //        var factory = sp.GetRequiredService<IAmazonS3ClientFactory>();
-                //        var apiOptions = sp.GetRequiredService<IOptions<AmazonS3ApiOptions>>();
-                //        return (AmazonS3ApiClient)factory.CreateClient(apiOptions.Value.ContainerName);
-                //    }
-                //})
-                //.AddSingleton<FakeAmazonS3ApiClient>()
-                ;
             })
             .Build();
 
@@ -335,25 +316,6 @@ public class AmazonS3ApiClientTest
             exists.Should().BeFalse();
         }
     }
-
-    //private static AmazonS3ApiClient CreateAmazonS3ApiClient(IServiceProvider serviceProvider)
-    //{
-    //    ILoggerFactory loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
-    //    IOptions<AmazonS3ApiOptions> apiOptions = serviceProvider.GetRequiredService<IOptions<AmazonS3ApiOptions>>();
-    //    var s3ClientFactory = serviceProvider.GetRequiredService<IAmazonS3ClientFactory>();
-
-    //    AmazonS3ApiClient serviceClient = (AmazonS3ApiClient)s3ClientFactory.CreateClient(apiOptions.Value.ContainerName);
-
-    //    TestOptions testOptions = serviceProvider.GetRequiredService<IOptions<TestOptions>>().Value;
-    //    if (testOptions.Category.Equals(TestOptions.UnitTest, StringComparison.OrdinalIgnoreCase))
-    //    {
-    //        serviceClient = new FakeAmazonS3ApiClient(
-    //            loggerFactory: loggerFactory,
-    //            apiOptions: apiOptions);
-    //    }
-
-    //    return serviceClient;
-    //}
 
     private sealed class TestObject
     {
