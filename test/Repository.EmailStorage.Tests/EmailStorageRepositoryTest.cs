@@ -81,7 +81,7 @@ public class EmailStorageRepositoryTest
                     .AddSingleton<GraphApiEmailClient>()
                     .AddSingleton<FakeGraphApiEmailClient>()
                     .AddSingleton(CreateGraphApiEmailClient)
-                    .AddSingleton<IAmazonS3ClientFactory, MockS3ClientFactory>()
+                    .AddSingleton<IAmazonS3ClientFactory, FakeS3ClientFactory>()
                     //.AddSingleton<AmazonS3ApiClient>(sp =>
                     //{
                     //    var testOptions = sp.GetRequiredService<IOptions<TestOptions>>().Value;
@@ -99,8 +99,8 @@ public class EmailStorageRepositoryTest
                     //        return (AmazonS3ApiClient)factory.CreateClient(apiOptions.Value.ContainerName);
                     //    }
                     //})
-                    .AddSingleton<FakeAmazonS3ApiClient>()
-                    .AddSingleton(CreateStorageClient)
+                    //.AddSingleton<FakeAmazonS3ApiClient>()
+                    //.AddSingleton(CreateStorageClient)
                     .AddSingleton<ConnectionFactory>()
                     .AddSingleton<RabbitMQClient>()
                     .AddSingleton<FakeRabbitMQClient>()
@@ -202,17 +202,17 @@ public class EmailStorageRepositoryTest
         return graphApiClient;
     }
 
-    private static IStorageClient CreateStorageClient(IServiceProvider serviceProvider)
-    {
-        TestOptions testOptions = serviceProvider.GetRequiredService<IOptions<TestOptions>>().Value;
-        IStorageClient graphApiClient = serviceProvider.GetRequiredService<AmazonS3ApiClient>();
-        if (testOptions.Category.Equals(TestOptions.UnitTest, StringComparison.OrdinalIgnoreCase))
-        {
-            graphApiClient = serviceProvider.GetRequiredService<FakeAmazonS3ApiClient>();
-        }
+    //private static IStorageClient CreateStorageClient(IServiceProvider serviceProvider)
+    //{
+    //    TestOptions testOptions = serviceProvider.GetRequiredService<IOptions<TestOptions>>().Value;
+    //    IStorageClient graphApiClient = serviceProvider.GetRequiredService<AmazonS3ApiClient>();
+    //    if (testOptions.Category.Equals(TestOptions.UnitTest, StringComparison.OrdinalIgnoreCase))
+    //    {
+    //        graphApiClient = serviceProvider.GetRequiredService<FakeAmazonS3ApiClient>();
+    //    }
 
-        return graphApiClient;
-    }
+    //    return graphApiClient;
+    //}
 
     private static IRabbitMQClient CreateRabbitMQClient(IServiceProvider serviceProvider)
     {

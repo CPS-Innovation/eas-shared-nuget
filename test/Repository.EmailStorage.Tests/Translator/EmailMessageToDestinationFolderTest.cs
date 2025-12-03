@@ -12,12 +12,17 @@ using Cps.Fct.EasShared.Repository.EmailStorage.Configuration;
 using Cps.Fct.EasShared.Repository.EmailStorage.Translator;
 using Cps.Fct.EasShared.ServiceClient.Aws.Emulation;
 using Cps.Fct.EasShared.ServiceClient.Aws;
+using Cps.Fct.EasShared.ServiceClient.Aws.Configuration;
 using Cps.Fct.EasShared.ServiceClient.GraphApiEmail.Emulation;
 using Cps.Fct.EasShared.Subscriber.Core.Translator;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Graph.Models;
 using Moq;
+using Cps.Fct.EasShared.Core.Configuration;
+using Cps.Fct.EasShared.ServiceClient.GraphApiEmail.Configuration;
+using Microsoft.Extensions.Options;
 
 /// <summary>
 /// Tests the <see cref="EmailMessageToDestinationFolder"/> class.
@@ -33,8 +38,6 @@ public class EmailMessageToDestinationFolderTest
     /// </summary>
     public EmailMessageToDestinationFolderTest()
     {
-        this.mailboxOptionsMock = new Mock<MailboxOptions>(new MockS3ClientFactory());
-
         string[] args = Array.Empty<string>();
         IHost host = Host
             .CreateDefaultBuilder(args)
@@ -42,19 +45,26 @@ public class EmailMessageToDestinationFolderTest
             {
                 services
                     .AddServiceOptions<EmailAddressExclusionOptions>("EmailAddressMatching")
-                    .AddServiceOptions<EmailSubjectExclusionOptions>("EmailSubjectMatching");
+                    .AddServiceOptions<EmailSubjectExclusionOptions>("EmailSubjectMatching")
+                    .AddServiceOptions<AmazonS3ApiOptions>(AmazonS3ApiOptions.DefaultSectionName)
+                    .AddServiceOptions<AmazonS3ClientFactoryOptions>(AmazonS3ClientFactoryOptions.DefaultSectionName);
 
                 services
+                    .AddSingleton<IAmazonS3ClientFactory, FakeS3ClientFactory>()
+                    .AddSingleton<MailboxOptions>()
                     .AddSingleton<ITextMatcher, IgnoreCaseTextMatcher>()
                     .AddSingleton<EmailSubjectToUrnTranslator>()
                     .AddSingleton<EmailMessageToDestinationFolder>()
-                    .AddSingleton<MailboxOptions>(this.mailboxOptionsMock.Object)
                     ;
             })
             .Build();
 
         IServiceScope serviceScope = host.Services.CreateScope();
         this.ServiceProvider = serviceScope.ServiceProvider;
+
+        // Create the mock after getting the factory from DI
+        var factory = this.ServiceProvider.GetRequiredService<IAmazonS3ClientFactory>();
+        this.mailboxOptionsMock = new Mock<MailboxOptions>(factory);
     }
 
     private IServiceProvider ServiceProvider { get; }
@@ -240,7 +250,24 @@ public class EmailMessageToDestinationFolderTest
             senderEmailAddress: emailAddress,
             subject: subject);
         message.Body!.Content = message.Body!.Content!.Replace("writing guidelines", insecureUrl, StringComparison.OrdinalIgnoreCase);
-        EmailMessageToDestinationFolder translator = this.ServiceProvider.GetRequiredService<EmailMessageToDestinationFolder>();
+
+        // Create translator with mocked MailboxOptions
+        var textMatcher = this.ServiceProvider.GetRequiredService<ITextMatcher>();
+        var urnTranslator = new EmailSubjectToUrnTranslator(this.mailboxOptionsMock.Object);
+        var emailAddressOptions = this.ServiceProvider.GetRequiredService<IOptions<EmailAddressExclusionOptions>>();
+        var emailSubjectOptions = this.ServiceProvider.GetRequiredService<IOptions<EmailSubjectExclusionOptions>>();
+        var folderOptions = this.ServiceProvider.GetRequiredService<IOptions<MailboxFolderOptions>>();
+        var attachmentOptions = this.ServiceProvider.GetRequiredService<IOptions<AttachmentSettingOptions>>();
+
+        EmailMessageToDestinationFolder translator = new EmailMessageToDestinationFolder(
+            textMatcher,
+            urnTranslator,
+            emailAddressOptions,
+            emailSubjectOptions,
+            folderOptions,
+            this.mailboxOptionsMock.Object,
+            attachmentOptions);
+
         EmailMessageInfo emailMessageInfo = new(Email: message, MailboxId: mailboxId);
 
         // Act

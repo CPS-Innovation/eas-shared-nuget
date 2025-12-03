@@ -30,7 +30,7 @@ public class MailboxOptionsTest
             .ConfigureServices(services =>
             {
                 services
-                    .AddSingleton<IAmazonS3ClientFactory, MockS3ClientFactory>()
+                    .AddSingleton<IAmazonS3ClientFactory, FakeS3ClientFactory>()
                     .AddSingleton<MailboxOptions>();
             })
             .Build();

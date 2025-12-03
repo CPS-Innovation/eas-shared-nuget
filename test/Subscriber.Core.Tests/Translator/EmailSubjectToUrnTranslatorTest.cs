@@ -35,7 +35,7 @@ public partial class EmailSubjectToUrnTranslatorTest
             .ConfigureServices(services =>
             {
                 services
-                    .AddSingleton<IAmazonS3ClientFactory, MockS3ClientFactory>()
+                    .AddSingleton<IAmazonS3ClientFactory, FakeS3ClientFactory>()
                     .AddSingleton<MailboxOptions>()
                     .AddSingleton<EmailSubjectToUrnTranslator>();
             })
