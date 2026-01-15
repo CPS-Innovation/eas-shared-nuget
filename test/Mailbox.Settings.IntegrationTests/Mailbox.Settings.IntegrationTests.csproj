@@ -36,11 +36,21 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Mailbox.Settings\Mailbox.Settings.csproj" />
     <ProjectReference Include="..\..\src\ServiceClient.Aws\ServiceClient.Aws.csproj" />
+    <ProjectReference Include="..\..\src\ServiceClient.GraphApi\ServiceClient.GraphApi.csproj" />
+    <ProjectReference Include="..\..\src\ServiceClient.GraphApiEmail\ServiceClient.GraphApiEmail.csproj" />
     <ProjectReference Include="..\Core.Xunit\Core.Xunit.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="appsettings.Development.json">
+      <DependentUpon>appsettings.json</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings.Staging.json">
+      <DependentUpon>appsettings.json</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings.Production.json">
       <DependentUpon>appsettings.json</DependentUpon>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

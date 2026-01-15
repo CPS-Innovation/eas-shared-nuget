@@ -1,4 +1,4 @@
-// <copyright file="IntegrationFactAttribute.cs" company="TheCrownProsecutionService">
+// <copyright file="S3IntegrationFactAttribute.cs" company="TheCrownProsecutionService">
 // Copyright (c) The Crown Prosecution Service. All rights reserved.
 // </copyright>
 
@@ -16,9 +16,10 @@ using Microsoft.Extensions.Options;
 using Xunit;
 
 /// <summary>
-/// Custom fact attribute for integration tests that automatically skips when AWS credentials are not available.
+/// Custom fact attribute for integration tests that require S3/AWS credentials.
+/// Automatically skips when AWS credentials are not available.
 /// </summary>
-public class IntegrationFactAttribute : FactAttribute
+public class S3IntegrationFactAttribute : FactAttribute
 {
     private static readonly Lazy<bool> CredentialsAvailable = new(CheckCredentialsAvailable);
 
@@ -31,7 +32,7 @@ public class IntegrationFactAttribute : FactAttribute
         {
             if (!CredentialsAvailable.Value)
             {
-                return "AWS credentials are not configured. Skipping integration test.";
+                return "AWS credentials are not configured. Skipping S3 integration test.";
             }
 
             return base.Skip;
