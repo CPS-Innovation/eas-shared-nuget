@@ -227,6 +227,56 @@ public class MailboxOptions
     }
 
     /// <summary>
+    /// Creates the mailbox list by loading configuration files from embedded resources.
+    /// This method is kept for rollback purposes if S3 loading fails.
+    /// </summary>
+    /// <returns>The list of mailbox settings loaded from embedded resources.</returns>
+    private static IList<IdentifiableMailboxSettings> CreateMailboxListEmbedded()
+    {
+        const string ResourceNamespace = "Cps.Fct.EasShared.Mailbox.Settings.Configuration";
+        string[] environments =
+        {
+            "Default",
+            "Production.London",
+            "Production.North West",
+            "Production.West Midlands",
+            "Production.Proceeds of Crime",
+            "Production.East Midlands",
+            "Production.Cymru-Wales",
+            "Production.Wessex",
+            "Production.Extradition",
+            "Production.Yorkshire and Humberside",
+            "Production.Mersey Cheshire",
+            "Production.CPS Direct",
+            "Production.South West",
+            "Production.South East",
+            "Production.East of England",
+            "Production.London North",
+            "Production.London South",
+            "Production.North East",
+            "Production.Thames and Chiltern",
+            "Production.ARU",
+            "Production.VTP",
+            "Development",
+            "Staging",
+        };
+
+        List<IdentifiableMailboxSettings> result = new();
+        foreach (string environment in environments)
+        {
+            string json = EmbeddedResourceUtility.LoadEmbeddedResource($"{ResourceNamespace}.appsettings.{environment}.json", typeof(MailboxOptions));
+            MailboxListSettings? settings = JsonSerializer.Deserialize<MailboxListSettings>(json: json, options: ApplicationOptions.ApplicationSerializerOptions);
+            if (settings is not null && settings.MailboxList is not null && settings.MailboxList.Any())
+            {
+                result.AddRange(settings.MailboxList);
+            }
+        }
+
+        LoadPrivateSettings(result);
+        return result;
+    }
+
+    /// <summary>
     /// Loads private settings from the local file system.
     /// </summary>
     /// <param name="result">The list to add private settings to.</param>
