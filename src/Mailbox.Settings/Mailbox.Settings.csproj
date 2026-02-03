@@ -9,32 +9,58 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Configuration\appsettings.Default.json" />
+    <None Remove="Configuration\appsettings.Development.json" />
+    <None Remove="Configuration\appsettings.Production.ARU.json" />
+    <None Remove="Configuration\appsettings.Production.CPS Direct.json" />
+    <None Remove="Configuration\appsettings.Production.Cymru-Wales.json" />
+    <None Remove="Configuration\appsettings.Production.East Midlands.json" />
+    <None Remove="Configuration\appsettings.Production.East of England.json" />
+    <None Remove="Configuration\appsettings.Production.Extradition.json" />
+    <None Remove="Configuration\appsettings.Production.London North.json" />
+    <None Remove="Configuration\appsettings.Production.London South.json" />
+    <None Remove="Configuration\appsettings.Production.London.json" />
+    <None Remove="Configuration\appsettings.Production.Mersey Cheshire.json" />
+    <None Remove="Configuration\appsettings.Production.North East.json" />
+    <None Remove="Configuration\appsettings.Production.North West.json" />
+    <None Remove="Configuration\appsettings.Production.Proceeds of Crime.json" />
+    <None Remove="Configuration\appsettings.Production.South East.json" />
+    <None Remove="Configuration\appsettings.Production.South West.json" />
+    <None Remove="Configuration\appsettings.Production.Thames and Chiltern.json" />
+    <None Remove="Configuration\appsettings.Production.VTP.json" />
+    <None Remove="Configuration\appsettings.Production.Wessex.json" />
+    <None Remove="Configuration\appsettings.Production.West Midlands.json" />
+    <None Remove="Configuration\appsettings.Production.Yorkshire and Humberside.json" />
+    <None Remove="Configuration\appsettings.Staging.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AdditionalFiles Include="Analysis\stylecop.json" />
   </ItemGroup>
 
-  <ItemGroup>    
-    <EmbeddedResource Include="Configuration\appsettings.Production.VTP.json" />    
-    <EmbeddedResource Include="Configuration\appsettings.Production.ARU.json" />    
-    <EmbeddedResource Include="Configuration\appsettings.Production.Thames and Chiltern.json" />    
-    <EmbeddedResource Include="Configuration\appsettings.Production.North East.json" />    
-    <EmbeddedResource Include="Configuration\appsettings.Production.London South.json" />    
-    <EmbeddedResource Include="Configuration\appsettings.Production.London North.json" />    
-    <EmbeddedResource Include="Configuration\appsettings.Production.East of England.json" />    
-    <EmbeddedResource Include="Configuration\appsettings.Production.South East.json" />    
-    <EmbeddedResource Include="Configuration\appsettings.Production.South West.json" />    
-    <EmbeddedResource Include="Configuration\appsettings.Production.CPS Direct.json" />    
+  <ItemGroup>
     <EmbeddedResource Include="Configuration\appsettings.Default.json" />
     <EmbeddedResource Include="Configuration\appsettings.Development.json" />
+    <EmbeddedResource Include="Configuration\appsettings.Production.ARU.json" />
+    <EmbeddedResource Include="Configuration\appsettings.Production.CPS Direct.json" />
     <EmbeddedResource Include="Configuration\appsettings.Production.Cymru-Wales.json" />
     <EmbeddedResource Include="Configuration\appsettings.Production.East Midlands.json" />
+    <EmbeddedResource Include="Configuration\appsettings.Production.East of England.json" />
+    <EmbeddedResource Include="Configuration\appsettings.Production.Extradition.json" />
+    <EmbeddedResource Include="Configuration\appsettings.Production.London North.json" />
+    <EmbeddedResource Include="Configuration\appsettings.Production.London South.json" />
     <EmbeddedResource Include="Configuration\appsettings.Production.London.json" />
+    <EmbeddedResource Include="Configuration\appsettings.Production.Mersey Cheshire.json" />
+    <EmbeddedResource Include="Configuration\appsettings.Production.North East.json" />
     <EmbeddedResource Include="Configuration\appsettings.Production.North West.json" />
     <EmbeddedResource Include="Configuration\appsettings.Production.Proceeds of Crime.json" />
-    <EmbeddedResource Include="Configuration\appsettings.Production.Extradition.json" />
+    <EmbeddedResource Include="Configuration\appsettings.Production.South East.json" />
+    <EmbeddedResource Include="Configuration\appsettings.Production.South West.json" />
+    <EmbeddedResource Include="Configuration\appsettings.Production.Thames and Chiltern.json" />
+    <EmbeddedResource Include="Configuration\appsettings.Production.VTP.json" />
     <EmbeddedResource Include="Configuration\appsettings.Production.Wessex.json" />
     <EmbeddedResource Include="Configuration\appsettings.Production.West Midlands.json" />
     <EmbeddedResource Include="Configuration\appsettings.Production.Yorkshire and Humberside.json" />
-    <EmbeddedResource Include="Configuration\appsettings.Production.Mersey Cheshire.json" />
     <EmbeddedResource Include="Configuration\appsettings.Staging.json" />
   </ItemGroup>
 
@@ -44,6 +70,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\ServiceClient.Aws\ServiceClient.Aws.csproj" />
   </ItemGroup>
 
 </Project>

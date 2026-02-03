@@ -7,6 +7,8 @@ namespace Cps.Fct.EasShared.Mailbox.Settings.Tests.Configuration;
 using System;
 using System.Data;
 using Cps.Fct.EasShared.Mailbox.Settings.Configuration;
+using Cps.Fct.EasShared.ServiceClient.Aws;
+using Cps.Fct.EasShared.ServiceClient.Aws.Emulation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -28,6 +30,7 @@ public class MailboxOptionsTest
             .ConfigureServices(services =>
             {
                 services
+                    .AddSingleton<IAmazonS3ClientFactory, FakeS3ClientFactory>()
                     .AddSingleton<MailboxOptions>();
             })
             .Build();
@@ -38,15 +41,23 @@ public class MailboxOptionsTest
 
     private IServiceProvider ServiceProvider { get; }
 
+    [Fact]
+    public void Constructor_WithNullFactory_ThrowsArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>(() => new MailboxOptions(null!));
+    }
+
     /// <summary>
     /// Tests that the expected number of mailboxes per environment.
     /// </summary>
     /// <param name="environment">The environment to check.</param>
     /// <param name="expectedMailboxCount">The expected number of mailboxes per environment.</param>
     [Theory]
-    [InlineData("Development", 1)]
-    [InlineData("Staging", 2)]
-    [InlineData("Production", 189)]
+    [InlineData("N/A", 3)]
+    [InlineData("Half unit tests", 3)]
+    //[InlineData("Development", 1)] // dev integration test
+    //[InlineData("Staging", 2)] // staging integration test
+    //[InlineData("Production", 190)] // prod integration test
     public void ExpectedEnvironmentCount(string environment, int expectedMailboxCount)
     {
         // Arrange
@@ -66,30 +77,30 @@ public class MailboxOptionsTest
     /// <param name="region">The region to check.</param>
     /// <param name="expectedMailboxCount">The expected number of mailboxes.</param>
     [Theory]
-    [InlineData("Cymru-Wales", 6)]
-    [InlineData("Default", 1)]
-    [InlineData("East Midlands", 6)]
-    [InlineData("London", 1)]
-    [InlineData("North West", 24)]
-    [InlineData("Proceeds of Crime", 7)]
-    [InlineData("West Midlands", 14)]
-    [InlineData("Wessex", 12)]
-    [InlineData("Extradition", 4)]
-    [InlineData("Yorkshire and Humberside", 12)]
-    [InlineData("Mersey Cheshire", 21)]
-    [InlineData("CPS Direct", 3)]
-    [InlineData("South West", 12)]
-    [InlineData("South East", 10)]
-    [InlineData("East of England", 9)]
-    [InlineData("London North", 2)]
-    [InlineData("London South", 9)]
-    [InlineData("North East", 13)]
-    [InlineData("Thames and Chiltern", 20)]
-    [InlineData("ARU", 3)]
-    [InlineData("VTP", 1)]
-    [InlineData("Testing development", 1)]
-    [InlineData("Testing staging", 2)]
-    [InlineData("Unit test", 4)]
+    [InlineData("Unit test", 6)]
+    //[InlineData("Cymru-Wales", 6)] // prod integration test
+    //[InlineData("Default", 1)] // prod integration test
+    //[InlineData("East Midlands", 6)] // prod integration test
+    //[InlineData("London", 1)] // prod integration test
+    //[InlineData("North West", 24)] // prod integration test
+    //[InlineData("Proceeds of Crime", 7)] // prod integration test
+    //[InlineData("West Midlands", 14)] // prod integration test
+    //[InlineData("Wessex", 12)] // prod integration test
+    //[InlineData("Extradition", 4)] // prod integration test
+    //[InlineData("Yorkshire and Humberside", 12)] // prod integration test
+    //[InlineData("Mersey Cheshire", 21)] // prod integration test
+    //[InlineData("CPS Direct", 3)] // prod integration test
+    //[InlineData("South West", 12)] // prod integration test
+    //[InlineData("South East", 10)] // prod integration test
+    //[InlineData("East of England", 9)] // prod integration test
+    //[InlineData("London North", 2)] // prod integration test
+    //[InlineData("London South", 9)] // prod integration test
+    //[InlineData("North East", 13)] // prod integration test
+    //[InlineData("Thames and Chiltern", 20)] // prod integration test
+    //[InlineData("ARU", 3)] // prod integration test
+    //[InlineData("VTP", 1)] // prod integration test
+    //[InlineData("Testing development", 1)] // dev integration test
+    //[InlineData("Testing staging", 2)] // staging integration test
     public void ExpectedRegionCount(string region, int expectedMailboxCount)
     {
         // Arrange
@@ -174,12 +185,14 @@ public class MailboxOptionsTest
     /// </summary>
     /// <param name="mailboxId">The mailbox ID to test.</param>
     [Theory]
-    [InlineData("SHARED2@mailbox.com")]
-    [InlineData("email.automation3@cps.gov.uk")]
-    [InlineData("2e256642-b947-4da3-a987-0233f165eff4")]
-    [InlineData("0724d778-579d-423a-a83a-a1f092257b13")]
-    [InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602")]
-    [InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a")]
+    [InlineData("SHARED2@mailbox.com")] // dev integration test
+    [InlineData("a849ab7c-a548-41d1-a546-377a44be0c11")] // staging integration test
+    //[InlineData("SHARED2@mailbox.com")] // dev integration test
+    //[InlineData("email.automation3@cps.gov.uk")] // staging integration test
+    //[InlineData("2e256642-b947-4da3-a987-0233f165eff4")] // staging integration test
+    //[InlineData("0724d778-579d-423a-a83a-a1f092257b13")] // prod integration test
+    //[InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602")] // prod integration test
+    //[InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a")] // prod integration test
     public void IsAProceedsOfCrimeMailbox(string mailboxId)
     {
         // Arrange
@@ -197,11 +210,16 @@ public class MailboxOptionsTest
     /// </summary>
     /// <param name="mailboxId">The mailbox ID to test.</param>
     [Theory]
-    [InlineData("Email.Automation2@cps.gov.uk")]
-    [InlineData("ef0ef3d7-9373-4f61-91a9-37fe5982abef")]
-    [InlineData("0724d778-579d-423a-a83a-a1f092257b13")]
-    [InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602")]
-    [InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a")]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("notfound@mailbox.com")]
+    [InlineData("shared1@mailbox.com")]
+    [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156")]
+    //[InlineData("Email.Automation2@cps.gov.uk")] // staging integration test
+    //[InlineData("ef0ef3d7-9373-4f61-91a9-37fe5982abef")] // staging integration test
+    //[InlineData("0724d778-579d-423a-a83a-a1f092257b13")] // prod integration test
+    //[InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602")] // prod integration test
+    //[InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a")] // prod integration test
     public void AcceptNonProceedsOfCrimeUrnIsFalse(string mailboxId)
     {
         // Arrange
@@ -219,8 +237,10 @@ public class MailboxOptionsTest
     /// </summary>
     /// <param name="mailboxId">The mailbox ID to test.</param>
     [Theory]
-    [InlineData("Email.Automation3@cps.gov.uk")]
-    [InlineData("2e256642-b947-4da3-a987-0233f165eff4")]
+    [InlineData("b@test.com")]
+    [InlineData("d9862eb7-4560-4b8c-b462-a9baacb33f38")]
+    //[InlineData("Email.Automation3@cps.gov.uk")] // staging integration test
+    //[InlineData("2e256642-b947-4da3-a987-0233f165eff4")] // staging integration test
     public void AcceptNonProceedsOfCrimeUrnIsTrue(string mailboxId)
     {
         // Arrange
@@ -238,8 +258,8 @@ public class MailboxOptionsTest
     /// </summary>
     /// <param name="mailboxId">The mailbox ID to test.</param>
     [Theory]
-    [InlineData("a@b.com")]
-    [InlineData("123")]
+    [InlineData("a@b.com")] // should return false because its default if mailbox not found
+    [InlineData("123")] // should return false because its default if mailbox not found
     [InlineData("shared1@mailbox.com")]
     [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156")]
     public void RequiresEmailAsMsgFileIsFalse(string mailboxId)
@@ -261,11 +281,11 @@ public class MailboxOptionsTest
     [Theory]
     [InlineData("shared2@mailbox.com")]
     [InlineData("a849ab7c-a548-41d1-a546-377a44be0c11")]
-    [InlineData("email.automation3@cps.gov.uk")]
-    [InlineData("2e256642-b947-4da3-a987-0233f165eff4")]
-    [InlineData("0724d778-579d-423a-a83a-a1f092257b13")]
-    [InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602")]
-    [InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a")]
+    //[InlineData("email.automation3@cps.gov.uk")] // staging integration test
+    //[InlineData("2e256642-b947-4da3-a987-0233f165eff4")] // staging integration test
+    //[InlineData("0724d778-579d-423a-a83a-a1f092257b13")] // prod integration test
+    //[InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602")] // prod integration test
+    //[InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a")] // prod integration test
     public void RequiresEmailAsMsgFileIsTrue(string mailboxId)
     {
         // Arrange
@@ -306,11 +326,13 @@ public class MailboxOptionsTest
     /// </summary>
     /// <param name="mailboxId">The mailbox ID to test.</param>
     [Theory]
-    [InlineData("0724d778-579d-423a-a83a-a1f092257b13")]
-    [InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602")]
-    [InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a")]
-    [InlineData("email.automation3@cps.gov.uk")]
-    [InlineData("2e256642-b947-4da3-a987-0233f165eff4")]
+    [InlineData("shared4@mailbox.com")]
+    [InlineData("9013883a-81e2-494b-8207-bb055bf76b8f")]
+    //[InlineData("0724d778-579d-423a-a83a-a1f092257b13")] // prod integration test
+    //[InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602")] // prod integration test
+    //[InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a")] // prod integration test
+    //[InlineData("email.automation3@cps.gov.uk")] // staging integration test
+    //[InlineData("2e256642-b947-4da3-a987-0233f165eff4")] // staging integration test
     public void RequiresEmailAsMsgFileIncludeAttachmentsIsTrue(string mailboxId)
     {
         // Arrange
@@ -328,8 +350,10 @@ public class MailboxOptionsTest
     /// </summary>
     /// <param name="mailboxId">The mailbox ID to test.</param>
     [Theory]
-    [InlineData("email.automation3@cps.gov.uk")]
-    [InlineData("2e256642-b947-4da3-a987-0233f165eff4")]
+    [InlineData("shared3@mailbox.com")]
+    [InlineData("2d39b093-548f-444d-84ca-0e4b92f40961")]
+    //[InlineData("email.automation3@cps.gov.uk")] // staging integration test
+    //[InlineData("2e256642-b947-4da3-a987-0233f165eff4")] // staging integration test
     public void RequiresIgnoreAttachmentsIsTrue(string mailboxId)
     {
         // Arrange
@@ -398,11 +422,11 @@ public class MailboxOptionsTest
     [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156", false)]
     [InlineData("shared2@mailbox.com", true)]
     [InlineData("a849ab7c-a548-41d1-a546-377a44be0c11", true)]
-    [InlineData("email.automation3@cps.gov.uk", true)]
-    [InlineData("2e256642-b947-4da3-a987-0233f165eff4", true)]
-    [InlineData("0724d778-579d-423a-a83a-a1f092257b13", true)]
-    [InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602", true)]
-    [InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a", true)]
+    //[InlineData("email.automation3@cps.gov.uk", true)] // staging integration test
+    //[InlineData("2e256642-b947-4da3-a987-0233f165eff4", true)] // staging integration test
+    //[InlineData("0724d778-579d-423a-a83a-a1f092257b13", true)] // prod integration test
+    //[InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602", true)] // prod integration test
+    //[InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a", true)] // prod integration test
     public void GetMailboxSettingsReturnsExpectedTreatZipAttachmentEmailsAsExceptionsSettings(
         string? id,
         bool treatZipAttachmentEmailsAsExceptions)
@@ -431,11 +455,11 @@ public class MailboxOptionsTest
     [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156", false)]
     [InlineData("shared2@mailbox.com", true)]
     [InlineData("a849ab7c-a548-41d1-a546-377a44be0c11", true)]
-    [InlineData("email.automation3@cps.gov.uk", false)]
-    [InlineData("2e256642-b947-4da3-a987-0233f165eff4", false)]
-    [InlineData("0724d778-579d-423a-a83a-a1f092257b13", false)]
-    [InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602", false)]
-    [InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a", false)]
+    //[InlineData("email.automation3@cps.gov.uk", false)] // staging integration test
+    //[InlineData("2e256642-b947-4da3-a987-0233f165eff4", false)] // staging integration test
+    //[InlineData("0724d778-579d-423a-a83a-a1f092257b13", false)] // prod integration test
+    //[InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602", false)] // prod integration test
+    //[InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a", false)] // prod integration test
     public void GetMailboxSettingsReturnsExpectedDisableInvalidUrnAutoReplySettings(
         string? id,
         bool disableInvalidUrnAutoReply)
@@ -464,11 +488,11 @@ public class MailboxOptionsTest
     [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156", false)]
     [InlineData("shared2@mailbox.com", true)]
     [InlineData("a849ab7c-a548-41d1-a546-377a44be0c11", true)]
-    [InlineData("email.automation3@cps.gov.uk", true)]
-    [InlineData("2e256642-b947-4da3-a987-0233f165eff4", true)]
-    [InlineData("0724d778-579d-423a-a83a-a1f092257b13", false)]
-    [InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602", false)]
-    [InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a", false)]
+    //[InlineData("email.automation3@cps.gov.uk", true)] // staging integration test
+    //[InlineData("2e256642-b947-4da3-a987-0233f165eff4", true)] // staging integration test
+    //[InlineData("0724d778-579d-423a-a83a-a1f092257b13", false)] // prod integration test
+    //[InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602", false)] // prod integration test
+    //[InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a", false)] // prod integration test
     public void GetMailboxSettingsReturnsExpectedDisableAddToFinalisedCase(
         string? id,
         bool disableAddToFinalisedCase)
@@ -489,16 +513,16 @@ public class MailboxOptionsTest
     /// </summary>
     /// <param name="mailboxId">The mailbox ID to test.</param>
     [Theory]
-    [InlineData("SHARED2@mailbox.com")]
-    [InlineData("A849AB7C-A548-41D1-A546-377A44BE0C11")]
-    [InlineData("email.automation3@cps.gov.uk")]
-    [InlineData("2e256642-b947-4da3-a987-0233f165eff4")]
-    [InlineData("0724d778-579d-423a-a83a-a1f092257b13")]
-    [InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602")]
-    [InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a")]
-    [InlineData("253ebcbf-c354-46c5-91e0-791581ac276e")]
-    [InlineData("da0e9987-5098-482a-9c5f-bdcf5d8e930e")]
-    [InlineData("e281f282-6773-4a85-a215-6bc40fc026a9")]
+    [InlineData("SHARED2@mailbox.com")] // dev integration test / maybe unit test as the file is embedded?
+    [InlineData("A849AB7C-A548-41D1-A546-377A44BE0C11")] // dev integration test / maybe unit test as the file is embedded?
+    //[InlineData("email.automation3@cps.gov.uk")] // staging integration test
+    //[InlineData("2e256642-b947-4da3-a987-0233f165eff4")] // staging integration test
+    //[InlineData("0724d778-579d-423a-a83a-a1f092257b13")] // prod integration test
+    //[InlineData("6868c72f-8c7d-434e-b9c8-6cd76778e602")] // prod integration test
+    //[InlineData("8c5e56db-11b3-4a75-aedb-70ec5d18750a")] // prod integration test
+    //[InlineData("253ebcbf-c354-46c5-91e0-791581ac276e")] // prod integration test
+    //[InlineData("da0e9987-5098-482a-9c5f-bdcf5d8e930e")] // prod integration test
+    //[InlineData("e281f282-6773-4a85-a215-6bc40fc026a9")] // prod integration test
     public void IsASecureMailbox(string mailboxId)
     {
         // Arrange

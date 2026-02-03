@@ -66,6 +66,7 @@ public class EmailStorageRepositoryTest
                     .AddServiceOptions<TestOptions>(TestOptions.DefaultSectionName)
                     .AddServiceOptions<GraphApiConnectionOptions>(GraphApiConnectionOptions.DefaultSectionName)
                     .AddServiceOptions<AmazonS3ApiOptions>(AmazonS3ApiOptions.DefaultSectionName)
+                    .AddServiceOptions<AmazonS3ClientFactoryOptions>(AmazonS3ClientFactoryOptions.DefaultSectionName)
                     .AddServiceOptions<RabbitMQConnectionOptions>(RabbitMQConnectionOptions.DefaultSectionName)
                     .AddServiceOptions<RetryOptions>(RabbitMQConnectionOptions.DefaultSectionName)
                     .AddServiceOptions<EmailReceivedQueueOptions>(EmailReceivedQueueOptions.DefaultSectionName)
@@ -80,9 +81,7 @@ public class EmailStorageRepositoryTest
                     .AddSingleton<GraphApiEmailClient>()
                     .AddSingleton<FakeGraphApiEmailClient>()
                     .AddSingleton(CreateGraphApiEmailClient)
-                    .AddSingleton<AmazonS3ApiClient>()
-                    .AddSingleton<FakeAmazonS3ApiClient>()
-                    .AddSingleton(CreateStorageClient)
+                    .AddSingleton<IAmazonS3ClientFactory, FakeS3ClientFactory>()
                     .AddSingleton<ConnectionFactory>()
                     .AddSingleton<RabbitMQClient>()
                     .AddSingleton<FakeRabbitMQClient>()
@@ -184,17 +183,17 @@ public class EmailStorageRepositoryTest
         return graphApiClient;
     }
 
-    private static IStorageClient CreateStorageClient(IServiceProvider serviceProvider)
-    {
-        TestOptions testOptions = serviceProvider.GetRequiredService<IOptions<TestOptions>>().Value;
-        IStorageClient graphApiClient = serviceProvider.GetRequiredService<AmazonS3ApiClient>();
-        if (testOptions.Category.Equals(TestOptions.UnitTest, StringComparison.OrdinalIgnoreCase))
-        {
-            graphApiClient = serviceProvider.GetRequiredService<FakeAmazonS3ApiClient>();
-        }
+    //private static IStorageClient CreateStorageClient(IServiceProvider serviceProvider)
+    //{
+    //    TestOptions testOptions = serviceProvider.GetRequiredService<IOptions<TestOptions>>().Value;
+    //    IStorageClient graphApiClient = serviceProvider.GetRequiredService<AmazonS3ApiClient>();
+    //    if (testOptions.Category.Equals(TestOptions.UnitTest, StringComparison.OrdinalIgnoreCase))
+    //    {
+    //        graphApiClient = serviceProvider.GetRequiredService<FakeAmazonS3ApiClient>();
+    //    }
 
-        return graphApiClient;
-    }
+    //    return graphApiClient;
+    //}
 
     private static IRabbitMQClient CreateRabbitMQClient(IServiceProvider serviceProvider)
     {

@@ -46,11 +46,18 @@ public class AmazonS3ApiClientTest
             {
                 services
                     .AddServiceOptions<AmazonS3ApiOptions>(AmazonS3ApiOptions.DefaultSectionName)
-                    .AddServiceOptions<TestOptions>(TestOptions.DefaultSectionName);
+                    .AddServiceOptions<AmazonS3ClientFactoryOptions>(AmazonS3ClientFactoryOptions.DefaultSectionName)
+                    .AddServiceOptions<TestOptions>(TestOptions.DefaultSectionName)
+                    .AddSingleton<IAmazonS3ClientFactory, FakeS3ClientFactory>();
 
                 services
                     .AddSingleton(output)
-                    .AddSingleton(CreateAmazonS3ApiClient);
+                    .AddSingleton<AmazonS3ApiClient>(sp =>
+                    {
+                        var factory = sp.GetRequiredService<IAmazonS3ClientFactory>();
+                        var apiOptions = sp.GetRequiredService<IOptions<AmazonS3ApiOptions>>();
+                        return (AmazonS3ApiClient)factory.CreateClient(apiOptions.Value.ContainerName);
+                    });
             })
             .Build();
 
@@ -153,7 +160,7 @@ public class AmazonS3ApiClientTest
         OptionsWrapper<AmazonS3ApiOptions> optionsWrapper = new(options);
 
         // Act
-        FakeAmazonS3ApiClient client = new(loggerFactory, optionsWrapper);
+        AmazonS3ApiClient client = this.ServiceProvider.GetRequiredService<AmazonS3ApiClient>();
 
         // Assert
         client.Client.Should().NotBeNull();
@@ -165,17 +172,18 @@ public class AmazonS3ApiClientTest
     [Fact]
     public void SpecifyingServiceEndpointSucceeds()
     {
-        // Assemble
+        // Arrange
         ILoggerFactory loggerFactory = this.ServiceProvider.GetRequiredService<ILoggerFactory>();
-        AmazonS3ApiOptions options = new()
+        AmazonS3ApiOptions options = new(
+            containerName: "test-bucket",
+            regionEndpoint: Amazon.RegionEndpoint.EUWest2)
         {
             ServiceEndpoint = "http://localhost",
         };
-
         OptionsWrapper<AmazonS3ApiOptions> optionsWrapper = new(options);
 
         // Act
-        AmazonS3ApiClient client = new(loggerFactory, optionsWrapper);
+        AmazonS3ApiClient client = this.ServiceProvider.GetRequiredService<AmazonS3ApiClient>();
 
         // Assert
         client.Client.Should().NotBeNull();
@@ -307,25 +315,6 @@ public class AmazonS3ApiClientTest
             bool exists = await client.ObjectExistsAsync(key).ConfigureAwait(true);
             exists.Should().BeFalse();
         }
-    }
-
-    private static AmazonS3ApiClient CreateAmazonS3ApiClient(IServiceProvider serviceProvider)
-    {
-        ILoggerFactory loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
-        IOptions<AmazonS3ApiOptions> apiOptions = serviceProvider.GetRequiredService<IOptions<AmazonS3ApiOptions>>();
-        AmazonS3ApiClient serviceClient = new(
-                loggerFactory: loggerFactory,
-                apiOptions: apiOptions);
-
-        TestOptions testOptions = serviceProvider.GetRequiredService<IOptions<TestOptions>>().Value;
-        if (testOptions.Category.Equals(TestOptions.UnitTest, StringComparison.OrdinalIgnoreCase))
-        {
-            serviceClient = new FakeAmazonS3ApiClient(
-                loggerFactory: loggerFactory,
-                apiOptions: apiOptions);
-        }
-
-        return serviceClient;
     }
 
     private sealed class TestObject

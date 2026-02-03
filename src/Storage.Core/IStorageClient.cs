@@ -115,4 +115,14 @@ public interface IStorageClient
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A <see cref="Task" /> that will complete when the operation has completed.</returns>
     Task PutStreamAsync(string key, Stream stream, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Lists all object keys in the storage with optional prefix filtering.
+    /// </summary>
+    /// <param name="prefix">Optional prefix to filter objects.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A collection of object keys.</returns>
+    Task<IEnumerable<string>> ListObjectKeysAsync(
+        string? prefix = null,
+        CancellationToken cancellationToken = default);
 }

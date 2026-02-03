@@ -6,6 +6,8 @@ namespace Cps.Fct.EasShared.Mailbox.Settings.Configuration;
 
 using Cps.Fct.EasShared.Core;
 using Cps.Fct.EasShared.Core.Configuration;
+using Cps.Fct.EasShared.ServiceClient.Aws;
+using Cps.Fct.EasShared.Storage.Core;
 using Microsoft;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -21,11 +23,14 @@ public class MailboxOptions
     private readonly ImmutableDictionary<string, IdentifiableMailboxSettings> mailboxIdentifiers;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="MailboxOptions"/> class.
+    /// Initializes a new instance of the <see cref="MailboxOptions"/> class using S3 storage.
     /// </summary>
-    public MailboxOptions()
+    /// <param name="clientFactory">The S3 client factory.</param>
+    public MailboxOptions(IAmazonS3ClientFactory clientFactory)
     {
-        this.MailboxList = CreateMailboxList();
+        Requires.NotNull(clientFactory);
+
+        this.MailboxList = CreateMailboxList(clientFactory);
         this.mailboxIdentifiers = CreateMailboxIdentifiers(this.MailboxList);
     }
 
@@ -169,7 +174,64 @@ public class MailboxOptions
         return setting.IsSecureMailbox;
     }
 
-    private static IList<IdentifiableMailboxSettings> CreateMailboxList()
+    /// <summary>
+    /// Creates the mailbox list by dynamically loading all configuration files from S3 bucket.
+    /// </summary>
+    /// <param name="clientFactory">The S3 client factory.</param>
+    /// <returns>The list of mailbox settings loaded from S3.</returns>
+    private static IList<IdentifiableMailboxSettings> CreateMailboxList(IAmazonS3ClientFactory clientFactory)
+    {
+        Requires.NotNull(clientFactory);
+
+        List<IdentifiableMailboxSettings> result = new();
+        IStorageClient configClient = clientFactory.GetMailboxConfigurationClient();
+
+        try
+        {
+            // Dynamically list ALL configuration files in the S3 bucket
+            IEnumerable<string> configFiles = configClient.ListObjectKeysAsync(prefix: "appsettings.")
+                .GetAwaiter()
+                .GetResult();
+
+            // Filter to only .json files
+            configFiles = configFiles.Where(key => key.EndsWith(".json", StringComparison.OrdinalIgnoreCase));
+
+            foreach (string key in configFiles)
+            {
+                try
+                {
+                    MailboxListSettings? settings = configClient.GetObjectAsync<MailboxListSettings>(key)
+                        .GetAwaiter()
+                        .GetResult();
+
+                    if (settings is not null && settings.MailboxList is not null && settings.MailboxList.Any())
+                    {
+                        result.AddRange(settings.MailboxList);
+                        System.Diagnostics.Debug.WriteLine($"Loaded {settings.MailboxList.Count} mailbox(es) from {key}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Warning: Could not load {key} from S3: {ex.Message}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error listing objects from S3: {ex.Message}. Falling back to legacy embedded resources.");
+            throw;
+        }
+
+        LoadPrivateSettings(result);
+        return result;
+    }
+
+    /// <summary>
+    /// Creates the mailbox list by loading configuration files from embedded resources.
+    /// This method is kept for rollback purposes if S3 loading fails.
+    /// </summary>
+    /// <returns>The list of mailbox settings loaded from embedded resources.</returns>
+    private static IList<IdentifiableMailboxSettings> CreateMailboxListEmbedded()
     {
         const string ResourceNamespace = "Cps.Fct.EasShared.Mailbox.Settings.Configuration";
         string[] environments =
@@ -214,6 +276,10 @@ public class MailboxOptions
         return result;
     }
 
+    /// <summary>
+    /// Loads private settings from the local file system.
+    /// </summary>
+    /// <param name="result">The list to add private settings to.</param>
     private static void LoadPrivateSettings(List<IdentifiableMailboxSettings> result)
     {
         DirectoryInfo dirInfo = new(Path.Combine(Assembly.GetExecutingAssembly().Location, "../"));
@@ -229,6 +295,11 @@ public class MailboxOptions
         }
     }
 
+    /// <summary>
+    /// Creates a dictionary of mailbox identifiers for fast lookup.
+    /// </summary>
+    /// <param name="mailboxList">The list of mailbox settings.</param>
+    /// <returns>An immutable dictionary mapping IDs and email addresses to mailbox settings.</returns>
     private static ImmutableDictionary<string, IdentifiableMailboxSettings> CreateMailboxIdentifiers(IList<IdentifiableMailboxSettings> mailboxList)
     {
         Dictionary<string, IdentifiableMailboxSettings> identifiers = new(StringComparer.OrdinalIgnoreCase);
