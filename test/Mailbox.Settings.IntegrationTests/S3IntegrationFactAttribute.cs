@@ -5,10 +5,8 @@
 namespace Cps.Fct.EasShared.Mailbox.Settings.IntegrationTests;
 
 using System;
-using Amazon.Runtime;
 using Cps.Fct.EasShared.Core.Configuration;
 using Cps.Fct.EasShared.Core.Configuration.Extensions;
-using Cps.Fct.EasShared.ServiceClient.Aws;
 using Cps.Fct.EasShared.ServiceClient.Aws.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -41,12 +39,6 @@ public class S3IntegrationFactAttribute : FactAttribute
     }
 
     /// <summary>
-    /// Returns whether a key/secret value is configured (non-empty and not a placeholder).
-    /// </summary>
-    private static bool IsConfigured(string? value) =>
-        !string.IsNullOrWhiteSpace(value) && !value.Contains("placeholder", StringComparison.OrdinalIgnoreCase);
-
-    /// <summary>
     /// Checks if AWS credentials are available for testing.
     /// </summary>
     /// <returns><c>true</c> if credentials are available; otherwise, <c>false</c>.</returns>
@@ -54,18 +46,6 @@ public class S3IntegrationFactAttribute : FactAttribute
     {
         try
         {
-            // Check environment variables first (for pipeline)
-            string? accessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID") ??
-                               Environment.GetEnvironmentVariable("AWS_ACCESS_KEY");
-            string? secretKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY") ??
-                               Environment.GetEnvironmentVariable("AWS_SECRET_KEY");
-
-            if (IsConfigured(accessKey) && IsConfigured(secretKey))
-            {
-                return true;
-            }
-
-            // Check configuration (for local development with privatesettings.json)
             string[] args = Array.Empty<string>();
             IHost host = Host
                 .CreateDefaultBuilder(args)
@@ -77,8 +57,7 @@ public class S3IntegrationFactAttribute : FactAttribute
                 {
                     services
                         .AddServiceOptions<AmazonS3ApiOptions>(AmazonS3ApiOptions.DefaultSectionName)
-                        .AddServiceOptions<AmazonS3ClientFactoryOptions>(AmazonS3ClientFactoryOptions.DefaultSectionName)
-                        .AddSingleton<IAmazonS3ClientFactory, AmazonS3ClientFactory>();
+                        .AddServiceOptions<AmazonS3ClientFactoryOptions>(AmazonS3ClientFactoryOptions.DefaultSectionName);
                 })
                 .Build();
 
@@ -86,40 +65,13 @@ public class S3IntegrationFactAttribute : FactAttribute
             IOptions<AmazonS3ApiOptions> apiOptions = scope.ServiceProvider.GetRequiredService<IOptions<AmazonS3ApiOptions>>();
             IOptions<AmazonS3ClientFactoryOptions> factoryOptions = scope.ServiceProvider.GetRequiredService<IOptions<AmazonS3ClientFactoryOptions>>();
 
-            string? configAccessKey = apiOptions.Value.AccessKey;
-            string? configSecretKey = apiOptions.Value.SecretKey;
+            string? accessKey = apiOptions.Value.AccessKey;
+            string? secretKey = apiOptions.Value.SecretKey;
             string? mailboxConfigContainer = factoryOptions.Value.MailboxConfigurationContainerName;
 
-            // Check if credentials are configured (non-empty and not placeholder)
-            bool hasCredentials = IsConfigured(configAccessKey) &&
-                                 IsConfigured(configSecretKey) &&
-                                 IsConfigured(mailboxConfigContainer);
-
-            if (hasCredentials)
-            {
-                // Try to create a client to verify credentials work
-                try
-                {
-                    IAmazonS3ClientFactory factory = scope.ServiceProvider.GetRequiredService<IAmazonS3ClientFactory>();
-                    var client = factory.GetMailboxConfigurationClient();
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-
-            // Try AWS SDK default credential chain (IAM roles, profiles, etc.)
-            try
-            {
-                var credentials = FallbackCredentialsFactory.GetCredentials();
-                return credentials != null;
-            }
-            catch
-            {
-                return false;
-            }
+            return ConfigurationHelper.IsValueConfigured(accessKey) &&
+                   ConfigurationHelper.IsValueConfigured(secretKey) &&
+                   ConfigurationHelper.IsValueConfigured(mailboxConfigContainer);
         }
         catch
         {
