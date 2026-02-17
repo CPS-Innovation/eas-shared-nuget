@@ -147,6 +147,21 @@ public class StagingMailboxConfigurationIntegrationTests
         mailbox.FullyAutomated.Should().BeTrue("Staging mailbox should be fully automated");
         mailbox.DefaultParty.Should().Be("Defence", "Mailbox default party should be 'Defence'");
         mailbox.DefaultPartyDescription.Should().Be("DEF/CSL", "Mailbox default party description should be 'DEF/CSL'");
+
+        // POC - Automation2 does not have Proceeds of Crime URN support
+        mailboxOptions.RequiresProceedsOfCrimeUrnSupport(mailboxId).Should().BeFalse(
+            "Email.Automation2 should not have Proceeds of Crime URN support enabled");
+
+        // MSG format - Automation2 does not require emails in MSG file format
+        mailboxOptions.RequiresEmailAsMsgFile(mailboxId).Should().BeFalse(
+            "Email.Automation2 should not require emails in MSG file format");
+
+        // Secure queue - Automation2 does not route to the secure queue
+        mailboxOptions.RequiresSecureMailbox(mailboxId).Should().BeFalse(
+            "Email.Automation2 should not route to the secure mailbox queue");
+
+        // Auto-reply and other settings
+        mailbox.DisableInvalidUrnAutoReply.Should().BeFalse("Email.Automation2 should not disable invalid URN auto-reply");
     }
 
     /// <summary>
@@ -187,6 +202,9 @@ public class StagingMailboxConfigurationIntegrationTests
         mailbox.TreatZipAttachmentEmailsAsExceptions.Should().BeTrue("Mailbox should treat ZIP attachments as exceptions");
         mailbox.IgnoreAttachments.Should().BeTrue("Mailbox should ignore attachments");
         mailbox.IsSecureMailbox.Should().BeTrue("Mailbox should be a secure mailbox");
+
+        // Auto-reply - Automation3 does not disable invalid URN auto-reply
+        mailbox.DisableInvalidUrnAutoReply.Should().BeFalse("Email.Automation3 should not disable invalid URN auto-reply");
     }
 
     /// <summary>
