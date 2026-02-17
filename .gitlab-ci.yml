@@ -56,7 +56,8 @@ integration-tests:
     - if: $CI_COMMIT_BRANCH == "main"
   script:
     - dotnet test EasSharedNuget.sln -c Release --no-build --verbosity normal --filter "Category=IntegrationTest" --logger "trx;LogFileName=integration-test-results.trx"
-    - echo "To run integration tests (instead of skipping), add these CI/CD variables (masked): AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, GraphApi__ClientId, GraphApi__ClientSecret, GraphApi__TenantId"
+    - |
+      echo 'To run integration tests (instead of skipping), add these CI/CD variables (masked): AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, GraphApi__ClientId, GraphApi__ClientSecret, GraphApi__TenantId'
     - dotnet tool install -g trx2junit
     - export PATH="$PATH:/root/.dotnet/tools"
     - find . -name "*.trx" -exec trx2junit {} \;

@@ -39,6 +39,12 @@ public class GraphApiIntegrationFactAttribute : FactAttribute
     }
 
     /// <summary>
+    /// Returns whether a key/secret value is configured (non-empty and not a placeholder).
+    /// </summary>
+    private static bool IsConfigured(string? value) =>
+        !string.IsNullOrWhiteSpace(value) && !value.Contains("placeholder", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
     /// Checks if Graph API credentials are available for testing.
     /// </summary>
     /// <returns><c>true</c> if credentials are available; otherwise, <c>false</c>.</returns>
@@ -68,13 +74,8 @@ public class GraphApiIntegrationFactAttribute : FactAttribute
             string? clientSecret = graphApiOptions.Value.ClientSecret;
             string? tenantId = graphApiOptions.Value.TenantId;
 
-            // Check if credentials are configured and not placeholders
-            bool hasCredentials = !string.IsNullOrWhiteSpace(clientId) &&
-                                 !string.IsNullOrWhiteSpace(clientSecret) &&
-                                 !string.IsNullOrWhiteSpace(tenantId) &&
-                                 !clientId.Contains("Placeholder", StringComparison.OrdinalIgnoreCase) &&
-                                 !clientSecret.Contains("Placeholder", StringComparison.OrdinalIgnoreCase) &&
-                                 !tenantId.Contains("Placeholder", StringComparison.OrdinalIgnoreCase);
+            // Check if credentials are configured (non-empty and not placeholder)
+            bool hasCredentials = IsConfigured(clientId) && IsConfigured(clientSecret) && IsConfigured(tenantId);
 
             return hasCredentials;
         }

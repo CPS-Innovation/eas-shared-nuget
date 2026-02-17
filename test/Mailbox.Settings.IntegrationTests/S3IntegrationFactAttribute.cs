@@ -41,6 +41,12 @@ public class S3IntegrationFactAttribute : FactAttribute
     }
 
     /// <summary>
+    /// Returns whether a key/secret value is configured (non-empty and not a placeholder).
+    /// </summary>
+    private static bool IsConfigured(string? value) =>
+        !string.IsNullOrWhiteSpace(value) && !value.Contains("placeholder", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
     /// Checks if AWS credentials are available for testing.
     /// </summary>
     /// <returns><c>true</c> if credentials are available; otherwise, <c>false</c>.</returns>
@@ -54,7 +60,7 @@ public class S3IntegrationFactAttribute : FactAttribute
             string? secretKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY") ??
                                Environment.GetEnvironmentVariable("AWS_SECRET_KEY");
 
-            if (!string.IsNullOrWhiteSpace(accessKey) && !string.IsNullOrWhiteSpace(secretKey))
+            if (IsConfigured(accessKey) && IsConfigured(secretKey))
             {
                 return true;
             }
@@ -84,13 +90,10 @@ public class S3IntegrationFactAttribute : FactAttribute
             string? configSecretKey = apiOptions.Value.SecretKey;
             string? mailboxConfigContainer = factoryOptions.Value.MailboxConfigurationContainerName;
 
-            // Check if credentials are configured and not placeholders
-            bool hasCredentials = !string.IsNullOrWhiteSpace(configAccessKey) &&
-                                 !string.IsNullOrWhiteSpace(configSecretKey) &&
-                                 !configAccessKey.Contains("Placeholder", StringComparison.OrdinalIgnoreCase) &&
-                                 !configSecretKey.Contains("Placeholder", StringComparison.OrdinalIgnoreCase) &&
-                                 !string.IsNullOrWhiteSpace(mailboxConfigContainer) &&
-                                 !mailboxConfigContainer.Contains("Placeholder", StringComparison.OrdinalIgnoreCase);
+            // Check if credentials are configured (non-empty and not placeholder)
+            bool hasCredentials = IsConfigured(configAccessKey) &&
+                                 IsConfigured(configSecretKey) &&
+                                 IsConfigured(mailboxConfigContainer);
 
             if (hasCredentials)
             {
