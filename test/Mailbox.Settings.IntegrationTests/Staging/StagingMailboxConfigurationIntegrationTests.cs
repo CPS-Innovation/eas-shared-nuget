@@ -5,6 +5,7 @@
 namespace Cps.Fct.EasShared.Mailbox.Settings.IntegrationTests.Staging;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cps.Fct.EasShared.Core.Configuration;
@@ -93,6 +94,35 @@ public class StagingMailboxConfigurationIntegrationTests
             expectedCount,
             $"Expected {expectedCount} mailbox(es) in Staging environment, but found {actualCount}. " +
             $"Mailboxes found: {string.Join(", ", stagingMailboxes.Select(m => m.MailboxId))}");
+    }
+
+    /// <summary>
+    /// Structural consistency: every mailbox in this bucket has valid Environment and non-empty Region.
+    /// </summary>
+    [S3IntegrationFact]
+    public void EveryMailboxHasValidEnvironmentAndRegion()
+    {
+        var validEnvironments = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "Development",
+            "Staging",
+            "Production",
+        };
+
+        MailboxOptions mailboxOptions = this.serviceProvider.GetRequiredService<MailboxOptions>();
+        var errors = new List<string>();
+        foreach (var m in mailboxOptions.MailboxList)
+        {
+            if (string.IsNullOrWhiteSpace(m.Environment))
+                errors.Add($"MailboxId='{m.MailboxId}': Environment is missing or empty.");
+            else if (!validEnvironments.Contains(m.Environment))
+                errors.Add($"MailboxId='{m.MailboxId}': Environment '{m.Environment}' is not one of Development, Staging, Production.");
+            if (string.IsNullOrWhiteSpace(m.Region))
+                errors.Add($"MailboxId='{m.MailboxId}': Region is missing or empty.");
+        }
+
+        errors.Should().BeEmpty(
+            "Every mailbox must have valid Environment and non-empty Region. " + string.Join(" ", errors));
     }
 
     /// <summary>
