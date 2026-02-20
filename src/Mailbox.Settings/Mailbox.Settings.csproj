@@ -62,6 +62,7 @@
     <EmbeddedResource Include="Configuration\appsettings.Production.West Midlands.json" />
     <EmbeddedResource Include="Configuration\appsettings.Production.Yorkshire and Humberside.json" />
     <EmbeddedResource Include="Configuration\appsettings.Staging.json" />
+    <EmbeddedResource Include="Configuration\appsettings.UnitTest.json" />
   </ItemGroup>
 
   <ItemGroup>

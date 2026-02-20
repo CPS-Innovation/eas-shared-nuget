@@ -30,7 +30,7 @@ public class MailboxOptions
     {
         Requires.NotNull(clientFactory);
 
-        this.MailboxList = CreateMailboxList(clientFactory);
+        this.MailboxList = CreateMailboxListEmbedded();
         this.mailboxIdentifiers = CreateMailboxIdentifiers(this.MailboxList);
     }
 
@@ -259,6 +259,7 @@ public class MailboxOptions
             "Production.VTP",
             "Development",
             "Staging",
+            "UnitTest",
         };
 
         List<IdentifiableMailboxSettings> result = new();
