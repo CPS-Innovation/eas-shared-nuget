@@ -57,7 +57,7 @@ public class MailboxOptionsTest
     [InlineData("Half unit tests", 3)]
     [InlineData("Development", 1)] // dev integration test
     [InlineData("Staging", 2)] // staging integration test
-    [InlineData("Production", 190)] // prod integration test
+    [InlineData("Production", 189)] // prod integration test
     public void ExpectedEnvironmentCount(string environment, int expectedMailboxCount)
     {
         // Arrange
@@ -119,10 +119,10 @@ public class MailboxOptionsTest
     /// </summary>
     /// <param name="id">A mailbox identifier, either a GUID or an email address.</param>
     [Theory]
-    [InlineData("shared1@mailbox.com")]
-    [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156")]
-    [InlineData("shared2@mailbox.com")]
-    [InlineData("a849ab7c-a548-41d1-a546-377a44be0c11")]
+    [InlineData("unittest1@mailbox.com")]
+    [InlineData("b3d00586-8786-4f64-b341-20e515f9c039")]
+    [InlineData("unittest2@mailbox.com")]
+    [InlineData("d302b81d-e137-4478-a306-d400216707d4")]
     public void IsASharedMailbox(string id)
     {
         // Arrange
@@ -144,7 +144,7 @@ public class MailboxOptionsTest
     [InlineData("")]
     [InlineData(" ")]
     [InlineData("shared1@b.com")]
-    [InlineData("338b27ea-0000-0000-849d-e396fd161156")]
+    [InlineData("b3d00586-8786-4f64-b341-20e515f9c030")]
     [InlineData("shared2@b.com")]
     [InlineData("a849ab7c-0000-0000-a546-377a44be0c11")]
     public void NotASharedMailbox(string? id)
@@ -166,8 +166,8 @@ public class MailboxOptionsTest
     [Theory]
     [InlineData("a@b.com")]
     [InlineData("123")]
-    [InlineData("shared1@mailbox.com")]
-    [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156")]
+    [InlineData("unittest1@mailbox.com")]
+    [InlineData("b3d00586-8786-4f64-b341-20e515f9c039")]
     public void NotAProceedsOfCrimeMailbox(string mailboxId)
     {
         // Arrange
@@ -185,8 +185,8 @@ public class MailboxOptionsTest
     /// </summary>
     /// <param name="mailboxId">The mailbox ID to test.</param>
     [Theory]
-    [InlineData("SHARED2@mailbox.com")] // dev integration test
-    [InlineData("a849ab7c-a548-41d1-a546-377a44be0c11")] // staging integration test
+    [InlineData("unittest2@mailbox.com")]
+    [InlineData("d302b81d-e137-4478-a306-d400216707d4")]
     [InlineData("email.automation3@cps.gov.uk")] // staging integration test
     [InlineData("2e256642-b947-4da3-a987-0233f165eff4")] // staging integration test
     [InlineData("0724d778-579d-423a-a83a-a1f092257b13")] // prod integration test
@@ -212,8 +212,8 @@ public class MailboxOptionsTest
     [InlineData("")]
     [InlineData(" ")]
     [InlineData("notfound@mailbox.com")]
-    [InlineData("shared1@mailbox.com")]
-    [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156")]
+    [InlineData("unittest1@mailbox.com")]
+    [InlineData("b3d00586-8786-4f64-b341-20e515f9c039")]
     [InlineData("Email.Automation2@cps.gov.uk")] // staging integration test
     [InlineData("ef0ef3d7-9373-4f61-91a9-37fe5982abef")] // staging integration test
     [InlineData("0724d778-579d-423a-a83a-a1f092257b13")] // prod integration test
@@ -259,8 +259,8 @@ public class MailboxOptionsTest
     [Theory]
     [InlineData("a@b.com")] // should return false because its default if mailbox not found
     [InlineData("123")] // should return false because its default if mailbox not found
-    [InlineData("shared1@mailbox.com")]
-    [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156")]
+    [InlineData("unittest1@mailbox.com")]
+    [InlineData("b3d00586-8786-4f64-b341-20e515f9c039")]
     public void RequiresEmailAsMsgFileIsFalse(string mailboxId)
     {
         // Arrange
@@ -278,8 +278,8 @@ public class MailboxOptionsTest
     /// </summary>
     /// <param name="mailboxId">The mailbox ID to test.</param>
     [Theory]
-    [InlineData("shared2@mailbox.com")]
-    [InlineData("a849ab7c-a548-41d1-a546-377a44be0c11")]
+    [InlineData("unittest2@mailbox.com")]
+    [InlineData("d302b81d-e137-4478-a306-d400216707d4")]
     [InlineData("email.automation3@cps.gov.uk")] // staging integration test
     [InlineData("2e256642-b947-4da3-a987-0233f165eff4")] // staging integration test
     [InlineData("0724d778-579d-423a-a83a-a1f092257b13")] // prod integration test
@@ -304,10 +304,10 @@ public class MailboxOptionsTest
     [Theory]
     [InlineData("a@b.com")]
     [InlineData("123")]
-    [InlineData("shared1@mailbox.com")]
-    [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156")]
-    [InlineData("shared2@mailbox.com")]
-    [InlineData("a849ab7c-a548-41d1-a546-377a44be0c11")]
+    [InlineData("unittest1@mailbox.com")]
+    [InlineData("b3d00586-8786-4f64-b341-20e515f9c039")]
+    [InlineData("unittest2@mailbox.com")]
+    [InlineData("d302b81d-e137-4478-a306-d400216707d4")]
     public void RequiresEmailAsMsgFileIncludeAttachmentsIsFalse(string mailboxId)
     {
         // Arrange
@@ -379,10 +379,10 @@ public class MailboxOptionsTest
     [InlineData(null, "Crown Prosecution Service", "Defence", "DEF/CSL", true, false, null)]
     [InlineData("", "Crown Prosecution Service", "Defence", "DEF/CSL", true, false, null)]
     [InlineData(" ", "Crown Prosecution Service", "Defence", "DEF/CSL", true, false, null)]
-    [InlineData("shared1@mailbox.com", "Crown Prosecution Service", "Defence", "DEF/CSL", true, false, null)]
-    [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156", "Crown Prosecution Service", "Defence", "DEF/CSL", true, false, null)]
-    [InlineData("shared2@mailbox.com", "Shared mailbox #2", "Counsel", "CSL", false, true, "99")]
-    [InlineData("a849ab7c-a548-41d1-a546-377a44be0c11", "Shared mailbox #2", "Counsel", "CSL", false, true, "99")]
+    [InlineData("unittest1@mailbox.com", "Crown Prosecution Service", "Defence", "DEF/CSL", true, false, null)]
+    [InlineData("b3d00586-8786-4f64-b341-20e515f9c039", "Crown Prosecution Service", "Defence", "DEF/CSL", true, false, null)]
+    [InlineData("unittest2@mailbox.com", "Shared mailbox #2", "Counsel", "CSL", false, true, "99")]
+    [InlineData("d302b81d-e137-4478-a306-d400216707d4", "Shared mailbox #2", "Counsel", "CSL", false, true, "99")]
     public void GetMailboxSettingsReturnsExpectedSettings(
         string? id,
         string expectedName,
@@ -417,10 +417,10 @@ public class MailboxOptionsTest
     [InlineData(null, false)]
     [InlineData("", false)]
     [InlineData(" ", false)]
-    [InlineData("shared1@mailbox.com", false)]
-    [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156", false)]
-    [InlineData("shared2@mailbox.com", true)]
-    [InlineData("a849ab7c-a548-41d1-a546-377a44be0c11", true)]
+    [InlineData("unittest1@mailbox.com", false)]
+    [InlineData("b3d00586-8786-4f64-b341-20e515f9c039", false)]
+    [InlineData("unittest2@mailbox.com", true)]
+    [InlineData("d302b81d-e137-4478-a306-d400216707d4", true)]
     [InlineData("email.automation3@cps.gov.uk", true)] // staging integration test
     [InlineData("2e256642-b947-4da3-a987-0233f165eff4", true)] // staging integration test
     [InlineData("0724d778-579d-423a-a83a-a1f092257b13", true)] // prod integration test
@@ -450,10 +450,10 @@ public class MailboxOptionsTest
     [InlineData(null, false)]
     [InlineData("", false)]
     [InlineData(" ", false)]
-    [InlineData("shared1@mailbox.com", false)]
-    [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156", false)]
-    [InlineData("shared2@mailbox.com", true)]
-    [InlineData("a849ab7c-a548-41d1-a546-377a44be0c11", true)]
+    [InlineData("unittest1@mailbox.com", false)]
+    [InlineData("b3d00586-8786-4f64-b341-20e515f9c039", false)]
+    [InlineData("unittest2@mailbox.com", true)]
+    [InlineData("d302b81d-e137-4478-a306-d400216707d4", true)]
     [InlineData("email.automation3@cps.gov.uk", false)] // staging integration test
     [InlineData("2e256642-b947-4da3-a987-0233f165eff4", false)] // staging integration test
     [InlineData("0724d778-579d-423a-a83a-a1f092257b13", false)] // prod integration test
@@ -483,10 +483,10 @@ public class MailboxOptionsTest
     [InlineData(null, false)]
     [InlineData("", false)]
     [InlineData(" ", false)]
-    [InlineData("shared1@mailbox.com", false)]
-    [InlineData("338b27ea-6f8e-42f0-849d-e396fd161156", false)]
-    [InlineData("shared2@mailbox.com", true)]
-    [InlineData("a849ab7c-a548-41d1-a546-377a44be0c11", true)]
+    [InlineData("unittest1@mailbox.com", false)]
+    [InlineData("b3d00586-8786-4f64-b341-20e515f9c039", false)]
+    [InlineData("unittest2@mailbox.com", true)]
+    [InlineData("d302b81d-e137-4478-a306-d400216707d4", true)]
     [InlineData("email.automation3@cps.gov.uk", true)] // staging integration test
     [InlineData("2e256642-b947-4da3-a987-0233f165eff4", true)] // staging integration test
     [InlineData("0724d778-579d-423a-a83a-a1f092257b13", false)] // prod integration test
@@ -512,8 +512,8 @@ public class MailboxOptionsTest
     /// </summary>
     /// <param name="mailboxId">The mailbox ID to test.</param>
     [Theory]
-    [InlineData("SHARED2@mailbox.com")] // dev integration test / maybe unit test as the file is embedded?
-    [InlineData("A849AB7C-A548-41D1-A546-377A44BE0C11")] // dev integration test / maybe unit test as the file is embedded?
+    [InlineData("unittest2@mailbox.com")]
+    [InlineData("d302b81d-e137-4478-a306-d400216707d4")]
     [InlineData("email.automation3@cps.gov.uk")] // staging integration test
     [InlineData("2e256642-b947-4da3-a987-0233f165eff4")] // staging integration test
     [InlineData("0724d778-579d-423a-a83a-a1f092257b13")] // prod integration test
