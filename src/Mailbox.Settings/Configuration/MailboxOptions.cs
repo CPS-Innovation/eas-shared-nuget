@@ -30,7 +30,8 @@ public class MailboxOptions
     {
         Requires.NotNull(clientFactory);
 
-        this.MailboxList = CreateMailboxList(clientFactory);
+        // this.MailboxList = CreateMailboxList(clientFactory);
+        this.MailboxList = CreateMailboxListEmbedded();
         this.mailboxIdentifiers = CreateMailboxIdentifiers(this.MailboxList);
     }
 
