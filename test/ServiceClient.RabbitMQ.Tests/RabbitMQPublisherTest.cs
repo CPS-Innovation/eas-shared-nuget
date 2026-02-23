@@ -133,7 +133,7 @@ public class RabbitMQPublisherTest
     /// <returns>The test event.</returns>
     internal static CloudEvent CreateTestEvent()
     {
-        string mailboxId = "338b27ea-6f8e-42f0-849d-e396fd161156";
+        string mailboxId = "b3d00586-8786-4f64-b341-20e515f9c039";
         string source = $"Users/{mailboxId}/Messages";
         string messageId = "AAMkADYyNDU0NWEwLTJlMzYtNGExZC1hZTJmLTMxYzY5ZTBkNDMxZABGAAAAAABdhU36QI-kTLa-1b3sH5CzBwDlGkianql-Rr9Dp21TeC_GAAAAAAEKAADlGkianql-Rr9Dp21TeC_GAAAHlKtcAAA=";
 
