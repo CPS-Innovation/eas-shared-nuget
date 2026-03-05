@@ -21,6 +21,19 @@ public class GraphApiIntegrationFactAttribute : FactAttribute
 {
     private static readonly Lazy<bool> CredentialsAvailable = new(CheckCredentialsAvailable);
 
+    private bool _skipUntilCanAccessBucketLocally;
+
+    public bool SkipUntilCanAccessBucketLocally
+    {
+        get => _skipUntilCanAccessBucketLocally;
+        set
+        {
+            _skipUntilCanAccessBucketLocally = value;
+            if (value)
+                Skip = "Skipped until bucket is ready: copy target environment config files to staging bucket and configure staging credentials before running.";
+        }
+    }
+
     /// <summary>
     /// Gets the skip reason if credentials are not available.
     /// </summary>

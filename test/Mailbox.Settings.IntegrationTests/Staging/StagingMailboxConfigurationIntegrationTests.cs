@@ -75,7 +75,7 @@ public class StagingMailboxConfigurationIntegrationTests
     /// <summary>
     /// Tests that the Staging environment has the expected number of mailboxes.
     /// </summary>
-    [S3IntegrationFact]
+    [S3IntegrationFact(SkipUntilCanAccessBucketLocally = true)]
     public void StagingEnvironmentHasExpectedMailboxCount()
     {
         // Arrange
@@ -128,7 +128,7 @@ public class StagingMailboxConfigurationIntegrationTests
     /// <summary>
     /// Tests that the Staging region has the expected number of mailboxes.
     /// </summary>
-    [S3IntegrationFact]
+    [S3IntegrationFact(SkipUntilCanAccessBucketLocally = true)]
     public void StagingRegionHasExpectedMailboxCount()
     {
         // Arrange
@@ -153,7 +153,7 @@ public class StagingMailboxConfigurationIntegrationTests
     /// <summary>
     /// Tests that the first Staging mailbox (Email.Automation2) exists and has the correct properties.
     /// </summary>
-    [S3IntegrationFact]
+    [S3IntegrationFact(SkipUntilCanAccessBucketLocally = true)]
     public void StagingMailbox2HasCorrectProperties()
     {
         // Arrange
@@ -197,7 +197,7 @@ public class StagingMailboxConfigurationIntegrationTests
     /// <summary>
     /// Tests that the second Staging mailbox (Email.Automation3) exists and has the correct properties.
     /// </summary>
-    [S3IntegrationFact]
+    [S3IntegrationFact(SkipUntilCanAccessBucketLocally = true)]
     public void StagingMailbox3HasCorrectProperties()
     {
         // Arrange
@@ -240,7 +240,7 @@ public class StagingMailboxConfigurationIntegrationTests
     /// <summary>
     /// Tests that Staging mailboxes can be found by both email address and GUID.
     /// </summary>
-    [S3IntegrationFact]
+    [S3IntegrationFact(SkipUntilCanAccessBucketLocally = true)]
     public void StagingMailboxesAreRecognizedAsSharedMailboxes()
     {
         // Arrange
@@ -268,7 +268,7 @@ public class StagingMailboxConfigurationIntegrationTests
     /// Tests that all Staging mailboxes can be accessed via Microsoft Graph API.
     /// This proves that the app registration has the necessary permissions to access each mailbox.
     /// </summary>
-    [GraphApiIntegrationFact]
+    [GraphApiIntegrationFact(SkipUntilCanAccessBucketLocally = true)]
     public async Task StagingMailboxesCanBeAccessedViaGraphApi()
     {
         // Arrange

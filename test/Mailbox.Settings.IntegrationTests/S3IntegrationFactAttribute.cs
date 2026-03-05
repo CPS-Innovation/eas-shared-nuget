@@ -12,4 +12,16 @@ using Xunit;
 /// </summary>
 public sealed class S3IntegrationFactAttribute : S3IntegrationAttributeBase
 {
+    private bool _skipUntilCanAccessBucketLocally;
+
+    public bool SkipUntilCanAccessBucketLocally
+    {
+        get => _skipUntilCanAccessBucketLocally;
+        set
+        {
+            _skipUntilCanAccessBucketLocally = value;
+            if (value)
+                Skip = "Skipped until bucket is ready: copy target environment config files to staging bucket and configure staging credentials before running.";
+        }
+    }
 }

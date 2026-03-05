@@ -73,7 +73,7 @@ public class ProductionMailboxConfigurationIntegrationTests
     /// Tests that the Production environment has the expected number of mailboxes.
     /// Expected count is based on current S3 configuration; verify against S3 at implementation time if the count changes.
     /// </summary>
-    [S3IntegrationFact]
+    [S3IntegrationFact(SkipUntilCanAccessBucketLocally = true)]
     [Trait("ReconsiderBrittleness", "true")]
     public void ProductionEnvironmentHasExpectedMailboxCount()
     {
@@ -125,7 +125,7 @@ public class ProductionMailboxConfigurationIntegrationTests
     /// Tests that each Production region has the expected number of mailboxes.
     /// Expected counts are based on current S3 configuration; verify against S3 at implementation time if counts change.
     /// </summary>
-    [S3IntegrationTheory]
+    [S3IntegrationTheory(SkipUntilCanAccessBucketLocally = true)]
     [Trait("ReconsiderBrittleness", "true")]
     [InlineData("Cymru-Wales", 6)]
     [InlineData("East Midlands", 6)]
@@ -167,7 +167,7 @@ public class ProductionMailboxConfigurationIntegrationTests
     /// <summary>
     /// Proceeds of Crime region: 7 mailboxes, all with POC URN support (from appsettings.Production.Proceeds of Crime.json).
     /// </summary>
-    [S3IntegrationFact]
+    [S3IntegrationFact(SkipUntilCanAccessBucketLocally = true)]
     [Trait("ReconsiderBrittleness", "true")]
     public void ProceedsOfCrimeRegion_Has7MailboxesAllWithPocUrnSupport()
     {
@@ -195,7 +195,7 @@ public class ProductionMailboxConfigurationIntegrationTests
     /// <summary>
     /// Proceeds of Crime region: 7 mailboxes, all require email as MSG file (from appsettings.Production.Proceeds of Crime.json).
     /// </summary>
-    [S3IntegrationFact]
+    [S3IntegrationFact(SkipUntilCanAccessBucketLocally = true)]
     [Trait("ReconsiderBrittleness", "true")]
     public void ProceedsOfCrimeRegion_Has7MailboxesAllRequireEmailAsMsgFile()
     {
@@ -223,7 +223,7 @@ public class ProductionMailboxConfigurationIntegrationTests
     /// <summary>
     /// Proceeds of Crime region: 7 mailboxes, all secure (from appsettings.Production.Proceeds of Crime.json).
     /// </summary>
-    [S3IntegrationFact]
+    [S3IntegrationFact(SkipUntilCanAccessBucketLocally = true)]
     [Trait("ReconsiderBrittleness", "true")]
     public void ProceedsOfCrimeRegion_Has7MailboxesAllSecure()
     {
@@ -251,7 +251,7 @@ public class ProductionMailboxConfigurationIntegrationTests
     /// <summary>
     /// Extradition region: 4 mailboxes, 3 require email as MSG file (from appsettings.Production.Extradition.json; Extradition.Fees does not).
     /// </summary>
-    [S3IntegrationFact]
+    [S3IntegrationFact(SkipUntilCanAccessBucketLocally = true)]
     [Trait("ReconsiderBrittleness", "true")]
     public void ExtraditionRegion_Has4Mailboxes3RequireEmailAsMsgFile()
     {
@@ -280,7 +280,7 @@ public class ProductionMailboxConfigurationIntegrationTests
     /// <summary>
     /// Extradition region: 4 mailboxes, all secure (from appsettings.Production.Extradition.json).
     /// </summary>
-    [S3IntegrationFact]
+    [S3IntegrationFact(SkipUntilCanAccessBucketLocally = true)]
     [Trait("ReconsiderBrittleness", "true")]
     public void ExtraditionRegion_Has4MailboxesAllSecure()
     {

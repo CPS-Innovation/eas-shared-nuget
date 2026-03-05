@@ -75,7 +75,7 @@ public class DevelopmentMailboxConfigurationIntegrationTests
     /// <summary>
     /// Tests that the Development environment has the expected number of mailboxes.
     /// </summary>
-    [S3IntegrationFact]
+    [S3IntegrationFact(SkipUntilCanAccessBucketLocally = true)]
     public void DevelopmentEnvironmentHasExpectedMailboxCount()
     {
         // Arrange
@@ -128,7 +128,8 @@ public class DevelopmentMailboxConfigurationIntegrationTests
     /// <summary>
     /// Tests that the Development region has the expected number of mailboxes.
     /// </summary>
-    [S3IntegrationFact]
+    /// 
+    [S3IntegrationFact(SkipUntilCanAccessBucketLocally = true)]
     public void DevelopmentRegionHasExpectedMailboxCount()
     {
         // Arrange
@@ -153,7 +154,7 @@ public class DevelopmentMailboxConfigurationIntegrationTests
     /// <summary>
     /// Tests that the Development mailbox exists and has the correct properties.
     /// </summary>
-    [S3IntegrationFact]
+    [S3IntegrationFact(SkipUntilCanAccessBucketLocally = true)]
     public void DevelopmentMailboxHasCorrectProperties()
     {
         // Arrange
@@ -183,7 +184,7 @@ public class DevelopmentMailboxConfigurationIntegrationTests
     /// <summary>
     /// Tests that the Development mailbox can be found by both email address and GUID.
     /// </summary>
-    [S3IntegrationFact]
+    [S3IntegrationFact(SkipUntilCanAccessBucketLocally = true)]
     public void DevelopmentMailboxIsRecognizedAsSharedMailbox()
     {
         // Arrange
@@ -203,7 +204,7 @@ public class DevelopmentMailboxConfigurationIntegrationTests
     /// Tests that all Development mailboxes can be accessed via Microsoft Graph API.
     /// This proves that the app registration has the necessary permissions to access each mailbox.
     /// </summary>
-    [GraphApiIntegrationFact]
+    [GraphApiIntegrationFact(SkipUntilCanAccessBucketLocally = true)]
     public async Task DevelopmentMailboxesCanBeAccessedViaGraphApi()
     {
         // Arrange
