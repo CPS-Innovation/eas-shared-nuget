@@ -23,7 +23,7 @@ build:
       - test/
     expire_in: 1 hour
 
-test:
+unit-tests:
   stage: test
   image: mcr.microsoft.com/dotnet/sdk:8.0
   dependencies:
@@ -32,7 +32,32 @@ test:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == "main"
   script:
-    - dotnet test EasSharedNuget.sln -c Release --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
+    - dotnet test EasSharedNuget.sln -c Release --no-build --verbosity normal --filter "Category!=IntegrationTest" --logger "trx;LogFileName=unit-test-results.trx"
+    - dotnet tool install -g trx2junit
+    - export PATH="$PATH:/root/.dotnet/tools"
+    - find . -name "*.trx" -exec trx2junit {} \;
+  artifacts:
+    when: always
+    paths:
+      - "**/*.trx"
+      - "**/*.xml"
+    reports:
+      junit:
+        - "**/*.xml"
+    expire_in: 1 week
+
+integration-tests:
+  stage: test
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  dependencies:
+    - build
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+  script:
+    - dotnet test EasSharedNuget.sln -c Release --no-build --verbosity normal --filter "Category=IntegrationTest" --logger "trx;LogFileName=integration-test-results.trx"
+    - |
+      echo 'To run integration tests (instead of skipping), add these CI/CD variables (masked): AmazonS3__AccessKey, AmazonS3__SecretKey, AmazonS3ClientFactory__MailboxConfigurationContainerName, GraphApi__ClientId, GraphApi__ClientSecret, GraphApi__TenantId'
     - dotnet tool install -g trx2junit
     - export PATH="$PATH:/root/.dotnet/tools"
     - find . -name "*.trx" -exec trx2junit {} \;
