@@ -18,7 +18,7 @@ using System.Text.Json;
 /// <summary>
 /// The options used to identify shared mailboxes.
 /// </summary>
-public class MailboxOptions
+public class MailboxOptions : IUrnSupportLookup, IEmailStorageMailboxLookup, IMailboxLookup, IMailboxCatalog
 {
     private readonly ImmutableDictionary<string, IdentifiableMailboxSettings> mailboxIdentifiers;
 
