@@ -20,21 +20,21 @@ public partial class EmailSubjectToUrnTranslator
     /// <summary>
     /// Initializes a new instance of the <see cref="EmailSubjectToUrnTranslator"/> class.
     /// </summary>
-    /// <param name="mailboxOptions">The mailbox options.</param>
+    /// <param name="urnSupportLookup">The URN support lookup.</param>
     public EmailSubjectToUrnTranslator(
-        MailboxOptions mailboxOptions)
+        IUrnSupportLookup urnSupportLookup)
     {
-        Requires.NotNull(mailboxOptions);
+        Requires.NotNull(urnSupportLookup);
 
-        this.MailboxOptions = mailboxOptions;
-        this.pocUrnTranslator = new EmailSubjectToPocUrnTranslator(mailboxOptions);
-        this.standardUrnTranslator = new EmailSubjectToStandardUrnTranslator(mailboxOptions);
+        this.UrnSupportLookup = urnSupportLookup;
+        this.pocUrnTranslator = new EmailSubjectToPocUrnTranslator(urnSupportLookup);
+        this.standardUrnTranslator = new EmailSubjectToStandardUrnTranslator(urnSupportLookup);
     }
 
     /// <summary>
-    /// Gets the mailbox options.
+    /// Gets the URN support lookup.
     /// </summary>
-    public MailboxOptions MailboxOptions { get; }
+    public IUrnSupportLookup UrnSupportLookup { get; }
 
     /// <inheritdoc/>
     public string? Translate(EmailSubjectInfo source)
@@ -45,7 +45,7 @@ public partial class EmailSubjectToUrnTranslator
         string? result = null;
         if (source.Subject is not null)
         {
-            bool requiresPocUrnSupport = this.MailboxOptions.RequiresProceedsOfCrimeUrnSupport(source.MailboxId);
+            bool requiresPocUrnSupport = this.UrnSupportLookup.RequiresProceedsOfCrimeUrnSupport(source.MailboxId);
             if (requiresPocUrnSupport)
             {
                 result = this.pocUrnTranslator.Translate(source);

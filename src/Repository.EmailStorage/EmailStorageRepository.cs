@@ -42,7 +42,7 @@ public class EmailStorageRepository
     private readonly EmailSubjectToUrnTranslator urnTranslator;
     private readonly EmailReceivedQueueOptions queueOptions;
     private readonly EmailReceivedProceedsOfCrimeQueueOptions pocQueueOptions;
-    private readonly MailboxOptions mailboxOptions;
+    private readonly IEmailStorageMailboxLookup emailStorageMailboxLookup;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EmailStorageRepository"/> class.
@@ -55,7 +55,7 @@ public class EmailStorageRepository
     /// <param name="applicationOptions">The application options.</param>
     /// <param name="queueOptions">The email received queue options.</param>
     /// <param name="pocQueueOptions">The email received for Proceeds of Crime queue options.</param>
-    /// <param name="mailboxOptions">The mailbox options.</param>
+    /// <param name="emailStorageMailboxLookup">The email storage mailbox lookup.</param>
     public EmailStorageRepository(
         ILoggerFactory loggerFactory,
         IGraphApiEmailClient graphApiEmailClient,
@@ -65,7 +65,7 @@ public class EmailStorageRepository
         IOptions<ApplicationOptions> applicationOptions,
         IOptions<EmailReceivedQueueOptions> queueOptions,
         IOptions<EmailReceivedProceedsOfCrimeQueueOptions> pocQueueOptions,
-        MailboxOptions mailboxOptions)
+        IEmailStorageMailboxLookup emailStorageMailboxLookup)
     {
         Requires.NotNull(loggerFactory);
         Requires.NotNull(graphApiEmailClient);
@@ -80,7 +80,7 @@ public class EmailStorageRepository
         Requires.NotNull(pocQueueOptions);
         Requires.NotNull(pocQueueOptions.Value);
         Requires.NotNullOrWhiteSpace(pocQueueOptions.Value.QueueName);
-        Requires.NotNull(mailboxOptions);
+        Requires.NotNull(emailStorageMailboxLookup);
 
         /*
          * Fixes issue:
@@ -97,7 +97,7 @@ public class EmailStorageRepository
         this.eventPublisher = eventPublisher;
         this.urnTranslator = urnTranslator;
         this.pocQueueOptions = pocQueueOptions.Value;
-        this.mailboxOptions = mailboxOptions;
+        this.emailStorageMailboxLookup = emailStorageMailboxLookup;
     }
 
     /// <summary>
@@ -127,7 +127,7 @@ public class EmailStorageRepository
             IReadOnlyCollection<DocumentDetail> attachments = await this.SaveMessageAttachmentsAsync(notificationReceived, message, urn).ConfigureAwait(false);
             string queueName = this.queueOptions.QueueName;
 
-            if (this.mailboxOptions.RequiresSecureMailbox(identifier.MailboxId))
+            if (this.emailStorageMailboxLookup.RequiresSecureMailbox(identifier.MailboxId))
             {
                 queueName = this.pocQueueOptions.QueueName;
             }
@@ -201,8 +201,8 @@ public class EmailStorageRepository
         try
         {
             int size = -1;
-            bool requiresMsgFormat = this.mailboxOptions.RequiresEmailAsMsgFileIncludeAttachments(identifier.MailboxId) ||
-                this.mailboxOptions.RequiresEmailAsMsgFile(identifier.MailboxId);
+            bool requiresMsgFormat = this.emailStorageMailboxLookup.RequiresEmailAsMsgFileIncludeAttachments(identifier.MailboxId) ||
+                this.emailStorageMailboxLookup.RequiresEmailAsMsgFile(identifier.MailboxId);
             outcome = $"Failed - getting email contents, requires MSG format: {requiresMsgFormat}";
             EmailBody emailBody = await this.GetEmailBody(identifier).ConfigureAwait(false);
 
@@ -282,8 +282,8 @@ public class EmailStorageRepository
 
     private async Task<EmailBody> GetEmailBody(MailMessageIdentifier identifier)
     {
-        bool requiresAttachments = this.mailboxOptions.RequiresEmailAsMsgFileIncludeAttachments(identifier.MailboxId);
-        bool requiresMsgFormat = requiresAttachments || this.mailboxOptions.RequiresEmailAsMsgFile(identifier.MailboxId);
+        bool requiresAttachments = this.emailStorageMailboxLookup.RequiresEmailAsMsgFileIncludeAttachments(identifier.MailboxId);
+        bool requiresMsgFormat = requiresAttachments || this.emailStorageMailboxLookup.RequiresEmailAsMsgFile(identifier.MailboxId);
         Stream? stream = null;
         string contentType = SubscriberConstants.EmailBodyContentType;
         string emailBodyName = SubscriberConstants.EmailBodyHtmlFilename;
@@ -442,7 +442,7 @@ public class EmailStorageRepository
         Message message,
         string urn)
     {
-        IMailboxSettings settings = this.mailboxOptions.GetMailboxSettings(notificationReceived.MailboxId);
+        IMailboxSettings settings = this.emailStorageMailboxLookup.GetMailboxSettings(notificationReceived.MailboxId);
 
         if (settings.IgnoreAttachments)
         {

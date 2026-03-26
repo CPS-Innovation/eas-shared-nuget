@@ -74,7 +74,7 @@ public class EmailStorageRepositoryTest
 
                 services
                     .AddSingleton(output)
-                    .AddSingleton<MailboxOptions>()
+                    .AddMailboxConfiguration()
                     .AddSingleton<GraphApiClient>()
                     .AddSingleton<FakeGraphApiClient>()
                     .AddSingleton(CreateGraphApiClient)

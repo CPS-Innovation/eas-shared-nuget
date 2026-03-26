@@ -51,19 +51,19 @@ public partial class UrnTranslator
     /// <summary>
     /// Initializes a new instance of the <see cref="UrnTranslator"/> class.
     /// </summary>
-    /// <param name="mailboxOptions">The mailbox options.</param>
+    /// <param name="urnSupportLookup">The URN support lookup.</param>
     protected UrnTranslator(
-        MailboxOptions mailboxOptions)
+        IUrnSupportLookup urnSupportLookup)
     {
-        Requires.NotNull(mailboxOptions);
+        Requires.NotNull(urnSupportLookup);
 
-        this.MailboxOptions = mailboxOptions;
+        this.UrnSupportLookup = urnSupportLookup;
     }
 
     /// <summary>
-    /// Gets the mailbox options.
+    /// Gets the URN support lookup.
     /// </summary>
-    protected MailboxOptions MailboxOptions { get; }
+    protected IUrnSupportLookup UrnSupportLookup { get; }
 
     /// <summary>
     /// Determines the URN matches.

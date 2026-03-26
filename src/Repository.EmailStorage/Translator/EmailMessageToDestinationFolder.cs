@@ -32,7 +32,7 @@ public class EmailMessageToDestinationFolder
     private readonly EmailAddressExclusionOptions emailAddressExclusionOptions;
     private readonly EmailSubjectExclusionOptions emailSubjectExclusionOptions;
     private readonly EmailSubjectToUrnTranslator urnTranslator;
-    private readonly MailboxOptions mailboxOptions;
+    private readonly IEmailStorageMailboxLookup emailStorageMailboxLookup;
     private readonly AttachmentSettingOptions attachmentSettingOptions;
 
     /// <summary>
@@ -43,14 +43,14 @@ public class EmailMessageToDestinationFolder
     /// <param name="emailAddressExclusionOptions">The email address exclusion list.</param>
     /// <param name="emailSubjectExclusionOptions">The email subject exclusion list.</param>
     /// <param name="folderOptions">The mailbox folder options.</param>
-    /// <param name="mailboxOptions">The mailbox options.</param>
+    /// <param name="emailStorageMailboxLookup">The email storage mailbox lookup.</param>
     public EmailMessageToDestinationFolder(
         ITextMatcher textMatcher,
         EmailSubjectToUrnTranslator urnTranslator,
         IOptions<EmailAddressExclusionOptions> emailAddressExclusionOptions,
         IOptions<EmailSubjectExclusionOptions> emailSubjectExclusionOptions,
         IOptions<MailboxFolderOptions> folderOptions,
-        MailboxOptions mailboxOptions,
+        IEmailStorageMailboxLookup emailStorageMailboxLookup,
         IOptions<AttachmentSettingOptions> attachmentSize
         )
     {
@@ -59,7 +59,7 @@ public class EmailMessageToDestinationFolder
         Requires.NotNull(emailAddressExclusionOptions);
         Requires.NotNull(emailSubjectExclusionOptions);
         Requires.NotNull(folderOptions);
-        Requires.NotNull(mailboxOptions);
+        Requires.NotNull(emailStorageMailboxLookup);
         Requires.NotNull(attachmentSize);
 
         this.textMatcher = textMatcher;
@@ -67,7 +67,7 @@ public class EmailMessageToDestinationFolder
         this.emailAddressExclusionOptions = emailAddressExclusionOptions.Value;
         this.emailSubjectExclusionOptions = emailSubjectExclusionOptions.Value;
         this.FolderOptions = folderOptions.Value;
-        this.mailboxOptions = mailboxOptions;
+        this.emailStorageMailboxLookup = emailStorageMailboxLookup;
         this.attachmentSettingOptions = attachmentSize.Value;
     }
 
@@ -102,7 +102,7 @@ public class EmailMessageToDestinationFolder
 
         destinationFolderResult ??= this.HasZipAttachmentException(urn, source.MailboxId, message);
 
-        if (this.mailboxOptions.RequiresEmailAsMsgFile(source.MailboxId))
+        if (this.emailStorageMailboxLookup.RequiresEmailAsMsgFile(source.MailboxId))
         {
             destinationFolderResult ??= this.HasInsecureUrlInMessageBody(DetermineUrn(urn), message);
         }
@@ -306,7 +306,7 @@ public class EmailMessageToDestinationFolder
     {
         DestinationFolderResult? result = null;
         if (urn is not null &&
-            this.urnTranslator.MailboxOptions.GetMailboxSettings(mailboxId).TreatZipAttachmentEmailsAsExceptions &&
+            this.emailStorageMailboxLookup.GetMailboxSettings(mailboxId).TreatZipAttachmentEmailsAsExceptions &&
             message?.Attachments != null &&
             message.Attachments.Any(a => a.Name is not null && a.Name.EndsWith(".zip", StringComparison.OrdinalIgnoreCase)))
         {
