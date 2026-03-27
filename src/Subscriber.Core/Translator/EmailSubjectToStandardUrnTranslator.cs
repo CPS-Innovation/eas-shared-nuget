@@ -21,10 +21,10 @@ public partial class EmailSubjectToStandardUrnTranslator
     /// <summary>
     /// Initializes a new instance of the <see cref="EmailSubjectToStandardUrnTranslator"/> class.
     /// </summary>
-    /// <param name="mailboxOptions">The mailbox options.</param>
+    /// <param name="urnSupportLookup">The URN support lookup.</param>
     public EmailSubjectToStandardUrnTranslator(
-        MailboxOptions mailboxOptions)
-            : base(mailboxOptions)
+        IUrnSupportLookup urnSupportLookup)
+            : base(urnSupportLookup)
     {
     }
 

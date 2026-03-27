@@ -22,10 +22,10 @@ public partial class EmailSubjectToPocUrnTranslator
     /// <summary>
     /// Initializes a new instance of the <see cref="EmailSubjectToPocUrnTranslator"/> class.
     /// </summary>
-    /// <param name="mailboxOptions">The mailbox options.</param>
+    /// <param name="urnSupportLookup">The URN support lookup.</param>
     public EmailSubjectToPocUrnTranslator(
-        MailboxOptions mailboxOptions)
-            : base(mailboxOptions)
+        IUrnSupportLookup urnSupportLookup)
+            : base(urnSupportLookup)
     {
     }
 
@@ -44,7 +44,7 @@ public partial class EmailSubjectToPocUrnTranslator
             foreach (string match in matches)
             {
                 string urn = FormatUrn(match);
-                if (IsProceedsOfCrimeUrn(urn, this.MailboxOptions.AcceptNonProceedsOfCrimeUrn(source.MailboxId)))
+                if (IsProceedsOfCrimeUrn(urn, this.UrnSupportLookup.AcceptNonProceedsOfCrimeUrn(source.MailboxId)))
                 {
                     if (!urns.Contains(urn))
                     {

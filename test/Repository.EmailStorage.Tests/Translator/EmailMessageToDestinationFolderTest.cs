@@ -31,7 +31,7 @@ using Microsoft.Extensions.Options;
 [Trait("Status", "Ready")]
 public class EmailMessageToDestinationFolderTest
 {
-    private readonly Mock<MailboxOptions> mailboxOptionsMock;
+    private readonly Mock<IEmailStorageMailboxLookup> emailStorageMailboxLookupMock;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EmailMessageToDestinationFolderTest"/> class.
@@ -51,7 +51,7 @@ public class EmailMessageToDestinationFolderTest
 
                 services
                     .AddSingleton<IAmazonS3ClientFactory, FakeS3ClientFactory>()
-                    .AddSingleton<MailboxOptions>()
+                    .AddMailboxConfiguration()
                     .AddSingleton<ITextMatcher, IgnoreCaseTextMatcher>()
                     .AddSingleton<EmailSubjectToUrnTranslator>()
                     .AddSingleton<EmailMessageToDestinationFolder>()
@@ -62,9 +62,7 @@ public class EmailMessageToDestinationFolderTest
         IServiceScope serviceScope = host.Services.CreateScope();
         this.ServiceProvider = serviceScope.ServiceProvider;
 
-        // Create the mock after getting the factory from DI
-        var factory = this.ServiceProvider.GetRequiredService<IAmazonS3ClientFactory>();
-        this.mailboxOptionsMock = new Mock<MailboxOptions>(factory);
+        this.emailStorageMailboxLookupMock = new Mock<IEmailStorageMailboxLookup>();
     }
 
     private IServiceProvider ServiceProvider { get; }
@@ -233,9 +231,15 @@ public class EmailMessageToDestinationFolderTest
     public void MailMessageTranslatesToExceptionFolderForInsecureUrlInTheEmailBodyWhenMailboxRequiresEmailAsMsgFileIsTrue(string insecureUrl)
     {
         // Arrange
-        this.mailboxOptionsMock
+        var mailboxSettingsMock = new Mock<IMailboxSettings>();
+        mailboxSettingsMock.Setup(s => s.TreatZipAttachmentEmailsAsExceptions).Returns(false);
+
+        this.emailStorageMailboxLookupMock
             .Setup(m => m.RequiresEmailAsMsgFile(It.IsAny<string>()))
             .Returns(() => true);
+        this.emailStorageMailboxLookupMock
+            .Setup(m => m.GetMailboxSettings(It.IsAny<string>()))
+            .Returns(mailboxSettingsMock.Object);
 
         string emailAddress = "a@b.com";
         string subject = "A URN 12AB1234523 in the subject";
@@ -251,9 +255,9 @@ public class EmailMessageToDestinationFolderTest
             subject: subject);
         message.Body!.Content = message.Body!.Content!.Replace("writing guidelines", insecureUrl, StringComparison.OrdinalIgnoreCase);
 
-        // Create translator with mocked MailboxOptions
         var textMatcher = this.ServiceProvider.GetRequiredService<ITextMatcher>();
-        var urnTranslator = new EmailSubjectToUrnTranslator(this.mailboxOptionsMock.Object);
+        var urnSupportLookup = this.ServiceProvider.GetRequiredService<IUrnSupportLookup>();
+        var urnTranslator = new EmailSubjectToUrnTranslator(urnSupportLookup);
         var emailAddressOptions = this.ServiceProvider.GetRequiredService<IOptions<EmailAddressExclusionOptions>>();
         var emailSubjectOptions = this.ServiceProvider.GetRequiredService<IOptions<EmailSubjectExclusionOptions>>();
         var folderOptions = this.ServiceProvider.GetRequiredService<IOptions<MailboxFolderOptions>>();
@@ -265,7 +269,7 @@ public class EmailMessageToDestinationFolderTest
             emailAddressOptions,
             emailSubjectOptions,
             folderOptions,
-            this.mailboxOptionsMock.Object,
+            this.emailStorageMailboxLookupMock.Object,
             attachmentOptions);
 
         EmailMessageInfo emailMessageInfo = new(Email: message, MailboxId: mailboxId);
