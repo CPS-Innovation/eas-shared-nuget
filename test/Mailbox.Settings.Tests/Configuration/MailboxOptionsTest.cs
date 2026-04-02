@@ -57,7 +57,7 @@ public class MailboxOptionsTest
     [InlineData("Half unit tests", 3)]
     //[InlineData("Development", 1)] // dev integration test
     //[InlineData("Staging", 2)] // staging integration test
-    //[InlineData("Production", 190)] // prod integration test
+    //[InlineData("Production", 191)] // prod integration test
     public void ExpectedEnvironmentCount(string environment, int expectedMailboxCount)
     {
         // Arrange
@@ -83,7 +83,7 @@ public class MailboxOptionsTest
     //[InlineData("East Midlands", 6)] // prod integration test
     //[InlineData("London", 1)] // prod integration test
     //[InlineData("North West", 24)] // prod integration test
-    //[InlineData("Proceeds of Crime", 7)] // prod integration test
+    //[InlineData("Proceeds of Crime", 8)] // prod integration test
     //[InlineData("West Midlands", 14)] // prod integration test
     //[InlineData("Wessex", 12)] // prod integration test
     //[InlineData("Extradition", 4)] // prod integration test
