@@ -4,9 +4,4 @@
 	<ItemGroup Condition="'$(MSBuildProjectName)' == 'ServiceClient.GraphApiEmail'">
 		<PackageReference Include="MimeKit" Version="4.15.1" />
 	</ItemGroup>
-
-	<!-- Pin System.Text.Json to non-vulnerable version (transitive via Microsoft.Extensions.* packages) -->
-	<ItemGroup>
-		<PackageReference Include="System.Text.Json" Version="8.0.5" />
-	</ItemGroup>
 </Project>
