@@ -5,8 +5,9 @@
 		<PackageReference Include="MimeKit" Version="4.15.1" />
 	</ItemGroup>
 
-	<!-- Pin System.Text.Json to non-vulnerable version (transitive via Microsoft.Extensions.* packages) -->
+	<!-- Align System.Text.Json across all projects with the Azure.Core 1.53.0 floor.
+     Closes GHSA-hh2w-p6rv-4g7w / GHSA-8g4q-xg66-9fp4 (vulnerable in 8.0.0). -->
 	<ItemGroup>
-		<PackageReference Include="System.Text.Json" Version="8.0.5" />
+		<PackageReference Include="System.Text.Json" Version="10.0.3" />
 	</ItemGroup>
 </Project>
