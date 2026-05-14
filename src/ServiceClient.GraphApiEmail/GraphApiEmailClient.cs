@@ -47,11 +47,12 @@ public partial class GraphApiEmailClient : IGraphApiEmailClient
     {
         Requires.NotNull(mimeStream);
 
-        MemoryStream msgStream = new();
+        using MemoryStream msgStream = new();
         MsgKit.Converter.ConvertEmlToMsg(mimeStream, msgStream);
-        mimeStream.Dispose();
         msgStream.Position = 0;
-        Storage.Message msg = new(msgStream, FileAccess.ReadWrite);
+
+        // leaveStreamOpen: true so MsgReader 6 / OpenMcdf 3 doesn't close msgStream when 'msg' is disposed.
+        using Storage.Message msg = new(msgStream, FileAccess.ReadWrite, leaveStreamOpen: true);
         if (removeAttachments && msg.Attachments != null && msg.Attachments.Any())
         {
             Storage.Attachment? attachment = GetFirstAttachment(msg);
@@ -62,12 +63,15 @@ public partial class GraphApiEmailClient : IGraphApiEmailClient
             }
         }
 
-        Stream resultStream = new MemoryStream();
-        msg.Save(resultStream);
-        msgStream.Dispose();
-        msg.Dispose();
-        resultStream.Position = 0;
-        return resultStream;
+        // MsgReader 6 / OpenMcdf 3: msg.Save(stream) takes ownership of the stream and
+        // disposes it when the underlying RootStorage is disposed. Save into a temp
+        // buffer and copy the bytes out before disposal so the caller gets a clean,
+        // fully-owned stream that can be read after this method returns.
+        using MemoryStream tempStream = new();
+        msg.Save(tempStream);
+        byte[] bytes = tempStream.ToArray();
+
+        return new MemoryStream(bytes) { Position = 0 };
     }
 
     /// <inheritdoc/>

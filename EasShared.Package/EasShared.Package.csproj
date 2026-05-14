@@ -7,20 +7,28 @@
 		<AssemblyName>$(RootNamespace)</AssemblyName>
 		<!-- NuGet metadata -->
 		<PackageId>Cps.Fct.EasShared</PackageId>
-		<Version>1.1.21</Version>
+		<Version>1.1.22</Version>
 		<Authors>Crown Prosecution Service</Authors>
 		<Company>CPS</Company>
 		<Description>Reusable components for the Email Automation Service microservices</Description>
 		<PackageTags>internal;utility;shared</PackageTags>
 		<!-- Required to generate .nupkg -->
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<IncludeSymbols>true</IncludeSymbols>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<PrivateAssets>all</PrivateAssets>
-		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<DebugType>portable</DebugType>
 		<DebugSymbols>true</DebugSymbols>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+		<DebugType>embedded</DebugType>
+		<DebugSymbols>true</DebugSymbols>
+		<EmbedAllSources>true</EmbedAllSources>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -42,23 +50,22 @@
 		<ProjectReference Include="..\src\Repository.EmailStorage\Repository.EmailStorage.csproj" PrivateAssets="all" />
 	</ItemGroup>
 
-	<!-- Include built DLLs in the package -->
 	<ItemGroup>
-		<None Include="../src/Core/bin/Release/net8.0/Cps.Fct.EasShared.Core.dll" Pack="true" PackagePath="lib/net8.0/" />
-		<None Include="../test/Core.Xunit/bin/Release/net8.0/Cps.Fct.EasShared.Core.Xunit.dll" Pack="true" PackagePath="lib/net8.0/" />
-		<None Include="../src/ServiceClient.GraphApi/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApi.dll" Pack="true" PackagePath="lib/net8.0/" />
-		<None Include="../test/ServiceClient.GraphApi.Emulation/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApi.Emulation.dll" Pack="true" PackagePath="lib/net8.0/" />
-		<None Include="../src/ServiceClient.GraphApiEmail/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApiEmail.dll" Pack="true" PackagePath="lib/net8.0/" />
-		<None Include="../test/ServiceClient.GraphApiEmail.Emulation/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApiEmail.Emulation.dll" Pack="true" PackagePath="lib/net8.0/" />
-		<None Include="../src/ServiceClient.GraphApiSubscription/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApiSubscription.dll" Pack="true" PackagePath="lib/net8.0/" />
-		<None Include="../test/ServiceClient.GraphApiSubscription.Emulation/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApiSubscription.Emulation.dll" Pack="true" PackagePath="lib/net8.0/" />
-		<None Include="../src/ServiceClient.RabbitMQ/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.RabbitMQ.dll" Pack="true" PackagePath="lib/net8.0/" />
-		<None Include="../test/ServiceClient.RabbitMQ.Emulation/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.RabbitMQ.Emulation.dll" Pack="true" PackagePath="lib/net8.0/" />
-		<None Include="../src/ServiceClient.Aws/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.Aws.dll" Pack="true" PackagePath="lib/net8.0/" />
-		<None Include="../test/ServiceClient.Aws.Emulation/bin/Release/net8.0/Cps.Fct.EasShared.ServiceClient.Aws.Emulation.dll" Pack="true" PackagePath="lib/net8.0/" />
-		<None Include="../src/Subscriber.Core/bin/Release/net8.0/Cps.Fct.EasShared.Subscriber.Core.dll" Pack="true" PackagePath="lib/net8.0/" />
-		<None Include="../src/Mailbox.Settings/bin/Release/net8.0/Cps.Fct.EasShared.Mailbox.Settings.dll" Pack="true" PackagePath="lib/net8.0/" />
-		<None Include="../src/Storage.Core/bin/Release/net8.0/Cps.Fct.EasShared.Storage.Core.dll" Pack="true" PackagePath="lib/net8.0/" />
-		<None Include="../src/Repository.EmailStorage/bin/Release/net8.0/Cps.Fct.EasShared.Repository.EmailStorage.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../src/Core/bin/$(Configuration)/net8.0/Cps.Fct.EasShared.Core.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../test/Core.Xunit/bin/$(Configuration)/net8.0/Cps.Fct.EasShared.Core.Xunit.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../src/ServiceClient.GraphApi/bin/$(Configuration)/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApi.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../test/ServiceClient.GraphApi.Emulation/bin/$(Configuration)/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApi.Emulation.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../src/ServiceClient.GraphApiEmail/bin/$(Configuration)/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApiEmail.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../test/ServiceClient.GraphApiEmail.Emulation/bin/$(Configuration)/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApiEmail.Emulation.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../src/ServiceClient.GraphApiSubscription/bin/$(Configuration)/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApiSubscription.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../test/ServiceClient.GraphApiSubscription.Emulation/bin/$(Configuration)/net8.0/Cps.Fct.EasShared.ServiceClient.GraphApiSubscription.Emulation.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../src/ServiceClient.RabbitMQ/bin/$(Configuration)/net8.0/Cps.Fct.EasShared.ServiceClient.RabbitMQ.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../test/ServiceClient.RabbitMQ.Emulation/bin/$(Configuration)/net8.0/Cps.Fct.EasShared.ServiceClient.RabbitMQ.Emulation.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../src/ServiceClient.Aws/bin/$(Configuration)/net8.0/Cps.Fct.EasShared.ServiceClient.Aws.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../test/ServiceClient.Aws.Emulation/bin/$(Configuration)/net8.0/Cps.Fct.EasShared.ServiceClient.Aws.Emulation.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../src/Subscriber.Core/bin/$(Configuration)/net8.0/Cps.Fct.EasShared.Subscriber.Core.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../src/Mailbox.Settings/bin/$(Configuration)/net8.0/Cps.Fct.EasShared.Mailbox.Settings.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../src/Storage.Core/bin/$(Configuration)/net8.0/Cps.Fct.EasShared.Storage.Core.dll" Pack="true" PackagePath="lib/net8.0/" />
+		<None Include="../src/Repository.EmailStorage/bin/$(Configuration)/net8.0/Cps.Fct.EasShared.Repository.EmailStorage.dll" Pack="true" PackagePath="lib/net8.0/" />
 	</ItemGroup>
 </Project>
