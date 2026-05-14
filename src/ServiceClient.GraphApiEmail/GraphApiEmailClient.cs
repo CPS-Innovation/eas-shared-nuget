@@ -47,11 +47,11 @@ public partial class GraphApiEmailClient : IGraphApiEmailClient
     {
         Requires.NotNull(mimeStream);
 
-        MemoryStream msgStream = new();
+        using MemoryStream msgStream = new();
         MsgKit.Converter.ConvertEmlToMsg(mimeStream, msgStream);
-        mimeStream.Dispose();
         msgStream.Position = 0;
-        Storage.Message msg = new(msgStream, FileAccess.ReadWrite);
+
+        using Storage.Message msg = new(msgStream, FileAccess.ReadWrite, leaveStreamOpen: true);
         if (removeAttachments && msg.Attachments != null && msg.Attachments.Any())
         {
             Storage.Attachment? attachment = GetFirstAttachment(msg);
@@ -62,12 +62,11 @@ public partial class GraphApiEmailClient : IGraphApiEmailClient
             }
         }
 
-        Stream resultStream = new MemoryStream();
-        msg.Save(resultStream);
-        msgStream.Dispose();
-        msg.Dispose();
-        resultStream.Position = 0;
-        return resultStream;
+        using MemoryStream tempStream = new();
+        msg.Save(tempStream);
+        byte[] bytes = tempStream.ToArray();
+
+        return new MemoryStream(bytes) { Position = 0 };
     }
 
     /// <inheritdoc/>
