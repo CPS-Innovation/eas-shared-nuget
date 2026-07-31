@@ -57,7 +57,7 @@ public class MailboxOptionsTest
     [InlineData("Half unit tests", 3)]
     //[InlineData("Development", 1)] // dev integration test
     //[InlineData("Staging", 2)] // staging integration test
-    //[InlineData("Production", 191)] // prod integration test
+    //[InlineData("Production", 194)] // prod integration test
     public void ExpectedEnvironmentCount(string environment, int expectedMailboxCount)
     {
         // Arrange
@@ -82,7 +82,7 @@ public class MailboxOptionsTest
     //[InlineData("Default", 1)] // prod integration test
     //[InlineData("East Midlands", 6)] // prod integration test
     //[InlineData("London", 1)] // prod integration test
-    //[InlineData("North West", 24)] // prod integration test
+    //[InlineData("North West", 26)] // prod integration test
     //[InlineData("Proceeds of Crime", 8)] // prod integration test
     //[InlineData("West Midlands", 14)] // prod integration test
     //[InlineData("Wessex", 12)] // prod integration test
@@ -94,7 +94,7 @@ public class MailboxOptionsTest
     //[InlineData("South East", 10)] // prod integration test
     //[InlineData("East of England", 9)] // prod integration test
     //[InlineData("London North", 2)] // prod integration test
-    //[InlineData("London South", 10)] // prod integration test
+    //[InlineData("London South", 11)] // prod integration test
     //[InlineData("North East", 13)] // prod integration test
     //[InlineData("Thames and Chiltern", 20)] // prod integration test
     //[InlineData("ARU", 3)] // prod integration test
