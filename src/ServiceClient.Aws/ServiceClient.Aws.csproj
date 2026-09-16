@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Cps.Fct.EasShared.$(MSBuildProjectName)</RootNamespace>
@@ -16,7 +16,7 @@
     <PackageReference Include="AWSSDK.CloudWatchLogs" Version="3.7.305.53" />
     <PackageReference Include="AWSSDK.Core" Version="3.7.304.23" />
     <PackageReference Include="AWSSDK.S3" Version="3.7.309.12" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.12" />
   </ItemGroup>
 
   <ItemGroup>

@@ -10,7 +10,7 @@ variables:
 # Compile everything so that all referenced DLLs exist for nuspec to include
 build:
   stage: build
-  image: mcr.microsoft.com/dotnet/sdk:8.0
+  image: mcr.microsoft.com/dotnet/sdk:10.0
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == "main"
@@ -25,7 +25,7 @@ build:
 
 unit-tests:
   stage: test
-  image: mcr.microsoft.com/dotnet/sdk:8.0
+  image: mcr.microsoft.com/dotnet/sdk:10.0
   dependencies:
     - build
   rules:
@@ -48,7 +48,7 @@ unit-tests:
 
 integration-tests:
   stage: test
-  image: mcr.microsoft.com/dotnet/sdk:8.0
+  image: mcr.microsoft.com/dotnet/sdk:10.0
   dependencies:
     - build
   rules:
@@ -73,7 +73,7 @@ integration-tests:
 
 pack:
   stage: pack
-  image: mcr.microsoft.com/dotnet/sdk:8.0
+  image: mcr.microsoft.com/dotnet/sdk:10.0
   dependencies:
     - build
   rules:
@@ -87,7 +87,7 @@ pack:
 
 publish:
   stage: publish
-  image: mcr.microsoft.com/dotnet/sdk:8.0
+  image: mcr.microsoft.com/dotnet/sdk:10.0
   dependencies:
     - pack
   rules:
