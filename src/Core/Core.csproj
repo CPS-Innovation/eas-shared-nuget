@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -25,9 +25,9 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.12" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.12" />
     <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="10.0.12" />
-    <PackageReference Include="Microsoft.Kiota.Abstractions" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Kiota.Serialization.Json" Version="2.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Validation" Version="17.8.8" />
+    <PackageReference Include="Microsoft.Kiota.Abstractions" Version="2.1.2" />
+    <PackageReference Include="Microsoft.Kiota.Serialization.Json" Version="2.1.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Validation" Version="17.13.22" />
   </ItemGroup>
 
 </Project>

@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Graph" Version="6.0.3" />
+    <PackageReference Include="Microsoft.Graph" Version="6.6.0" />
     <PackageReference Include="MsgKit" Version="3.0.5" />
     <PackageReference Include="MsgReader" Version="6.1.2" />
   </ItemGroup>
