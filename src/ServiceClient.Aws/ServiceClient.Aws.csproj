@@ -13,10 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.CloudWatchLogs" Version="4.0.104.3" />
-    <PackageReference Include="AWSSDK.Core" Version="4.0.102.6" />
-    <PackageReference Include="AWSSDK.S3" Version="4.0.103.3" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.12" />
+    <PackageReference Include="AWSSDK.CloudWatchLogs" />
+    <PackageReference Include="AWSSDK.Core" />
+    <PackageReference Include="AWSSDK.S3" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
   </ItemGroup>
 
   <ItemGroup>

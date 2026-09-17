@@ -7,7 +7,7 @@ stages:
 variables:
   NUGET_FEED: "https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/packages/nuget/index.json"
 
-# Compile everything so that all referenced DLLs exist for nuspec to include
+# Compile everything so that all referenced DLLs exist for the pack stage to include
 build:
   stage: build
   image: mcr.microsoft.com/dotnet/sdk:10.0

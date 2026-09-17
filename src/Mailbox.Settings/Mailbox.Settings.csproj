@@ -66,7 +66,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.Validation" Version="17.13.22" />
+    <PackageReference Include="Microsoft.VisualStudio.Validation" />
   </ItemGroup>
 
   <ItemGroup>
