@@ -78,7 +78,7 @@ public class CloudWatchQueryClient : ICloudWatchQueryClient
             throw new InvalidOperationException(errorMsg);
         }
 
-        return results.Results;
+        return results.Results ?? [];
     }
 
     private AmazonCloudWatchLogsClient CreateCloudWatchClient()
