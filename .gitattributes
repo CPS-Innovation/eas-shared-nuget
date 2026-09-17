@@ -7,9 +7,6 @@
 # MIME fixtures. RFC 5322 mandates CRLF - normalising these breaks parsing.
 *.eml -text
 
-# Golden-output fixtures, compared byte for byte by tests.
-test/**/Output/** -text
-
 # Binary
 *.msg binary
 *.pdf binary
