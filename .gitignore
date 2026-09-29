@@ -400,3 +400,6 @@ FodyWeavers.xsd
 # Custom CPS CMS
 privatesettings.json
 /privatesettings.archive
+
+# Test artifacts exported for manual inspection in Outlook. Rewritten on every run.
+test/ServiceClient.GraphApiEmail.Tests/Output/

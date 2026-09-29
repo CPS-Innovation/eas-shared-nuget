@@ -1,0 +1,13 @@
+# Default: LF in the repository and in the working tree, on every platform.
+* text=auto eol=lf
+
+# Visual Studio rewrites the solution file with CRLF on every save.
+*.sln text eol=crlf
+
+# MIME fixtures. RFC 5322 mandates CRLF - normalising these breaks parsing.
+*.eml -text
+
+# Binary
+*.msg binary
+*.pdf binary
+*.bin binary

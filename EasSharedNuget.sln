@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00.SolutionItems", "00.Solu
 	ProjectSection(SolutionItems) = preProject
 		.gitlab-ci.yml = .gitlab-ci.yml
 		Directory.Build.props = Directory.Build.props
+		global.json = global.json
 		nuget.config = nuget.config
 	EndProjectSection
 EndProject

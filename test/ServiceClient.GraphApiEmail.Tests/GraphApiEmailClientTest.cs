@@ -233,7 +233,10 @@ public partial class GraphApiEmailClientTest
 
         // Export streams so that we can view them in outlook
         DirectoryInfo dirInfo = new(Path.Combine(Assembly.GetExecutingAssembly().Location, "../../../../Output"));
-        dirInfo.Exists.Should().BeTrue();
+        if (!dirInfo.Exists)
+        {
+            dirInfo.Create();
+        }
 
         string filename = Path.Combine(dirInfo.FullName, "msgStreamWitAttachments.msg");
         using FileStream fileStream1 = new(filename, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read, 64 * 1024, FileOptions.None);

@@ -148,7 +148,21 @@ public partial class GraphApiSubscriptionClient :
         {
             foreach (MailFolderSubscription subscription in unwanted)
             {
-                await this.DeleteGraphAPIChangeNotificationSubscriptionAsync(subscription.SubscriptionId, cancellationToken).ConfigureAwait(false);
+                try
+                {
+                    await this.DeleteGraphAPIChangeNotificationSubscriptionAsync(subscription.SubscriptionId, cancellationToken).ConfigureAwait(false);
+                }
+                catch (ODataError exception)
+                {
+                    if (exception.ResponseStatusCode != (int)System.Net.HttpStatusCode.NotFound)
+                    {
+                        throw;
+                    }
+
+                    // Another caller reconciling the same mailbox deleted it between the find and the delete.
+                    continue;
+                }
+
                 this.logger.LogInformation(
                     "Milestone: deleted unwanted subscription {SubscriptionId} for mailbox {MailboxId}.\n - Resource: {Resource}",
                     subscription.SubscriptionId,

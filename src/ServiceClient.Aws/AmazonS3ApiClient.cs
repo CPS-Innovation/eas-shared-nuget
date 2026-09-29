@@ -292,20 +292,23 @@ public class AmazonS3ApiClient : IStorageClient
     {
         try
         {
+            AmazonS3Config config = new()
+            {
+                RequestChecksumCalculation = RequestChecksumCalculation.WHEN_REQUIRED,
+                ResponseChecksumValidation = ResponseChecksumValidation.WHEN_REQUIRED,
+            };
             if (!string.IsNullOrWhiteSpace(this.ApiOptions.AccessKey) && !string.IsNullOrWhiteSpace(this.ApiOptions.SecretKey))
             {
+                config.RegionEndpoint = this.ApiOptions.RegionEndpoint;
                 BasicAWSCredentials credentials = new(
                     accessKey: this.ApiOptions.AccessKey,
                     secretKey: this.ApiOptions.SecretKey);
-                return new AmazonS3Client(credentials: credentials, this.ApiOptions.RegionEndpoint);
+                return new AmazonS3Client(credentials, config);
             }
-
-            AmazonS3Config config = new();
             if (this.ApiOptions.ServiceEndpoint is not null)
             {
                 config.ServiceURL = this.ApiOptions.ServiceEndpoint;
             }
-
             return new AmazonS3Client(config: config);
         }
         catch (Exception ex)
@@ -340,9 +343,9 @@ public class AmazonS3ApiClient : IStorageClient
 
                 ListObjectsV2Response response = await this.Client.ListObjectsV2Async(request, cancellationToken).ConfigureAwait(false);
 
-                keys.AddRange(response.S3Objects.Select(obj => obj.Key));
+                keys.AddRange(response.S3Objects?.Select(obj => obj.Key) ?? []);
 
-                continuationToken = response.IsTruncated ? response.NextContinuationToken : null;
+                continuationToken = response.IsTruncated == true ? response.NextContinuationToken : null;
             }
             while (continuationToken != null);
 
