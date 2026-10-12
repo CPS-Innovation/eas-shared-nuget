@@ -1,0 +1,117 @@
+name: Build and Publish NuGet Package
+
+on:
+  pull_request:
+
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore
+        run: |
+          dotnet restore EasSharedNuget.sln
+
+      - name: Build
+        run: |
+          dotnet build EasSharedNuget.sln \
+            --configuration Release \
+            --no-restore
+
+      - name: Unit Tests
+        run: |
+          dotnet test EasSharedNuget.sln \
+            --configuration Release \
+            --no-build \
+            --verbosity normal \
+            --filter "Category!=IntegrationTest" \
+            --logger "trx;LogFileName=unit-test-results.trx"
+
+      - name: Install trx2junit
+        run: |
+          dotnet tool install -g trx2junit
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Convert Unit Test Results
+        run: |
+          find . -name "*.trx" -exec trx2junit {} \;
+
+      - name: Integration Tests
+        if: github.ref == 'refs/heads/main'
+        run: |
+          dotnet test EasSharedNuget.sln \
+            --configuration Release \
+            --no-build \
+            --verbosity normal \
+            --filter "Category=IntegrationTest" \
+            --logger "trx;LogFileName=integration-test-results.trx"
+
+      - name: Convert Integration Test Results
+        if: github.ref == 'refs/heads/main'
+        run: |
+          find . -name "*.trx" -exec trx2junit {} \;
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            **/*.trx
+            **/*.xml
+
+      - name: Pack NuGet Package
+        if: github.ref == 'refs/heads/main'
+        run: |
+          dotnet pack \
+            EasShared.Package/EasShared.Package.csproj \
+            --configuration Release \
+            --no-build \
+            --output ./out \
+            --verbosity normal \
+            -p:IncludeSymbols=true \
+            -p:SymbolPackageFormat=snupkg \
+            -p:EmbedUntrackedSources=true \
+            -p:EmbedAllSources=true \
+            -p:DebugType=portable
+
+      - name: Add GitHub Package Source
+        if: github.ref == 'refs/heads/main'
+        run: |
+          dotnet nuget add source \
+            --username "${{ github.actor }}" \
+            --password "${{ secrets.GITHUB_TOKEN }}" \
+            --store-password-in-clear-text \
+            --name github \
+            "https://nuget.pkg.github.com/CPS-Innovation/index.json"
+
+      - name: Publish NuGet Package
+        if: github.ref == 'refs/heads/main'
+        run: |
+          dotnet nuget push "./out/*.nupkg" \
+            --source github \
+            --skip-duplicate
+
+      - name: Publish Symbols
+        if: github.ref == 'refs/heads/main'
+        run: |
+          dotnet nuget push "./out/*.snupkg" \
+            --source github \
+            --skip-duplicate
