@@ -17,6 +17,11 @@
 		<PrivateAssets>all</PrivateAssets>
 	</PropertyGroup>
 
+	<PropertyGroup>
+	  <RepositoryUrl>https://github.com/CPS-Innovation/eas-shared-nuget</RepositoryUrl>
+	  <RepositoryType>git</RepositoryType>
+	</PropertyGroup>
+
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<DebugType>portable</DebugType>
 		<DebugSymbols>true</DebugSymbols>
